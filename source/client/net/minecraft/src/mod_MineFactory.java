@@ -10,6 +10,7 @@ import net.minecraft.src.powercrystals.minefactoryreloaded.IFactoryPlantable;
 import net.minecraft.src.powercrystals.minefactoryreloaded.IFactoryRanchable;
 import net.minecraft.src.powercrystals.minefactoryreloaded.IMFRProxy;
 import net.minecraft.src.powercrystals.minefactoryreloaded.MineFactoryReloadedCore;
+import net.minecraft.src.powercrystals.minefactoryreloaded.TextureFrameAnimFX;
 
 public class mod_MineFactory extends BaseModMp
 {
