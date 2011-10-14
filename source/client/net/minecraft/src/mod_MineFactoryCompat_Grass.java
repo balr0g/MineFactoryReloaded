@@ -1,6 +1,12 @@
 package net.minecraft.src;
 
-import net.minecraft.src.powercrystals.minefactoryreloaded.IFactoryFertilizable;
+import net.minecraft.src.BaseModMp;
+import net.minecraft.src.Block;
+import net.minecraft.src.Item;
+import net.minecraft.src.ItemStack;
+import net.minecraft.src.World;
+import net.minecraft.src.powercrystals.minefactoryreloaded.MineFactoryReloadedCore;
+import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryFertilizable;
 
 public class mod_MineFactoryCompat_Grass extends BaseModMp
 {
@@ -15,7 +21,6 @@ public class mod_MineFactoryCompat_Grass extends BaseModMp
 	{
 		mod_MineFactory.registerFertilizable(new FactoryFertilizableGrass());
 	}
-	
 	
 	public class FactoryFertilizableGrass implements IFactoryFertilizable
 	{

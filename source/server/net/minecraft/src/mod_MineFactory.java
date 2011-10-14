@@ -1,10 +1,10 @@
 package net.minecraft.src;
 
-import net.minecraft.src.powercrystals.minefactoryreloaded.IFactoryFertilizable;
-import net.minecraft.src.powercrystals.minefactoryreloaded.IFactoryHarvestable;
-import net.minecraft.src.powercrystals.minefactoryreloaded.IFactoryPlantable;
-import net.minecraft.src.powercrystals.minefactoryreloaded.IFactoryRanchable;
 import net.minecraft.src.powercrystals.minefactoryreloaded.MineFactoryReloadedCore;
+import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryFertilizable;
+import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryHarvestable;
+import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryPlantable;
+import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryRanchable;
 
 public class mod_MineFactory extends BaseModMp
 {	

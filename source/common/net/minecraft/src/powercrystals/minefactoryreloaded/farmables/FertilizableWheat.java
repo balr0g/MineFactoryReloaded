@@ -1,22 +1,18 @@
-package net.minecraft.src.powercrystals.minefactoryreloaded;
+package net.minecraft.src.powercrystals.minefactoryreloaded.farmables;
 
+import net.minecraft.src.Block;
+import net.minecraft.src.BlockCrops;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.World;
+import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryFertilizable;
 
-public class FactoryFertilizableStemPlants implements IFactoryFertilizable
+public class FertilizableWheat implements IFactoryFertilizable
 {
-	private int fertilizableId;
-	
-	public FactoryFertilizableStemPlants(int fertilizableId)
-	{
-		this.fertilizableId = fertilizableId;
-	}
-
 	@Override
 	public int getFertilizableBlockId()
 	{
-		return fertilizableId;
+		return Block.crops.blockID;
 	}
 
 	@Override
@@ -29,8 +25,7 @@ public class FactoryFertilizableStemPlants implements IFactoryFertilizable
 	@Override
 	public boolean fertilize(World world, int x, int y, int z, ItemStack fertilizer)
 	{
-		MineFactoryReloadedCore.proxy.fertilizeStemPlant(world, x, y, z);
-		return world.getBlockMetadata(x, y, z) == 7;
+		((BlockCrops)Block.crops).fertilize(world, x, y, z);
+		return true;
 	}
-
 }

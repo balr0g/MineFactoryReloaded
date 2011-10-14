@@ -38,10 +38,10 @@ public class BlockRailCargoDropoff extends BlockRail implements ITextureProvider
 			{
 				continue;
 			}
-			for(IInventory chest : MineFactoryReloadedCore.findChests(world, x, y, z))
+			for(IInventory chest : InventoryUtil.findChests(world, x, y, z))
 			{
 				ItemStack stackToAdd = ourStack.copy();
-				int amountRemaining = MineFactoryReloadedCore.addToInventory(chest, stackToAdd);
+				int amountRemaining = InventoryUtil.addToInventory(chest, stackToAdd);
 				if(amountRemaining == 0)
 				{
 					minecart.setInventorySlotContents(slotIndex, null);

@@ -31,7 +31,7 @@ public class BlockRailCargoPickup extends BlockRail implements ITextureProvider
 			return;
 		}
 		
-		for(IInventory chest : MineFactoryReloadedCore.findChests(world, x, y, z))
+		for(IInventory chest : InventoryUtil.findChests(world, x, y, z))
 		{
 			for(int slotIndex = 0; slotIndex < chest.getSizeInventory(); slotIndex++)
 			{
@@ -41,7 +41,7 @@ public class BlockRailCargoPickup extends BlockRail implements ITextureProvider
 					continue;
 				}
 				ItemStack stackToAdd = sourceStack.copy();
-				int amountRemaining = MineFactoryReloadedCore.addToInventory(minecart, stackToAdd);
+				int amountRemaining = InventoryUtil.addToInventory(minecart, stackToAdd);
 				if(amountRemaining == 0)
 				{
 					chest.setInventorySlotContents(slotIndex, null);

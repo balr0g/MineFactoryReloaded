@@ -1,8 +1,10 @@
-package net.minecraft.src.powercrystals.minefactoryreloaded;
+package net.minecraft.src.powercrystals.minefactoryreloaded.old;
 
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.World;
+import net.minecraft.src.powercrystals.minefactoryreloaded.ItemFactory;
+import net.minecraft.src.powercrystals.minefactoryreloaded.MineFactoryReloadedCore;
 
 public class ItemFactoryFertilizer extends ItemFactory
 {
@@ -38,15 +40,15 @@ public class ItemFactoryFertilizer extends ItemFactory
         {
             i++;
         }
-        if(MineFactoryReloadedCore.fertilizerBlock.canPlaceBlockAt(world, i, j, k))
+        /*if(MineFactoryReloadedCore.fertilizerBlock.canPlaceBlockAt(world, i, j, k))
         {
             itemstack.stackSize--;
             world.setBlockWithNotify(i, j, k, MineFactoryReloadedCore.fertilizerBlock.blockID);
             return true;
         }
         else
-        {
+        {*/
         	return false;
-        }
+        //}
     }
 }

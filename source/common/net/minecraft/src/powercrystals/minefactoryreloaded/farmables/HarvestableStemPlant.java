@@ -1,11 +1,11 @@
-package net.minecraft.src.powercrystals.minefactoryreloaded;
+package net.minecraft.src.powercrystals.minefactoryreloaded.farmables;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.World;
 
-public class FactoryHarvestableStemPlant extends FactoryHarvestableStandard
+public class HarvestableStemPlant extends HarvestableStandard
 {
-	public FactoryHarvestableStemPlant(int sourceId, FactoryHarvestType harvestType)
+	public HarvestableStemPlant(int sourceId, HarvestType harvestType)
 	{
 		super(sourceId, harvestType);
 	}

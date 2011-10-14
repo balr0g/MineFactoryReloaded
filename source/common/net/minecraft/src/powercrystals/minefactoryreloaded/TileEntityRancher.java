@@ -8,27 +8,29 @@ import net.minecraft.src.AxisAlignedBB;
 import net.minecraft.src.DamageSource;
 import net.minecraft.src.EntityLiving;
 import net.minecraft.src.ItemStack;
+import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryRanchable;
 
-public class TileEntityRancher extends TileEntityFactoryInventoryBase
+public class TileEntityRancher extends TileEntityFactoryInventoryRotateable
 {
-	public TileEntityRancher()
-	{
-		super(25, 25);
-	}
-
 	private static Map<Class<?>, IFactoryRanchable> ranchables = new HashMap<Class<?>, IFactoryRanchable>();
-	
-	@Override
-	public String getInvName()
-	{
-		return "Rancher";
-	}
-	
+
 	public static void registerRanchable(IFactoryRanchable ranchable)
 	{
 		ranchables.put(ranchable.getRanchableEntity(), ranchable);
 	}
 	
+	public TileEntityRancher()
+	{
+		super(25, 25);
+	}
+
+	@Override
+	public String getInvName()
+	{
+		return "Rancher";
+	}
+
+	@Override
 	public void doWork()
 	{
 		if(!powerAvailable())

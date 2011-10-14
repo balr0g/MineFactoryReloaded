@@ -4,10 +4,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.src.IBlockAccess;
 import net.minecraft.src.RenderBlocks;
 import net.minecraft.src.forge.MinecraftForgeClient;
-import net.minecraft.src.powercrystals.minefactoryreloaded.IFactoryFertilizable;
-import net.minecraft.src.powercrystals.minefactoryreloaded.IFactoryHarvestable;
-import net.minecraft.src.powercrystals.minefactoryreloaded.IFactoryPlantable;
-import net.minecraft.src.powercrystals.minefactoryreloaded.IFactoryRanchable;
+import net.minecraft.src.powercrystals.minefactoryreloaded.MineFactoryReloadedCore.Machine;
+import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryFertilizable;
+import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryHarvestable;
+import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryPlantable;
+import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryRanchable;
 import net.minecraft.src.powercrystals.minefactoryreloaded.IMFRProxy;
 import net.minecraft.src.powercrystals.minefactoryreloaded.MineFactoryReloadedCore;
 import net.minecraft.src.powercrystals.minefactoryreloaded.TextureFrameAnimFX;
@@ -21,19 +22,17 @@ public class mod_MineFactory extends BaseModMp
 	{
 		MineFactoryReloadedCore.Init(new ClientProxy());
 		
-		ModLoader.AddName(MineFactoryReloadedCore.conveyorBlock, "Conveyor Belt Block");
-		ModLoader.AddName(MineFactoryReloadedCore.fertilizerBlock, "Fertilizer Block");
-		ModLoader.AddName(MineFactoryReloadedCore.harvesterBlock, "Harvester");
-		ModLoader.AddName(new ItemStack(MineFactoryReloadedCore.rancherBlock, 1, 0), "Rancher");
-		ModLoader.AddName(new ItemStack(MineFactoryReloadedCore.rancherBlock, 1, 4), "Veterinary Clinic");
-		ModLoader.AddName(MineFactoryReloadedCore.planterBlock, "Planter");
-		ModLoader.AddName(MineFactoryReloadedCore.fisherBlock, "Fisher");
+		ModLoader.AddName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Planter)), "Planter");
+		ModLoader.AddName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Fisher)), "Fisher");
+		ModLoader.AddName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Harvester)), "Harvester");
+		ModLoader.AddName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Rancher)), "Rancher");
+		ModLoader.AddName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Fertilizer)), "Fertilizer");
+		
 		ModLoader.AddName(MineFactoryReloadedCore.passengerRailPickupBlock, "Passenger Pickup Rail");
 		ModLoader.AddName(MineFactoryReloadedCore.passengerRailDropoffBlock, "Passenger Dropoff Rail");
 		ModLoader.AddName(MineFactoryReloadedCore.cargoRailDropoffBlock, "Cargo Dropoff Rail");
 		ModLoader.AddName(MineFactoryReloadedCore.cargoRailPickupBlock, "Cargo Pickup Rail");
 		
-		ModLoader.AddName(MineFactoryReloadedCore.fertilizerItem, "Fertilizer");
 		ModLoader.AddName(MineFactoryReloadedCore.steelIngotItem, "Steel Ingot");
 		ModLoader.AddName(MineFactoryReloadedCore.factoryHammerItem, "Factory Hammer");
 		
@@ -51,7 +50,7 @@ public class mod_MineFactory extends BaseModMp
 	
 	public String Version()
 	{
-		return "1.8.1R1.2.2";
+		return "1.8.1R1.3.0B";
 	}
 
 	public void RegisterAnimation(Minecraft minecraft)

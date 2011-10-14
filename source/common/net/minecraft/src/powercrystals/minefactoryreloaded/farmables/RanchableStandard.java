@@ -1,4 +1,4 @@
-package net.minecraft.src.powercrystals.minefactoryreloaded;
+package net.minecraft.src.powercrystals.minefactoryreloaded.farmables;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -6,8 +6,10 @@ import java.util.List;
 import net.minecraft.src.EntityLiving;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.World;
+import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryRanchable;
+import net.minecraft.src.powercrystals.minefactoryreloaded.TileEntityRancher;
 
-public class FactoryRanchableStandard implements IFactoryRanchable
+public class RanchableStandard implements IFactoryRanchable
 {
 	private Class<?> ranchableClass;
 	private ItemStack dropStack;
@@ -15,7 +17,7 @@ public class FactoryRanchableStandard implements IFactoryRanchable
 	private int entityDamage;
 	private int dropChance;
 	
-	public FactoryRanchableStandard(Class<?> entityToRanch, ItemStack dropStack, int percentChanceToDamageEntity, int entityDamage,
+	public RanchableStandard(Class<?> entityToRanch, ItemStack dropStack, int percentChanceToDamageEntity, int entityDamage,
 			int percentChanceOfDrop)
 	{
 		ranchableClass = entityToRanch;

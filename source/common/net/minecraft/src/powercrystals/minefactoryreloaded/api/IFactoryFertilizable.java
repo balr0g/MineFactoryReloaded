@@ -1,4 +1,4 @@
-package net.minecraft.src.powercrystals.minefactoryreloaded;
+package net.minecraft.src.powercrystals.minefactoryreloaded.api;
 
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.World;

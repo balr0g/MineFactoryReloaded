@@ -1,17 +1,18 @@
-package net.minecraft.src.powercrystals.minefactoryreloaded;
+package net.minecraft.src.powercrystals.minefactoryreloaded.farmables;
 
 import java.util.List;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.World;
+import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryHarvestable;
 
-public class FactoryHarvestableStandard implements IFactoryHarvestable
+public class HarvestableStandard implements IFactoryHarvestable
 {
 	private int sourceId;
-	private FactoryHarvestType harvestType;
+	private HarvestType harvestType;
 	
-	public FactoryHarvestableStandard(int sourceId, FactoryHarvestType harvestType)
+	public HarvestableStandard(int sourceId, HarvestType harvestType)
 	{
 		if(sourceId > Block.blocksList.length)
 		{
@@ -28,7 +29,7 @@ public class FactoryHarvestableStandard implements IFactoryHarvestable
 	}
 
 	@Override
-	public FactoryHarvestType getHarvestType()
+	public HarvestType getHarvestType()
 	{
 		return harvestType;
 	}

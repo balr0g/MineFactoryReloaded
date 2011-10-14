@@ -1,12 +1,13 @@
-package net.minecraft.src.powercrystals.minefactoryreloaded;
+package net.minecraft.src.powercrystals.minefactoryreloaded.farmables;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.BlockSapling;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.World;
+import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryFertilizable;
 
-public class FactoryFertilizableSapling implements IFactoryFertilizable
+public class FertilizableSapling implements IFactoryFertilizable
 {	
 	@Override
 	public int getFertilizableBlockId()

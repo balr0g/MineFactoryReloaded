@@ -6,25 +6,31 @@ import java.util.Map;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.ItemStack;
-import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.World;
+import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryHarvestable;
+import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.HarvestType;
 
-public class TileEntityHarvester extends TileEntityFactoryBase
+public class TileEntityHarvester extends TileEntityFactoryInventoryRotateable
 {
-	private int storedMetadata;
-	
-	public TileEntityHarvester()
-	{
-		super(25, 25);
-	}
-	
 	private static Map<Integer, IFactoryHarvestable> harvestables = new HashMap<Integer, IFactoryHarvestable>();
 	
 	public static void registerHarvestable(IFactoryHarvestable harvestable)
 	{
 		harvestables.put(harvestable.getSourceId(), harvestable);
 	}
+	
+	public TileEntityHarvester()
+	{
+		super(10, 1);
+	}
 
+	@Override
+	public String getInvName()
+	{
+		return "Harvester";
+	}
+
+	@Override
 	public void doWork()
 	{
 		if(!powerAvailable())
@@ -143,14 +149,14 @@ public class TileEntityHarvester extends TileEntityFactoryBase
 				IFactoryHarvestable harvestable = harvestables.get(new Integer(searchId));
 				if(harvestable.canBeHarvested(world, centerX + currentXoffset, j, centerZ + currentZoffset))
 				{
-					if(harvestable.getHarvestType() == FactoryHarvestType.Normal)
+					if(harvestable.getHarvestType() == HarvestType.Normal)
 					{
 						target[0] = centerX + currentXoffset;
 						target[1] = j;
 						target[2] = centerZ + currentZoffset;
 						return target;
 					}
-					else if(harvestable.getHarvestType() == FactoryHarvestType.LeaveBottom)
+					else if(harvestable.getHarvestType() == HarvestType.LeaveBottom)
 					{
 						int[] temp = getNextVertical(world, centerX + currentXoffset, j, centerZ + currentZoffset);
 						if(temp[1] < 0)
@@ -159,7 +165,7 @@ public class TileEntityHarvester extends TileEntityFactoryBase
 						}
 						return temp;
 					}
-					else if(harvestable.getHarvestType() == FactoryHarvestType.Tree)
+					else if(harvestable.getHarvestType() == HarvestType.Tree)
 					{
 						return getNextLog(world, centerX + currentXoffset, j, centerZ + currentZoffset);
 					}
@@ -240,25 +246,4 @@ public class TileEntityHarvester extends TileEntityFactoryBase
 		return target;
 	}
 
-	public void readFromNBT(NBTTagCompound nbttagcompound)
-	{
-		super.readFromNBT(nbttagcompound);
-		storedMetadata = nbttagcompound.getInteger("blockData");
-	}
-
-	public void writeToNBT(NBTTagCompound nbttagcompound)
-	{
-		super.writeToNBT(nbttagcompound);
-		nbttagcompound.setInteger("blockData", storedMetadata);
-	}
-
-	public int getBlockMetadata()
-	{
-		return storedMetadata;
-	}
-	
-	public void setBlockMetadata(int metadata)
-	{
-		storedMetadata = metadata;
-	}
 }

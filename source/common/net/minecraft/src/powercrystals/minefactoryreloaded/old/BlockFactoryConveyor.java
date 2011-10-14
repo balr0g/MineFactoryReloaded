@@ -1,4 +1,4 @@
-package net.minecraft.src.powercrystals.minefactoryreloaded;
+package net.minecraft.src.powercrystals.minefactoryreloaded.old;
 
 import java.util.Random;
 
@@ -14,6 +14,7 @@ import net.minecraft.src.MovingObjectPosition;
 import net.minecraft.src.Vec3D;
 import net.minecraft.src.World;
 import net.minecraft.src.forge.ITextureProvider;
+import net.minecraft.src.powercrystals.minefactoryreloaded.MineFactoryReloadedCore;
 
 /* Metadata reference
  * 0	-X

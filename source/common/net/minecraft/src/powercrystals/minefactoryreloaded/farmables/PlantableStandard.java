@@ -1,20 +1,21 @@
-package net.minecraft.src.powercrystals.minefactoryreloaded;
+package net.minecraft.src.powercrystals.minefactoryreloaded.farmables;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.World;
+import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryPlantable;
 
 /*
  * Used for directly placing blocks (ie saplings) and items (ie sugarcane). Pass in source ID to constructor,
  * so one instance per source ID.
  */
 
-public class FactoryPlantableStandard implements IFactoryPlantable
+public class PlantableStandard implements IFactoryPlantable
 {
 	private int sourceId;
 	private int plantedBlockId;
 	
-	public FactoryPlantableStandard(int sourceId, int plantedBlockId)
+	public PlantableStandard(int sourceId, int plantedBlockId)
 	{
 		if(plantedBlockId >= Block.blocksList.length)
 		{

@@ -6,11 +6,11 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagList;
 
-public abstract class TileEntityFactoryInventoryBase extends TileEntityFactoryBase implements IInventory
+public abstract class TileEntityFactoryInventory extends TileEntityFactory implements IInventory
 {
 	protected ItemStack[] inventory;
 	
-	public TileEntityFactoryInventoryBase(int bcEnergyNeededToWork, int bcEnergyNeededToActivate)
+	public TileEntityFactoryInventory(int bcEnergyNeededToWork, int bcEnergyNeededToActivate)
 	{
 		super(bcEnergyNeededToWork, bcEnergyNeededToActivate);
 		inventory = new ItemStack[getSizeInventory()];

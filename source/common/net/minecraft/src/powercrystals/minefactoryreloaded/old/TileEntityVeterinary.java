@@ -1,4 +1,4 @@
-package net.minecraft.src.powercrystals.minefactoryreloaded;
+package net.minecraft.src.powercrystals.minefactoryreloaded.old;
 
 import java.util.List;
 
@@ -7,8 +7,9 @@ import net.minecraft.src.EntityLiving;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemFood;
 import net.minecraft.src.ItemStack;
+import net.minecraft.src.powercrystals.minefactoryreloaded.TileEntityFactoryInventory;
 
-public class TileEntityVeterinary extends TileEntityFactoryInventoryBase
+public class TileEntityVeterinary extends TileEntityFactoryInventory
 {
 	public TileEntityVeterinary()
 	{

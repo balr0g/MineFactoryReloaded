@@ -4,41 +4,52 @@ import net.minecraft.src.EntityPig;
 import net.minecraft.src.EntitySheep;
 import net.minecraft.src.EntitySlime;
 import net.minecraft.src.EntitySquid;
-import net.minecraft.src.IInventory;
-import net.minecraft.src.InventoryLargeChest;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.MLProp;
+import net.minecraft.src.Material;
 import net.minecraft.src.ModLoader;
-import net.minecraft.src.TileEntity;
-import net.minecraft.src.World;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.Item;
+import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryFertilizable;
+import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryHarvestable;
+import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryPlantable;
+import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryRanchable;
+import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.FertilizableGiantMushroom;
+import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.FertilizableSapling;
+import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.FertilizableStemPlants;
+import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.FertilizableWheat;
+import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.HarvestType;
+import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.HarvestableStandard;
+import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.HarvestableStemPlant;
+import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.HarvestableWheat;
+import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.PlantableStandard;
+import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.PlantableWheat;
+import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.RanchableChicken;
+import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.RanchableCow;
+import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.RanchableStandard;
 
 public class MineFactoryReloadedCore
 {
-	public static PowerSystem powerSystem = PowerSystem.IndustrialCraft;
+	public static PowerSystem powerSystem = PowerSystem.BuildCraft;
 	
 	public static String terrainTexture = "/MineFactorySprites/terrain.png";
 	public static String itemTexture = "/MineFactorySprites/items.png";
 	
-	public static Block conveyorBlock;
-	public static Block fertilizerBlock;
-	public static Block harvesterBlock;
-	public static Block rancherBlock;
-	public static Block planterBlock;
-	public static Block fisherBlock;
+	public static Block machineBlock;
+	
 	public static Block passengerRailDropoffBlock;
 	public static Block passengerRailPickupBlock;
 	public static Block cargoRailDropoffBlock;
 	public static Block cargoRailPickupBlock;
 	
-	public static Item fertilizerItem;
 	public static Item steelIngotItem;
 	public static Item factoryHammerItem;
+	
+	public static Item machineItem;
 	
 	public static int conveyorNormalTexture;
 	public static int conveyorReverseTexture;
@@ -49,7 +60,7 @@ public class MineFactoryReloadedCore
 	public static int planterCactusTexture;
 	public static int planterSugarTexture;
 	public static int planterMushroomTexture;
-	public static int steelHoleSideTexture;
+	public static int steelHoleTexture;
 	public static int passengerRailPickupTexture;
 	public static int passengerRailDropoffTexture;
 	public static int cargoRailPickupTexture;
@@ -67,15 +78,9 @@ public class MineFactoryReloadedCore
 	
 	public static IMFRProxy proxy;
 	
+	public static Map<MineFactoryReloadedCore.Machine, Integer> machineMetadataMappings;
+	
 	// TODO
-	@MLProp(min=1, max=1023)
-	public static int ConveyorBlockID = 125;
-	@MLProp(min=1, max=1023)
-	public static int FertilizerBlockID = 126;
-	@MLProp(min=1, max=1023)
-	public static int HarvesterBlockID = 127;
-	@MLProp(min=1, max=1023)
-	public static int PlanterBlockID = 128;
 	@MLProp(min=1, max=1023)
 	public static int PassengerPickupRailBlockID = 129;
 	@MLProp(min=1, max=1023)
@@ -84,10 +89,6 @@ public class MineFactoryReloadedCore
 	public static int CargoPickupRailBlockID = 131;
 	@MLProp(min=1, max=1023)
 	public static int CargoDropoffRailBlockID = 132;
-	@MLProp(min=1, max=1023)
-	public static int RancherBlockID = 133;
-	@MLProp(min=1, max=1023)
-	public static int FisherBlockID = 134;
 	
 	@MLProp(min=256, max=32767)
 	public static int SteelIngotItemID = 124;
@@ -124,45 +125,26 @@ public class MineFactoryReloadedCore
 	{
 		proxy = proxyParam;
 		
-		cargoRailDropoffTexture = 0;
-		cargoRailPickupTexture = 1;
-		passengerRailDropoffTexture = 2;
-		passengerRailPickupTexture = 3;
-		steelSideTexture = 4;
-		steelHoleSideTexture = 5;
-		planterCactusTexture = 6;
-		planterMushroomTexture = 7;
-		planterSaplingTexture = 8;
-		planterSugarTexture = 9;
-		conveyorNormalTexture = 10;
-		conveyorReverseTexture = 11;
-		harvesterAnimatedTexture = 12;
-		rancherAnimatedTexture = 13;
-		fisherBucketTexture = 14;
-		fisherFishTexture = 15;
-		harvesterSideTexture = 16;
-		rancherSideTexture = 17;
-		fertilizerBackTexture = 18;
-		fertilizerSideTexture = 19;
-
 		factoryWrenchTexture = 0;
 		fertilizerItemTexture = 1;
 		steelIngotTexture = 2;
 		
-		conveyorBlock = new BlockFactoryConveyor(ConveyorBlockID, conveyorNormalTexture);
-		fertilizerBlock = new BlockFactoryFertilizer(FertilizerBlockID, fertilizerSideTexture);
-		harvesterBlock = new BlockFactoryHarvester(HarvesterBlockID, steelSideTexture);
-		planterBlock = new BlockFactoryPlanter(PlanterBlockID, steelSideTexture);
+		machineMetadataMappings = new HashMap<Machine, Integer>();
+		machineMetadataMappings.put(Machine.Planter, 0);
+		machineMetadataMappings.put(Machine.Fisher, 1);
+		machineMetadataMappings.put(Machine.Harvester, 2);
+		machineMetadataMappings.put(Machine.Rancher, 3);
+		machineMetadataMappings.put(Machine.Fertilizer, 4);
+
+		setupTextures();
+		
 		passengerRailPickupBlock = new BlockRailPassengerPickup(PassengerPickupRailBlockID, passengerRailPickupTexture);
 		passengerRailDropoffBlock = new BlockRailPassengerDropoff(PassengerDropoffRailBlockID, passengerRailDropoffTexture);
 		cargoRailDropoffBlock = new BlockRailCargoDropoff(CargoDropoffRailBlockID, cargoRailDropoffTexture);
 		cargoRailPickupBlock = new BlockRailCargoPickup(CargoPickupRailBlockID, cargoRailPickupTexture);
-		rancherBlock = new BlockFactoryRancher(RancherBlockID, steelSideTexture);
-		fisherBlock = new BlockFactoryFisher(FisherBlockID, steelHoleSideTexture);
 		
-		fertilizerItem = (new ItemFactoryFertilizer(FertilizerItemID))
-			.setIconIndex(fertilizerItemTexture)
-			.setItemName("itemFertilizer");
+		machineBlock = new BlockFactoryMachine(137, 0, Material.ice);
+		
 		steelIngotItem = (new ItemFactory(SteelIngotItemID))
 			.setIconIndex(steelIngotTexture)
 			.setItemName("steelIngot");
@@ -170,27 +152,20 @@ public class MineFactoryReloadedCore
 			.setIconIndex(factoryWrenchTexture)
 			.setItemName("factoryWrench")
 			.setMaxStackSize(1);
-		
-		Item.itemsList[rancherBlock.blockID] = null;
-		Item.itemsList[rancherBlock.blockID] = new ItemRancher(rancherBlock.blockID - 256).setItemName("rancherItem");
-		
-		ModLoader.RegisterBlock(conveyorBlock);
-		ModLoader.RegisterBlock(fertilizerBlock);
-		ModLoader.RegisterBlock(harvesterBlock);
-		ModLoader.RegisterBlock(rancherBlock);
-		ModLoader.RegisterBlock(planterBlock);
-		ModLoader.RegisterBlock(fisherBlock);
+
+		ModLoader.RegisterBlock(machineBlock, ItemFactoryMachine.class);
 		ModLoader.RegisterBlock(passengerRailPickupBlock);
 		ModLoader.RegisterBlock(passengerRailDropoffBlock);
 		ModLoader.RegisterBlock(cargoRailDropoffBlock);
 		ModLoader.RegisterBlock(cargoRailPickupBlock);
+		
+		ModLoader.RegisterTileEntity(TileEntityFisher.class, "factoryFisher");
+		ModLoader.RegisterTileEntity(TileEntityPlanter.class, "factoryPlanter");
+		ModLoader.RegisterTileEntity(TileEntityHarvester.class, "factoryHarvester");
+		ModLoader.RegisterTileEntity(TileEntityRancher.class, "factoryRancher");
+		ModLoader.RegisterTileEntity(TileEntityFertilizer.class, "factoryFertilizer");
 
-		ModLoader.RegisterTileEntity(net.minecraft.src.powercrystals.minefactoryreloaded.TileEntityFertilizer.class, "Fertilizer");
-		ModLoader.RegisterTileEntity(net.minecraft.src.powercrystals.minefactoryreloaded.TileEntityPlanter.class, "Planter");
-		ModLoader.RegisterTileEntity(net.minecraft.src.powercrystals.minefactoryreloaded.TileEntityHarvester.class, "Harvester");
-		ModLoader.RegisterTileEntity(net.minecraft.src.powercrystals.minefactoryreloaded.TileEntityRancher.class, "Rancher");
-		ModLoader.RegisterTileEntity(net.minecraft.src.powercrystals.minefactoryreloaded.TileEntityVeterinary.class, "Veterinary");
-		ModLoader.RegisterTileEntity(net.minecraft.src.powercrystals.minefactoryreloaded.TileEntityFisher.class, "Fisher");
+		/*
 
 		ModLoader.AddRecipe(new ItemStack(steelIngotItem, 5), new Object[]
 			{
@@ -304,194 +279,110 @@ public class MineFactoryReloadedCore
  				Character.valueOf('P'), new ItemStack(Block.sapling, 1, 2),
  				Character.valueOf('S'), steelIngotItem
  			}
- 		);
+ 		);*/
 		
-		registerPlantable(new FactoryPlantableStandard(Block.sapling.blockID, Block.sapling.blockID));
-		registerPlantable(new FactoryPlantableStandard(Item.reed.shiftedIndex, Block.reed.blockID));
-		registerPlantable(new FactoryPlantableStandard(Block.cactus.blockID, Block.cactus.blockID));
-		registerPlantable(new FactoryPlantableStandard(Item.pumpkinSeeds.shiftedIndex, Block.pumpkinStem.blockID));
-		registerPlantable(new FactoryPlantableStandard(Item.melonSeeds.shiftedIndex, Block.melonStem.blockID));
-		registerPlantable(new FactoryPlantableStandard(Block.mushroomBrown.blockID, Block.mushroomBrown.blockID));
-		registerPlantable(new FactoryPlantableStandard(Block.mushroomRed.blockID, Block.mushroomRed.blockID));
-		registerPlantable(new FactoryPlantableWheat());
+		registerPlantable(new PlantableStandard(Block.sapling.blockID, Block.sapling.blockID));
+		registerPlantable(new PlantableStandard(Item.reed.shiftedIndex, Block.reed.blockID));
+		registerPlantable(new PlantableStandard(Block.cactus.blockID, Block.cactus.blockID));
+		registerPlantable(new PlantableStandard(Item.pumpkinSeeds.shiftedIndex, Block.pumpkinStem.blockID));
+		registerPlantable(new PlantableStandard(Item.melonSeeds.shiftedIndex, Block.melonStem.blockID));
+		registerPlantable(new PlantableStandard(Block.mushroomBrown.blockID, Block.mushroomBrown.blockID));
+		registerPlantable(new PlantableStandard(Block.mushroomRed.blockID, Block.mushroomRed.blockID));
+		registerPlantable(new PlantableWheat());
 		
-		registerHarvestable(new FactoryHarvestableStandard(Block.wood.blockID, FactoryHarvestType.Tree));
-		registerHarvestable(new FactoryHarvestableStandard(Block.leaves.blockID, FactoryHarvestType.Tree));
-		registerHarvestable(new FactoryHarvestableStandard(Block.reed.blockID, FactoryHarvestType.LeaveBottom));
-		registerHarvestable(new FactoryHarvestableStandard(Block.cactus.blockID, FactoryHarvestType.LeaveBottom));
-		registerHarvestable(new FactoryHarvestableStandard(Block.plantRed.blockID, FactoryHarvestType.Normal));
-		registerHarvestable(new FactoryHarvestableStandard(Block.plantYellow.blockID, FactoryHarvestType.Normal));
-		registerHarvestable(new FactoryHarvestableStandard(Block.tallGrass.blockID, FactoryHarvestType.Normal));
-		registerHarvestable(new FactoryHarvestableStandard(Block.mushroomCapBrown.blockID, FactoryHarvestType.Tree));
-		registerHarvestable(new FactoryHarvestableStandard(Block.mushroomCapRed.blockID, FactoryHarvestType.Tree));
-		registerHarvestable(new FactoryHarvestableStemPlant(Block.pumpkin.blockID, FactoryHarvestType.Normal));
-		registerHarvestable(new FactoryHarvestableStemPlant(Block.melon.blockID, FactoryHarvestType.Normal));
-		registerHarvestable(new FactoryHarvestableWheat());
+		registerHarvestable(new HarvestableStandard(Block.wood.blockID, HarvestType.Tree));
+		registerHarvestable(new HarvestableStandard(Block.leaves.blockID, HarvestType.Tree));
+		registerHarvestable(new HarvestableStandard(Block.reed.blockID, HarvestType.LeaveBottom));
+		registerHarvestable(new HarvestableStandard(Block.cactus.blockID, HarvestType.LeaveBottom));
+		registerHarvestable(new HarvestableStandard(Block.plantRed.blockID, HarvestType.Normal));
+		registerHarvestable(new HarvestableStandard(Block.plantYellow.blockID, HarvestType.Normal));
+		registerHarvestable(new HarvestableStandard(Block.tallGrass.blockID, HarvestType.Normal));
+		registerHarvestable(new HarvestableStandard(Block.mushroomCapBrown.blockID, HarvestType.Tree));
+		registerHarvestable(new HarvestableStandard(Block.mushroomCapRed.blockID, HarvestType.Tree));
+		registerHarvestable(new HarvestableStemPlant(Block.pumpkin.blockID, HarvestType.Normal));
+		registerHarvestable(new HarvestableStemPlant(Block.melon.blockID, HarvestType.Normal));
+		registerHarvestable(new HarvestableWheat());
 		if(HarvesterHarvestsSmallMushrooms)
 		{
-			registerHarvestable(new FactoryHarvestableStandard(Block.mushroomBrown.blockID, FactoryHarvestType.Normal));
-			registerHarvestable(new FactoryHarvestableStandard(Block.mushroomRed.blockID, FactoryHarvestType.Normal));
+			registerHarvestable(new HarvestableStandard(Block.mushroomBrown.blockID, HarvestType.Normal));
+			registerHarvestable(new HarvestableStandard(Block.mushroomRed.blockID, HarvestType.Normal));
 		}
 		
-		registerFertilizable(new FactoryFertilizableSapling());
-		registerFertilizable(new FactoryFertilizableWheat());
-		registerFertilizable(new FactoryFertilizableGiantMushroom(Block.mushroomBrown.blockID));
-		registerFertilizable(new FactoryFertilizableGiantMushroom(Block.mushroomRed.blockID));
-		registerFertilizable(new FactoryFertilizableStemPlants(Block.pumpkinStem.blockID));
-		registerFertilizable(new FactoryFertilizableStemPlants(Block.melonStem.blockID));
+		registerFertilizable(new FertilizableSapling());
+		registerFertilizable(new FertilizableWheat());
+		registerFertilizable(new FertilizableGiantMushroom(Block.mushroomBrown.blockID));
+		registerFertilizable(new FertilizableGiantMushroom(Block.mushroomRed.blockID));
+		registerFertilizable(new FertilizableStemPlants(Block.pumpkinStem.blockID));
+		registerFertilizable(new FertilizableStemPlants(Block.melonStem.blockID));
 		
 		registerFertilizerItem(Item.dyePowder.shiftedIndex);
 		
-		registerRanchable(new FactoryRanchableChicken());
-		registerRanchable(new FactoryRanchableCow());
-		registerRanchable(new FactoryRanchableStandard(EntityPig.class, new ItemStack(Item.porkRaw), 45, 1, 40));
-		registerRanchable(new FactoryRanchableStandard(EntitySheep.class, new ItemStack(Block.cloth), 30, 1, 40));
-		registerRanchable(new FactoryRanchableStandard(EntitySlime.class, new ItemStack(Item.slimeBall), 25, 1, 30));
-		registerRanchable(new FactoryRanchableStandard(EntitySquid.class, new ItemStack(Item.dyePowder), 10, 1, 40));
+		registerRanchable(new RanchableChicken());
+		registerRanchable(new RanchableCow());
+		registerRanchable(new RanchableStandard(EntityPig.class, new ItemStack(Item.porkRaw), 45, 1, 40));
+		registerRanchable(new RanchableStandard(EntitySheep.class, new ItemStack(Block.cloth), 30, 1, 40));
+		registerRanchable(new RanchableStandard(EntitySlime.class, new ItemStack(Item.slimeBall), 25, 1, 30));
+		registerRanchable(new RanchableStandard(EntitySquid.class, new ItemStack(Item.dyePowder), 10, 1, 40));
 	}
 	
-	
-	public static int addToInventory(IInventory targetInventory, ItemStack stackToAdd)
+	private static void setupTextures()
 	{
-		int amountLeftToAdd = stackToAdd.stackSize;
-		int stackSizeLimit;
-		if(stackToAdd.itemID >= Block.blocksList.length)
-		{
-			stackSizeLimit = Math.min(targetInventory.getInventoryStackLimit(), Item.itemsList[stackToAdd.itemID].getItemStackLimit());
-		}
-		else
-		{
-			stackSizeLimit = targetInventory.getInventoryStackLimit();
-		}
-		int slotIndex;
+		// 0 bottom 1 top 2 east 3 west 4 north 5 south
+		cargoRailDropoffTexture = 0;
+		cargoRailPickupTexture = 1;
+		passengerRailDropoffTexture = 2;
+		passengerRailPickupTexture = 3;
+		steelSideTexture = 4;
+		steelHoleTexture = 5;
+		planterCactusTexture = 6;
+		planterMushroomTexture = 7;
+		planterSaplingTexture = 8;
+		planterSugarTexture = 9;
+		conveyorNormalTexture = 10;
+		conveyorReverseTexture = 11;
+		harvesterAnimatedTexture = 12;
+		rancherAnimatedTexture = 13;
+		fisherBucketTexture = 14;
+		fisherFishTexture = 15;
+		harvesterSideTexture = 16;
+		rancherSideTexture = 17;
+		fertilizerBackTexture = 18;
+		fertilizerSideTexture = 19;
 		
-		while(amountLeftToAdd > 0)
-		{
-			slotIndex = getAvailableSlot(targetInventory, stackToAdd);
-			if(slotIndex < 0)
-			{
-				break;
-			}
-			ItemStack targetStack = targetInventory.getStackInSlot(slotIndex);
-			if(targetStack == null)
-			{
-				if(stackToAdd.stackSize <= stackSizeLimit)
-				{
-					ItemStack s = stackToAdd.copy();
-					s.stackSize = amountLeftToAdd;
-					targetInventory.setInventorySlotContents(slotIndex, s);
-					amountLeftToAdd = 0;
-					break;
-				}
-				else
-				{
-					ItemStack s = stackToAdd.copy();
-					s.stackSize = stackSizeLimit;
-					targetInventory.setInventorySlotContents(slotIndex, stackToAdd);
-					amountLeftToAdd -= s.stackSize;
-				}
-			}
-			else
-			{
-				int amountToAdd = Math.min(amountLeftToAdd, stackSizeLimit - targetStack.stackSize);
-				targetStack.stackSize += amountToAdd;
-				amountLeftToAdd -= amountToAdd;
-			}
-		}
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Planter)][0] = steelHoleTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Planter)][1] = steelSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Planter)][2] = planterCactusTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Planter)][3] = planterMushroomTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Planter)][4] = planterSaplingTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Planter)][5] = planterSugarTexture;
 		
-		return amountLeftToAdd;
-	}
-	
-	private static int getAvailableSlot(IInventory inventory, ItemStack stack)
-	{
-		int stackSizeLimit;
-		if(stack.itemID >= Block.blocksList.length)
-		{
-			stackSizeLimit = Math.min(inventory.getInventoryStackLimit(), Item.itemsList[stack.itemID].getItemStackLimit());
-		}
-		else
-		{
-			stackSizeLimit = inventory.getInventoryStackLimit();
-		}
-		for(int i = 0; i < inventory.getSizeInventory(); i++)
-		{
-			ItemStack targetStack = inventory.getStackInSlot(i);
-			if(targetStack == null)
-			{
-				return i;
-			}
-			if(targetStack.itemID == stack.itemID && targetStack.getItemDamage() == stack.getItemDamage()
-					&& targetStack.stackSize < stackSizeLimit)
-			{
-				return i;
-			}
-		}
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fisher)][0] = steelHoleTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fisher)][1] = steelSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fisher)][2] = fisherBucketTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fisher)][3] = fisherBucketTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fisher)][4] = fisherFishTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fisher)][5] = fisherFishTexture;
 		
-		return -1;
-	}
-
-	public static List<IInventory> findChests(World world, int x, int y, int z)
-	{
-		List<IInventory> chests = new LinkedList<IInventory>();
-		TileEntity te;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Harvester)][0] = steelSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Harvester)][1] = steelSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Harvester)][2] = harvesterAnimatedTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Harvester)][3] = steelHoleTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Harvester)][4] = harvesterSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Harvester)][5] = harvesterSideTexture;
 		
-		te = world.getBlockTileEntity(x + 1, y, z);
-		if(te != null && te instanceof IInventory)
-		{
-			chests.add(checkForDoubleChest(world, te, x + 1, y, z));
-		}
-		te = world.getBlockTileEntity(x - 1, y, z);
-		if(te != null && te instanceof IInventory)
-		{
-			chests.add(checkForDoubleChest(world, te, x - 1, y, z));
-		}
-		te = world.getBlockTileEntity(x, y, z + 1);
-		if(te != null && te instanceof IInventory)
-		{
-			chests.add(checkForDoubleChest(world, te, x, y, z + 1));
-		}
-		te = world.getBlockTileEntity(x, y, z - 1);
-		if(te != null && te instanceof IInventory)
-		{
-			chests.add(checkForDoubleChest(world, te, x, y, z - 1));
-		}
-		te = world.getBlockTileEntity(x, y + 1, z);
-		if(te != null && te instanceof IInventory)
-		{
-			chests.add(checkForDoubleChest(world, te, x, y + 1, z));
-		}
-		te = world.getBlockTileEntity(x, y - 1, z);
-		if(te != null && te instanceof IInventory)
-		{
-			chests.add(checkForDoubleChest(world, te, x, y - 1, z));
-		}
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Rancher)][0] = steelSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Rancher)][1] = steelSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Rancher)][2] = rancherAnimatedTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Rancher)][3] = steelHoleTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Rancher)][4] = rancherSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Rancher)][5] = rancherSideTexture;
 		
-		return chests;
-	}
-	
-	private static IInventory checkForDoubleChest(World world, TileEntity te, int x, int y, int z)
-	{
-		int blockId = world.getBlockId(x, y, z);
-		if(blockId == Block.chest.blockID)
-		{
-			if(world.getBlockId(x + 1, y, z) == Block.chest.blockID)
-			{
-				return new InventoryLargeChest("Large Chest", ((IInventory)te), ((IInventory)world.getBlockTileEntity(x + 1, y, z)));
-			}
-			if(world.getBlockId(x - 1, y, z) == Block.chest.blockID)
-			{
-				return new InventoryLargeChest("Large Chest", ((IInventory)te), ((IInventory)world.getBlockTileEntity(x - 1, y, z)));
-			}
-			if(world.getBlockId(x, y, z + 1) == Block.chest.blockID)
-			{
-				return new InventoryLargeChest("Large Chest", ((IInventory)te), ((IInventory)world.getBlockTileEntity(x, y, z + 1)));
-			}
-			if(world.getBlockId(x, y, z - 1) == Block.chest.blockID)
-			{
-				return new InventoryLargeChest("Large Chest", ((IInventory)te), ((IInventory)world.getBlockTileEntity(x, y, z - 1)));
-			}
-		}
-		return ((IInventory)te);
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][0] = fertilizerSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][1] = fertilizerSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][2] = fertilizerSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][3] = fertilizerSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][4] = fertilizerSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][5] = fertilizerBackTexture;
 	}
 	
 	public static void registerPlantable(IFactoryPlantable plantable)
@@ -522,7 +413,15 @@ public class MineFactoryReloadedCore
 	public enum PowerSystem
 	{
 		Redstone,
-		BuildCraft,
-		IndustrialCraft
+		BuildCraft
+	}
+	
+	public enum Machine
+	{
+		Planter,
+		Fisher,
+		Harvester,
+		Fertilizer,
+		Rancher
 	}
 }

@@ -37,26 +37,25 @@ del /s /f /q "%RELEASESERVER%\*" > NUL
 xcopy /y /e /q "%MCP%\reobf\minecraft\*" "%RELEASECLIENT%\" > NUL
 xcopy /y /e /q "%MCP%\reobf\minecraft_server\*" "%RELEASESERVER%\" > NUL
 
-mkdir "%RELEASECLIENT%\%SPRITEFOLDER%"
-mkdir "%RELEASESERVER%\%SPRITEFOLDER%"
-
+mkdir "%RELEASECLIENT%\%SPRITEFOLDER%\animations"
 xcopy /y /e /q "%PROJBASE%\sprites\terrain.png" "%RELEASECLIENT%\%SPRITEFOLDER%" > NUL
 xcopy /y /e /q "%PROJBASE%\sprites\items.png" "%RELEASECLIENT%\%SPRITEFOLDER%" > NUL
-xcopy /y /e /q "%PROJBASE%\sprites\animations\*" "%RELEASECLIENT%\%SPRITEFOLDER%" > NUL
+xcopy /y /e /q "%PROJBASE%\sprites\animations\*.png" "%RELEASECLIENT%\%SPRITEFOLDER%\animations" > NUL
 rmdir "%RELEASECLIENT%\%SPRITEFOLDER%\items"
 rmdir "%RELEASECLIENT%\%SPRITEFOLDER%\terrain"
 
+mkdir "%RELEASESERVER%\%SPRITEFOLDER%\animations"
 xcopy /y /e /q "%PROJBASE%\sprites\terrain.png" "%RELEASESERVER%\%SPRITEFOLDER%" > NUL
 xcopy /y /e /q "%PROJBASE%\sprites\items.png" "%RELEASESERVER%\%SPRITEFOLDER%" > NUL
-xcopy /y /e /q "%PROJBASE%\sprites\animations\*" "%RELEASESERVER%\%SPRITEFOLDER%" > NUL
-rmdir "%RELEASESERVER%\%SPRITEFOLDER%\items"
-rmdir "%RELEASESERVER%\%SPRITEFOLDER%\terrain"
+xcopy /y /e /q "%PROJBASE%\sprites\animations\*.png" "%RELEASESERVER%\%SPRITEFOLDER%\animations" > NUL
+rmdir /s /q "%RELEASESERVER%\%SPRITEFOLDER%\items"
+rmdir /s /q "%RELEASESERVER%\%SPRITEFOLDER%\terrain"
 
 cd "%RELEASECLIENT%"
-rmdir net
+rmdir /s /q net
 "%ZIPPATH%" -r -q "%RELEASEBASE%\%MODNAME%_Client_%MODVERSION%.zip" *
 cd "%RELEASESERVER%"
-rmdir net
+rmdir /s /q net
 "%ZIPPATH%" -r -q "%RELEASEBASE%\%MODNAME%_Server_%MODVERSION%.zip" *
 
 pause

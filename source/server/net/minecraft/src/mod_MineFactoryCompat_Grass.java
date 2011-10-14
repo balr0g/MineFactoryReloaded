@@ -1,6 +1,7 @@
 package net.minecraft.src;
 
-import net.minecraft.src.powercrystals.minefactoryreloaded.IFactoryFertilizable;
+import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryFertilizable;
+
 
 public class mod_MineFactoryCompat_Grass extends BaseModMp {
 

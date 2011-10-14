@@ -6,16 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 import net.minecraft.src.ItemStack;
+import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryFertilizable;
 
-public class TileEntityFertilizer extends TileEntityFactoryInventoryBase
+public class TileEntityFertilizer extends TileEntityFactoryInventoryRotateable
 {
 	private static List<Integer> fertilizerItems = new LinkedList<Integer>();
 	private static Map<Integer, IFactoryFertilizable> fertilizables = new HashMap<Integer, IFactoryFertilizable>();
-	
-	public TileEntityFertilizer()
-	{
-		super(25, 25);
-	}
     
     public static void registerFertilizable(IFactoryFertilizable fertilizable)
     {
@@ -31,10 +27,16 @@ public class TileEntityFertilizer extends TileEntityFactoryInventoryBase
 		}
     }
 
-    public String getInvName()
-    {
-        return "Fertilizer";
-    }
+	public TileEntityFertilizer()
+	{
+		super(10, 1);
+	}
+
+	@Override
+	public String getInvName()
+	{
+		return "Fertilizer";
+	}
 
     @Override
     public void doWork()
@@ -102,4 +104,5 @@ public class TileEntityFertilizer extends TileEntityFactoryInventoryBase
             }
         }
     }
+
 }

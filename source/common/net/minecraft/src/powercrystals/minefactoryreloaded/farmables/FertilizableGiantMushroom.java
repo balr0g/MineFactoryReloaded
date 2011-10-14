@@ -1,14 +1,16 @@
-package net.minecraft.src.powercrystals.minefactoryreloaded;
+package net.minecraft.src.powercrystals.minefactoryreloaded.farmables;
 
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.World;
+import net.minecraft.src.powercrystals.minefactoryreloaded.MineFactoryReloadedCore;
+import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryFertilizable;
 
-public class FactoryFertilizableGiantMushroom implements IFactoryFertilizable
+public class FertilizableGiantMushroom implements IFactoryFertilizable
 {
 	private int fertilizableId;
 	
-	public FactoryFertilizableGiantMushroom(int fertilizableId)
+	public FertilizableGiantMushroom(int fertilizableId)
 	{
 		this.fertilizableId = fertilizableId;
 	}

@@ -1,13 +1,14 @@
-package net.minecraft.src.powercrystals.minefactoryreloaded;
+package net.minecraft.src.powercrystals.minefactoryreloaded.farmables;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.World;
+import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryPlantable;
 
-public class FactoryPlantableWheat extends FactoryPlantableStandard implements IFactoryPlantable
+public class PlantableWheat extends PlantableStandard implements IFactoryPlantable
 {
-	public FactoryPlantableWheat()
+	public PlantableWheat()
 	{
 		super(Item.seeds.shiftedIndex, Block.crops.blockID);
 	}

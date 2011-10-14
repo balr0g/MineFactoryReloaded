@@ -10,7 +10,7 @@ import net.minecraft.src.buildcraft.api.PowerFramework;
 import net.minecraft.src.buildcraft.api.PowerProvider;
 import net.minecraft.src.powercrystals.minefactoryreloaded.MineFactoryReloadedCore.PowerSystem;
 
-public abstract class TileEntityFactoryBase extends TileEntity implements IPowerReceptor
+public abstract class TileEntityFactory extends TileEntity implements IPowerReceptor
 {
 	private boolean lastRedstonePowerState = false;
 	private boolean redstonePowerAvailable = false;
@@ -18,7 +18,7 @@ public abstract class TileEntityFactoryBase extends TileEntity implements IPower
 	private PowerProvider powerProvider;
 	private int powerNeeded;
 	
-	protected TileEntityFactoryBase(int bcEnergyNeededToWork, int bcEnergyNeededToActivate)
+	protected TileEntityFactory(int bcEnergyNeededToWork, int bcEnergyNeededToActivate)
 	{
 		powerProvider = PowerFramework.currentFramework.createPowerProvider();
 		powerNeeded = bcEnergyNeededToWork;
@@ -29,9 +29,9 @@ public abstract class TileEntityFactoryBase extends TileEntity implements IPower
 	{
 		if(MineFactoryReloadedCore.HarvesterCanDropInChests)
 		{
-			for(IInventory chest : MineFactoryReloadedCore.findChests(world, harvesterX, harvesterY, harvesterZ))
+			for(IInventory chest : InventoryUtil.findChests(world, harvesterX, harvesterY, harvesterZ))
 			{
-				s.stackSize = MineFactoryReloadedCore.addToInventory(chest, s);
+				s.stackSize = InventoryUtil.addToInventory(chest, s);
 				if(s.stackSize == 0)
 				{
 					return;
@@ -64,16 +64,6 @@ public abstract class TileEntityFactoryBase extends TileEntity implements IPower
 		}
 	}
 	
-	protected float getICEnergyFromBCPower(int power)
-	{
-		return power * 5.0F / 2.0F;
-	}
-	
-	protected float getBCPowerFromICEnergy(int energy)
-	{
-		return energy * 2.0F / 5.0F;
-	}
-	
 	protected boolean powerAvailable()
 	{
 		if(MineFactoryReloadedCore.powerSystem == PowerSystem.Redstone)
@@ -98,7 +88,6 @@ public abstract class TileEntityFactoryBase extends TileEntity implements IPower
 	public void updateEntity()
 	{
 		super.updateEntity();
-		System.out.println("Starting update, power system is " + MineFactoryReloadedCore.powerSystem);
 		if(MineFactoryReloadedCore.powerSystem == PowerSystem.BuildCraft)
 		{
 			getPowerProvider().update(this);

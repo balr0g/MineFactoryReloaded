@@ -4,7 +4,7 @@ import net.minecraft.src.Block;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 
-public class TileEntityFisher extends TileEntityFactoryInventoryBase
+public class TileEntityFisher extends TileEntityFactoryInventory
 {
 	public TileEntityFisher()
 	{
