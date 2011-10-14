@@ -26,9 +26,9 @@ public class BlockFactoryMachine extends BlockContainer implements ITextureProvi
     {
     	int md = iblockaccess.getBlockMetadata(x, y, z);
     	TileEntity te = iblockaccess.getBlockTileEntity(x, y, z);
-    	if(te instanceof TileEntityFactoryInventoryRotateable)
+    	if(te instanceof TileEntityFactoryRotateable)
     	{
-    		return textures[md][((TileEntityFactoryInventoryRotateable)te).getRotatedSide(side)];
+    		return textures[md][((TileEntityFactoryRotateable)te).getRotatedSide(side)];
     	}
     	return textures[md][side];
     }
@@ -70,14 +70,14 @@ public class BlockFactoryMachine extends BlockContainer implements ITextureProvi
 			return true;
 		}
 		ItemStack hand = entityplayer.inventory.getCurrentItem();
-		if(hand != null && hand.itemID == MineFactoryReloadedCore.factoryHammerItem.shiftedIndex && te instanceof TileEntityFactoryInventoryRotateable)
+		if(hand != null && hand.itemID == MineFactoryReloadedCore.factoryHammerItem.shiftedIndex && te instanceof TileEntityFactoryRotateable)
 		{
-			((TileEntityFactoryInventoryRotateable)te).rotate();
+			((TileEntityFactoryRotateable)te).rotate();
 			world.markBlockNeedsUpdate(i, j, k);
 		}
-		else if(te != null && te instanceof TileEntityFactoryInventory)
+		else if(te != null && te instanceof TileEntityFactory && ((TileEntityFactory)te).getSizeInventory() == 27)
 		{
-			entityplayer.displayGUIChest((TileEntityFactoryInventory)te);
+			entityplayer.displayGUIChest((TileEntityFactory)te);
 		}
 		return true;
 	}

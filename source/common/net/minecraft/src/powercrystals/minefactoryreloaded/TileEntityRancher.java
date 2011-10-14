@@ -10,7 +10,7 @@ import net.minecraft.src.EntityLiving;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryRanchable;
 
-public class TileEntityRancher extends TileEntityFactoryInventoryRotateable
+public class TileEntityRancher extends TileEntityFactoryRotateable
 {
 	private static Map<Class<?>, IFactoryRanchable> ranchables = new HashMap<Class<?>, IFactoryRanchable>();
 
@@ -21,7 +21,7 @@ public class TileEntityRancher extends TileEntityFactoryInventoryRotateable
 	
 	public TileEntityRancher()
 	{
-		super(25, 25);
+		super(25, 25, 27);
 	}
 
 	@Override

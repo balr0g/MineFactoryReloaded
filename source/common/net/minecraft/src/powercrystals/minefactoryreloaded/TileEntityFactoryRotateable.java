@@ -2,13 +2,13 @@ package net.minecraft.src.powercrystals.minefactoryreloaded;
 
 import net.minecraft.src.buildcraft.api.Orientations;
 
-public abstract class TileEntityFactoryInventoryRotateable extends TileEntityFactoryInventory
+public abstract class TileEntityFactoryRotateable extends TileEntityFactory
 {
 	private Orientations forwardDirection;
 	
-	public TileEntityFactoryInventoryRotateable(int bcEnergyNeededToWork, int bcEnergyNeededToActivate)
+	public TileEntityFactoryRotateable(int bcEnergyNeededToWork, int bcEnergyNeededToActivate, int inventorySize)
 	{
-		super(bcEnergyNeededToWork, bcEnergyNeededToActivate);
+		super(bcEnergyNeededToWork, bcEnergyNeededToActivate, inventorySize);
 		forwardDirection = Orientations.XPos;
 	}
 	

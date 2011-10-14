@@ -6,13 +6,13 @@ import java.util.Map;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryPlantable;
 
-public class TileEntityPlanter extends TileEntityFactoryInventory
+public class TileEntityPlanter extends TileEntityFactory
 {
 	private static Map<Integer, IFactoryPlantable> plantables = new HashMap<Integer, IFactoryPlantable>();
 	
 	public TileEntityPlanter() 
 	{
-		super(1, 1);
+		super(1, 1, 27);
 	}
 
     public static void registerPlantable(IFactoryPlantable plantable)

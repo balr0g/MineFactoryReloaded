@@ -8,7 +8,7 @@ import java.util.Map;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryFertilizable;
 
-public class TileEntityFertilizer extends TileEntityFactoryInventoryRotateable
+public class TileEntityFertilizer extends TileEntityFactoryRotateable
 {
 	private static List<Integer> fertilizerItems = new LinkedList<Integer>();
 	private static Map<Integer, IFactoryFertilizable> fertilizables = new HashMap<Integer, IFactoryFertilizable>();
@@ -29,7 +29,7 @@ public class TileEntityFertilizer extends TileEntityFactoryInventoryRotateable
 
 	public TileEntityFertilizer()
 	{
-		super(10, 1);
+		super(10, 1, 27);
 	}
 
 	@Override

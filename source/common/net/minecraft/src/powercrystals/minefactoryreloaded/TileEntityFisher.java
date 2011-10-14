@@ -4,11 +4,11 @@ import net.minecraft.src.Block;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 
-public class TileEntityFisher extends TileEntityFactoryInventory
+public class TileEntityFisher extends TileEntityFactory
 {
 	public TileEntityFisher()
 	{
-		super(5, 1);
+		super(5, 1, 27);
 	}
 
 	@Override

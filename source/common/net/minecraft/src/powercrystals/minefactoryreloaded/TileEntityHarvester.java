@@ -10,7 +10,7 @@ import net.minecraft.src.World;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryHarvestable;
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.HarvestType;
 
-public class TileEntityHarvester extends TileEntityFactoryInventoryRotateable
+public class TileEntityHarvester extends TileEntityFactoryRotateable
 {
 	private static Map<Integer, IFactoryHarvestable> harvestables = new HashMap<Integer, IFactoryHarvestable>();
 	
@@ -21,7 +21,7 @@ public class TileEntityHarvester extends TileEntityFactoryInventoryRotateable
 	
 	public TileEntityHarvester()
 	{
-		super(10, 1);
+		super(10, 1, 0);
 	}
 
 	@Override

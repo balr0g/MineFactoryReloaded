@@ -7,13 +7,13 @@ import net.minecraft.src.EntityLiving;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemFood;
 import net.minecraft.src.ItemStack;
-import net.minecraft.src.powercrystals.minefactoryreloaded.TileEntityFactoryInventory;
+import net.minecraft.src.powercrystals.minefactoryreloaded.TileEntityFactory;
 
-public class TileEntityVeterinary extends TileEntityFactoryInventory
+public class TileEntityVeterinary extends TileEntityFactory
 {
 	public TileEntityVeterinary()
 	{
-		super(25, 25);
+		super(25, 25, 27);
 	}
 	
 	@Override

@@ -1,8 +1,11 @@
 package net.minecraft.src.powercrystals.minefactoryreloaded;
 
 import net.minecraft.src.EntityItem;
+import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
+import net.minecraft.src.NBTTagCompound;
+import net.minecraft.src.NBTTagList;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraft.src.buildcraft.api.IPowerReceptor;
@@ -10,7 +13,7 @@ import net.minecraft.src.buildcraft.api.PowerFramework;
 import net.minecraft.src.buildcraft.api.PowerProvider;
 import net.minecraft.src.powercrystals.minefactoryreloaded.MineFactoryReloadedCore.PowerSystem;
 
-public abstract class TileEntityFactory extends TileEntity implements IPowerReceptor
+public abstract class TileEntityFactory extends TileEntity implements IInventory, IPowerReceptor
 {
 	private boolean lastRedstonePowerState = false;
 	private boolean redstonePowerAvailable = false;
@@ -18,11 +21,15 @@ public abstract class TileEntityFactory extends TileEntity implements IPowerRece
 	private PowerProvider powerProvider;
 	private int powerNeeded;
 	
-	protected TileEntityFactory(int bcEnergyNeededToWork, int bcEnergyNeededToActivate)
+	private int inventorySize;
+	
+	protected TileEntityFactory(int bcEnergyNeededToWork, int bcEnergyNeededToActivate, int inventorySize)
 	{
 		powerProvider = PowerFramework.currentFramework.createPowerProvider();
 		powerNeeded = bcEnergyNeededToWork;
 		powerProvider.configure(25, powerNeeded, powerNeeded, bcEnergyNeededToActivate, powerNeeded);
+		this.inventorySize = inventorySize; 
+		inventory = new ItemStack[getSizeInventory()];
 	}
 	
 	protected void dropStack(World world, ItemStack s, float dropX, float dropY, float dropZ, int harvesterX, int harvesterY, int harvesterZ)
@@ -112,5 +119,139 @@ public abstract class TileEntityFactory extends TileEntity implements IPowerRece
 	public int powerRequest()
 	{
 		return powerNeeded;
+	}
+	
+	// IInventory methods
+	
+	protected ItemStack[] inventory;
+	
+	@Override
+	public int getSizeInventory()
+	{
+		return inventorySize;
+	}
+
+	@Override
+	public ItemStack getStackInSlot(int i)
+	{
+		return inventory[i];
+	}
+	
+	@Override
+	public void openChest()
+	{
+	}
+	
+	@Override
+	public void closeChest()
+	{
+	}
+
+	@Override
+    public ItemStack decrStackSize(int i, int j)
+    {
+        if(inventory[i] != null)
+        {
+            if(inventory[i].stackSize <= j)
+            {
+                ItemStack itemstack = inventory[i];
+                inventory[i] = null;
+                return itemstack;
+            }
+            ItemStack itemstack1 = inventory[i].splitStack(j);
+            if(inventory[i].stackSize == 0)
+            {
+                inventory[i] = null;
+            }
+            return itemstack1;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+	@Override
+    public void setInventorySlotContents(int i, ItemStack itemstack)
+    {
+        inventory[i] = itemstack;
+        if(itemstack != null && itemstack.stackSize > getInventoryStackLimit())
+        {
+            itemstack.stackSize = getInventoryStackLimit();
+        }
+    }
+
+	@Override
+	public int getInventoryStackLimit()
+	{
+		return 64;
+	}
+
+	@Override
+	public boolean canInteractWith(EntityPlayer entityplayer)
+	{
+        if(worldObj.getBlockTileEntity(xCoord, yCoord, zCoord) != this)
+        {
+            return false;
+        }
+        return entityplayer.getDistanceSq((double)xCoord + 0.5D, (double)yCoord + 0.5D, (double)zCoord + 0.5D) <= 64D;
+	}
+	
+	@Override
+    public void readFromNBT(NBTTagCompound nbttagcompound)
+    {
+        super.readFromNBT(nbttagcompound);
+        if(inventorySize > 0)
+        {
+	        NBTTagList nbttaglist = nbttagcompound.getTagList("Items");
+	        inventory = new ItemStack[getSizeInventory()];
+	        for(int i = 0; i < nbttaglist.tagCount(); i++)
+	        {
+	            NBTTagCompound nbttagcompound1 = (NBTTagCompound)nbttaglist.tagAt(i);
+	            int j = nbttagcompound1.getByte("Slot") & 0xff;
+	            if(j >= 0 && j < inventory.length)
+	            {
+	            	ItemStack s = new ItemStack(0, 0, 0);
+	            	s.readFromNBT(nbttagcompound1);
+	                inventory[j] = s;
+	            }
+	        }
+        }
+
+    }
+
+	@Override
+    public void writeToNBT(NBTTagCompound nbttagcompound)
+    {
+        super.writeToNBT(nbttagcompound);
+        if(inventorySize > 0)
+        {
+	        NBTTagList nbttaglist = new NBTTagList();
+	        for(int i = 0; i < inventory.length; i++)
+	        {
+	            if(inventory[i] != null)
+	            {
+	                NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+	                nbttagcompound1.setByte("Slot", (byte)i);
+	                inventory[i].writeToNBT(nbttagcompound1);
+	                nbttaglist.setTag(nbttagcompound1);
+	            }
+	        }
+	
+	        nbttagcompound.setTag("Items", nbttaglist);
+        }
+    }
+	
+	public int findFirstStack(int itemId, int itemDamage)
+	{
+		for(int i = 0; i < getSizeInventory(); i++)
+		{
+			ItemStack s = getStackInSlot(i);
+			if(s != null && s.itemID == itemId && s.getItemDamage() == itemDamage)
+			{
+				return i;
+			}
+		}
+		return -1;
 	}
 }
