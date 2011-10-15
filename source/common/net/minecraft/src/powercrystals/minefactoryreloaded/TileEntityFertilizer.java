@@ -29,7 +29,7 @@ public class TileEntityFertilizer extends TileEntityFactoryRotateable
 
 	public TileEntityFertilizer()
 	{
-		super(10, 1, 27);
+		super(10, 1);
 	}
 
 	@Override

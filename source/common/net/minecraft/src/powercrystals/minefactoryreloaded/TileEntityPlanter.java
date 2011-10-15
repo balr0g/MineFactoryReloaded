@@ -12,7 +12,7 @@ public class TileEntityPlanter extends TileEntityFactory
 	
 	public TileEntityPlanter() 
 	{
-		super(1, 1, 27);
+		super(1, 1);
 	}
 
     public static void registerPlantable(IFactoryPlantable plantable)

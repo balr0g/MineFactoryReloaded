@@ -1,4 +1,4 @@
-package net.minecraft.src.powercrystals.minefactoryreloaded;
+package net.minecraft.src.powercrystals.minefactoryreloaded.core;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.EntityPlayer;
@@ -13,8 +13,7 @@ public interface IMFRProxy
 	
 	public int getBlockDamageDropped(Block block, int metadata);
 	
-	public int getFertilizerRenderId();
-	public int getConveyorRenderId();
+	public int getRenderId();
 	
 	public boolean fertilizeGiantMushroom(World world, int x, int y, int z);
 	public void fertilizeStemPlant(World world, int x, int y, int z);

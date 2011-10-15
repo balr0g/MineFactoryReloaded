@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.minecraft.src.AxisAlignedBB;
 import net.minecraft.src.DamageSource;
 import net.minecraft.src.EntityLiving;
 import net.minecraft.src.ItemStack;
+import net.minecraft.src.buildcraft.api.Orientations;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryRanchable;
 
 public class TileEntityRancher extends TileEntityFactoryRotateable
@@ -21,13 +21,19 @@ public class TileEntityRancher extends TileEntityFactoryRotateable
 	
 	public TileEntityRancher()
 	{
-		super(25, 25, 27);
+		super(25, 25);
 	}
 
 	@Override
 	public String getInvName()
 	{
 		return "Rancher";
+	}
+	
+	@Override
+	protected int getHarvestRadius()
+	{
+		return 2;
 	}
 
 	@Override
@@ -38,41 +44,31 @@ public class TileEntityRancher extends TileEntityFactoryRotateable
 			return;
 		}
 		
-		AxisAlignedBB pen;
-		int ourMetadata = getBlockMetadata();
 		float dropOffsetX = 0.0F;
 		float dropOffsetZ = 0.0F;
 		
-		if(ourMetadata == 0)
+		if(getDirectionFacing() == Orientations.XPos)
 		{
-			// -Z
-			pen = AxisAlignedBB.getBoundingBox(xCoord - 2, yCoord, zCoord - 5, xCoord + 3, yCoord + 3, zCoord);
-			dropOffsetX = 0.5F;
-			dropOffsetZ = 1.5F;
-		}
-		else if(ourMetadata == 1)
-		{
-			// -X
-			pen = AxisAlignedBB.getBoundingBox(xCoord - 5, yCoord, zCoord - 2, xCoord, yCoord + 3, zCoord + 3);
 			dropOffsetX = 1.5F;
 			dropOffsetZ = 0.5F;
 		}
-		else if(ourMetadata == 2)
+		else if(getDirectionFacing() == Orientations.ZPos)
 		{
-			// +Z
-			pen = AxisAlignedBB.getBoundingBox(xCoord - 2, yCoord, zCoord + 1, xCoord + 3, yCoord + 3, zCoord + 6);
 			dropOffsetX = 0.5F;
-			dropOffsetZ = -0.5F;
+			dropOffsetZ = 1.5F;
 		}
-		else 
+		else if(getDirectionFacing() == Orientations.XNeg)
 		{
-			// +X
-			pen = AxisAlignedBB.getBoundingBox(xCoord + 1, yCoord, zCoord - 2, xCoord + 6, yCoord + 3, zCoord + 3);
 			dropOffsetX = -0.5F;
 			dropOffsetZ = 0.5F;
 		}
+		else if(getDirectionFacing() == Orientations.ZNeg)
+		{
+			dropOffsetX = 0.5F;
+			dropOffsetZ = -0.5F;
+		}
 		
-		List<?> entities = worldObj.getEntitiesWithinAABB(net.minecraft.src.EntityLiving.class, pen);
+		List<?> entities = worldObj.getEntitiesWithinAABB(net.minecraft.src.EntityLiving.class, getHarvestArea().toAxisAlignedBB());
 		
 		for(Object o : entities)
 		{

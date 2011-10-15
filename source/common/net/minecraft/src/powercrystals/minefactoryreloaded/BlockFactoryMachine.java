@@ -9,10 +9,11 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.Material;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
+import net.minecraft.src.forge.IConnectRedstone;
 import net.minecraft.src.forge.ITextureProvider;
 import net.minecraft.src.powercrystals.minefactoryreloaded.MineFactoryReloadedCore.Machine;
 
-public class BlockFactoryMachine extends BlockContainer implements ITextureProvider
+public class BlockFactoryMachine extends BlockContainer implements IConnectRedstone, ITextureProvider
 {
 	public static int[][] textures = new int[16][6];
 	
@@ -70,10 +71,13 @@ public class BlockFactoryMachine extends BlockContainer implements ITextureProvi
 			return true;
 		}
 		ItemStack hand = entityplayer.inventory.getCurrentItem();
-		if(hand != null && hand.itemID == MineFactoryReloadedCore.factoryHammerItem.shiftedIndex && te instanceof TileEntityFactoryRotateable)
+		if(hand != null && hand.itemID == MineFactoryReloadedCore.factoryHammerItem.shiftedIndex)
 		{
-			((TileEntityFactoryRotateable)te).rotate();
-			world.markBlockNeedsUpdate(i, j, k);
+			if(te instanceof TileEntityFactoryRotateable)
+			{
+				((TileEntityFactoryRotateable)te).rotate();
+				world.markBlockNeedsUpdate(i, j, k);
+			}
 		}
 		else if(te != null && te instanceof TileEntityFactory && ((TileEntityFactory)te).getSizeInventory() == 27)
 		{
@@ -125,6 +129,12 @@ label0:
 		}
 
 		super.onBlockRemoval(world, i, j, k);
+	}
+
+	@Override
+	public boolean canConnectRedstone(IBlockAccess iba, int i, int j, int k, int dir)
+	{
+		return true;
 	}
 
 	@Override

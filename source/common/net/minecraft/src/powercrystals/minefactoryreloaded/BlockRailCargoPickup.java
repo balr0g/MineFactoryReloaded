@@ -8,6 +8,7 @@ import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.World;
 import net.minecraft.src.forge.ITextureProvider;
+import net.minecraft.src.powercrystals.minefactoryreloaded.core.InventoryUtil;
 
 public class BlockRailCargoPickup extends BlockRail implements ITextureProvider
 {

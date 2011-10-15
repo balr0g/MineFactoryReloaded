@@ -24,7 +24,6 @@ public class TextureFrameAnimFX extends TextureFX
         {
             BufferedImage bufferedimage = ImageIO.read((net.minecraft.client.Minecraft.class).getResource(filePath));
             srcSize = bufferedimage.getHeight();
-            System.out.println("Loading " + filePath + ", " + bufferedimage.getWidth() + "x" + bufferedimage.getHeight());
             fileBuffer = new int[bufferedimage.getWidth() * bufferedimage.getHeight()];
             numFrames = bufferedimage.getWidth() / bufferedimage.getHeight();
             bufferedimage.getRGB(0, 0, bufferedimage.getWidth(), bufferedimage.getHeight(), fileBuffer, 0, bufferedimage.getWidth());

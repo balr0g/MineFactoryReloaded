@@ -18,6 +18,7 @@ import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryFertiliza
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryHarvestable;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryPlantable;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryRanchable;
+import net.minecraft.src.powercrystals.minefactoryreloaded.core.IMFRProxy;
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.FertilizableGiantMushroom;
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.FertilizableSapling;
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.FertilizableStemPlants;
@@ -40,6 +41,8 @@ public class MineFactoryReloadedCore
 	public static String itemTexture = "/MineFactorySprites/items.png";
 	
 	public static Block machineBlock;
+	
+	public static Block conveyorBlock;
 	
 	public static Block passengerRailDropoffBlock;
 	public static Block passengerRailPickupBlock;
@@ -81,13 +84,17 @@ public class MineFactoryReloadedCore
 	public static Map<MineFactoryReloadedCore.Machine, Integer> machineMetadataMappings;
 	
 	// TODO
-	@MLProp(min=1, max=1023)
+	@MLProp(min=1, max=255)
+	public static int machineBlockID = 124;
+	@MLProp(min=1, max=255)
+	public static int conveyorBlockID = 125;
+	@MLProp(min=1, max=255)
 	public static int PassengerPickupRailBlockID = 129;
-	@MLProp(min=1, max=1023)
+	@MLProp(min=1, max=255)
 	public static int PassengerDropoffRailBlockID = 130;
-	@MLProp(min=1, max=1023)
+	@MLProp(min=1, max=255)
 	public static int CargoPickupRailBlockID = 131;
-	@MLProp(min=1, max=1023)
+	@MLProp(min=1, max=255)
 	public static int CargoDropoffRailBlockID = 132;
 	
 	@MLProp(min=256, max=32767)
@@ -143,7 +150,9 @@ public class MineFactoryReloadedCore
 		cargoRailDropoffBlock = new BlockRailCargoDropoff(CargoDropoffRailBlockID, cargoRailDropoffTexture);
 		cargoRailPickupBlock = new BlockRailCargoPickup(CargoPickupRailBlockID, cargoRailPickupTexture);
 		
-		machineBlock = new BlockFactoryMachine(137, 0, Material.ice);
+		conveyorBlock = new BlockConveyor(conveyorBlockID, conveyorNormalTexture);
+		
+		machineBlock = new BlockFactoryMachine(machineBlockID, 0, Material.circuits);
 		
 		steelIngotItem = (new ItemFactory(SteelIngotItemID))
 			.setIconIndex(steelIngotTexture)
@@ -154,6 +163,7 @@ public class MineFactoryReloadedCore
 			.setMaxStackSize(1);
 
 		ModLoader.RegisterBlock(machineBlock, ItemFactoryMachine.class);
+		ModLoader.RegisterBlock(conveyorBlock);
 		ModLoader.RegisterBlock(passengerRailPickupBlock);
 		ModLoader.RegisterBlock(passengerRailDropoffBlock);
 		ModLoader.RegisterBlock(cargoRailDropoffBlock);
@@ -422,6 +432,9 @@ public class MineFactoryReloadedCore
 		Fisher,
 		Harvester,
 		Fertilizer,
-		Rancher
+		Rancher,
+		Vet,
+		Collector,
+		Breaker
 	}
 }

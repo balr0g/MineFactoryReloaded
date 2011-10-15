@@ -6,8 +6,10 @@ import java.util.Map;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.ItemStack;
-import net.minecraft.src.World;
+import net.minecraft.src.buildcraft.api.Orientations;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryHarvestable;
+import net.minecraft.src.powercrystals.minefactoryreloaded.core.Area;
+import net.minecraft.src.powercrystals.minefactoryreloaded.core.BlockPosition;
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.HarvestType;
 
 public class TileEntityHarvester extends TileEntityFactoryRotateable
@@ -21,13 +23,19 @@ public class TileEntityHarvester extends TileEntityFactoryRotateable
 	
 	public TileEntityHarvester()
 	{
-		super(10, 1, 0);
+		super(5, 1);
+	}
+	
+	@Override
+	public int getSizeInventory()
+	{
+		return 0;
 	}
 
 	@Override
 	public String getInvName()
 	{
-		return "Harvester";
+		return null;
 	}
 
 	@Override
@@ -38,48 +46,43 @@ public class TileEntityHarvester extends TileEntityFactoryRotateable
 			return;
 		}
 		
-		int targetCoords[] = new int[3];
-		int ourMetadata = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
 		int harvestedBlockId = 0;
 		int harvestedBlockMetadata = 0;
 		float dropOffsetX = 0.0F;
 		float dropOffsetZ = 0.0F;
 		
-		if(ourMetadata == 0 || ourMetadata == 4)
+		if(getDirectionFacing() == Orientations.XPos)
 		{
-			targetCoords = getNextHarvest(worldObj, xCoord, yCoord, zCoord - 1, ourMetadata);
-			dropOffsetX = 0.5F;
-			dropOffsetZ = 1.5F;
-		}
-		else if(ourMetadata == 1 || ourMetadata == 5)
-		{
-			targetCoords = getNextHarvest(worldObj, xCoord - 1, yCoord, zCoord, ourMetadata);
 			dropOffsetX = 1.5F;
 			dropOffsetZ = 0.5F;
 		}
-		else if(ourMetadata == 2 || ourMetadata == 6)
+		else if(getDirectionFacing() == Orientations.ZPos)
 		{
-			targetCoords = getNextHarvest(worldObj, xCoord, yCoord, zCoord + 1, ourMetadata);
 			dropOffsetX = 0.5F;
-			dropOffsetZ = -0.5F;
+			dropOffsetZ = 1.5F;
 		}
-		else if(ourMetadata == 3 || ourMetadata == 7)
+		else if(getDirectionFacing() == Orientations.XNeg)
 		{
-			targetCoords = getNextHarvest(worldObj, xCoord + 1, yCoord, zCoord, ourMetadata);
 			dropOffsetX = -0.5F;
 			dropOffsetZ = 0.5F;
 		}
-		
-		if(targetCoords[1] < 0)
+		else if(getDirectionFacing() == Orientations.ZNeg)
+		{
+			dropOffsetX = 0.5F;
+			dropOffsetZ = -0.5F;
+		}
+
+		BlockPosition targetCoords = getNextHarvest();
+		if(targetCoords == null)
 		{
 			return;
 		}
 		
-		harvestedBlockId = worldObj.getBlockId(targetCoords[0], targetCoords[1], targetCoords[2]);
-		harvestedBlockMetadata = worldObj.getBlockMetadata(targetCoords[0], targetCoords[1], targetCoords[2]);
+		harvestedBlockId = worldObj.getBlockId(targetCoords.x, targetCoords.y, targetCoords.z);
+		harvestedBlockMetadata = worldObj.getBlockMetadata(targetCoords.x, targetCoords.y, targetCoords.z);
 		IFactoryHarvestable harvestable = harvestables.get(new Integer(harvestedBlockId));
 
-		harvestable.preHarvest(worldObj, targetCoords[0], targetCoords[1], targetCoords[2]);
+		harvestable.preHarvest(worldObj, targetCoords.x, targetCoords.y, targetCoords.z);
 		
 		List<ItemStack> drops;
 		
@@ -104,88 +107,56 @@ public class TileEntityHarvester extends TileEntityFactoryRotateable
 		{
 			worldObj.playSoundEffect(xCoord, yCoord, zCoord, "damage.fallsmall", 1.0F, 1.0F);
 		}
-		worldObj.setBlockWithNotify(targetCoords[0], targetCoords[1], targetCoords[2], 0);
+		worldObj.setBlockWithNotify(targetCoords.x, targetCoords.y, targetCoords.z, 0);
 		
-		harvestable.postHarvest(worldObj, targetCoords[0], targetCoords[1], targetCoords[2]);
+		harvestable.postHarvest(worldObj, targetCoords.x, targetCoords.y, targetCoords.z);
 	}
 
-	private int[] getNextHarvest(World world, int i, int j, int k, int ourMetadata)
+	private BlockPosition getNextHarvest()
 	{
-		int[] target = new int[3];
-		int currentXoffset = -1;
-		int currentZoffset = -1;
-		
-		int centerX = i;
-		int centerZ = k;
-		
-		if(ourMetadata == 0 || ourMetadata == 4)
+		Area harvestArea = getHarvestArea();
+		for(BlockPosition bp : harvestArea.getPositions())
 		{
-			centerZ--;
-		}
-		else if(ourMetadata == 1 || ourMetadata == 5)
-		{
-			centerX--;
-		}
-		else if(ourMetadata == 2 || ourMetadata == 6)
-		{
-			centerZ++;
-		}
-		else if(ourMetadata == 3 || ourMetadata == 7)
-		{
-			centerX++;
-		}
-		
-		for(currentXoffset = -1; currentXoffset <= 1; currentXoffset++)
-		{
-			for(currentZoffset = -1; currentZoffset <= 1; currentZoffset++)
+			int searchId = worldObj.getBlockId(bp.x, bp.y, bp.z);
+			
+			if(!harvestables.containsKey(new Integer(searchId)))
 			{
-				int searchId = world.getBlockId(centerX + currentXoffset, j, centerZ + currentZoffset);
-				
-				if(!harvestables.containsKey(new Integer(searchId)))
+				continue;
+			}
+			
+			IFactoryHarvestable harvestable = harvestables.get(new Integer(searchId));
+			if(harvestable.canBeHarvested(worldObj, bp.x, bp.y, bp.z))
+			{
+				if(harvestable.getHarvestType() == HarvestType.Normal)
 				{
-					continue;
+					return new BlockPosition(bp.x, bp.y, bp.z);
 				}
-				
-				IFactoryHarvestable harvestable = harvestables.get(new Integer(searchId));
-				if(harvestable.canBeHarvested(world, centerX + currentXoffset, j, centerZ + currentZoffset))
+				else if(harvestable.getHarvestType() == HarvestType.LeaveBottom)
 				{
-					if(harvestable.getHarvestType() == HarvestType.Normal)
+					BlockPosition temp = getNextVertical(bp.x, bp.y, bp.z);
+					if(temp == null)
 					{
-						target[0] = centerX + currentXoffset;
-						target[1] = j;
-						target[2] = centerZ + currentZoffset;
-						return target;
+						continue;
 					}
-					else if(harvestable.getHarvestType() == HarvestType.LeaveBottom)
-					{
-						int[] temp = getNextVertical(world, centerX + currentXoffset, j, centerZ + currentZoffset);
-						if(temp[1] < 0)
-						{
-							continue;
-						}
-						return temp;
-					}
-					else if(harvestable.getHarvestType() == HarvestType.Tree)
-					{
-						return getNextLog(world, centerX + currentXoffset, j, centerZ + currentZoffset);
-					}
+					return temp;
+				}
+				else if(harvestable.getHarvestType() == HarvestType.Tree)
+				{
+					return getNextLog(bp.x, bp.y, bp.z);
 				}
 			}
 		}
-		
-		target[1] = -1;
-		return target;
+		return null;
 	}
 	
-	private int[] getNextVertical(World world, int x, int y, int z)
+	private BlockPosition getNextVertical(int x, int y, int z)
 	{
-		int target[] = new int[3];
 		int highestBlockOffset = -1;
 		
 		for(int currentYoffset = 1; currentYoffset < MineFactoryReloadedCore.SugarAndCactusSearchMaxVertical; currentYoffset++)
 		{
-			int blockId = world.getBlockId(x, y + currentYoffset, z);
-			if(harvestables.containsKey(new Integer(blockId)) && harvestables.get(new Integer(blockId)).canBeHarvested(world, x, y + currentYoffset, z))
+			int blockId = worldObj.getBlockId(x, y + currentYoffset, z);
+			if(harvestables.containsKey(new Integer(blockId)) && harvestables.get(new Integer(blockId)).canBeHarvested(worldObj, x, y + currentYoffset, z))
 			{
 				highestBlockOffset = currentYoffset;
 			}
@@ -197,20 +168,14 @@ public class TileEntityHarvester extends TileEntityFactoryRotateable
 		
 		if(highestBlockOffset < 0)
 		{
-			target[1] = -1;
-			return target;
+			return null;
 		}
 		
-		target[0] = x;
-		target[1] = y + highestBlockOffset;
-		target[2] = z;
-		
-		return target;
+		return new BlockPosition(x, y + highestBlockOffset, z);
 	}
 
-	private int[] getNextLog(World world, int i, int j, int k)
+	private BlockPosition getNextLog(int i, int j, int k)
 	{
-		int target[] = new int[3];
 		int currentXoffset;
 		int currentYoffset;
 		int currentZoffset;
@@ -228,22 +193,16 @@ public class TileEntityHarvester extends TileEntityFactoryRotateable
 					searchX = i + currentXoffset;
 					searchY = j + currentYoffset;
 					searchZ = k + currentZoffset;
-					blockId = world.getBlockId(searchX, searchY, searchZ);
+					blockId = worldObj.getBlockId(searchX, searchY, searchZ);
 					if(harvestables.containsKey(new Integer(blockId))
-							&& harvestables.get(new Integer(blockId)).canBeHarvested(world, searchX, searchY, searchZ))
+							&& harvestables.get(new Integer(blockId)).canBeHarvested(worldObj, searchX, searchY, searchZ))
 					{
-						target[0] = searchX;
-						target[1] = searchY;
-						target[2] = searchZ;
-						return target;
+						return new BlockPosition(searchX, searchY, searchZ);
 					}
 				}
 			}
 		}
-		
-		target[1] = -1;
-		
-		return target;
+		return null;
 	}
 
 }

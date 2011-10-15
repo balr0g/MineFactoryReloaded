@@ -1,4 +1,4 @@
-package net.minecraft.src.powercrystals.minefactoryreloaded.old;
+package net.minecraft.src.powercrystals.minefactoryreloaded;
 
 import java.util.Random;
 
@@ -14,37 +14,19 @@ import net.minecraft.src.MovingObjectPosition;
 import net.minecraft.src.Vec3D;
 import net.minecraft.src.World;
 import net.minecraft.src.forge.ITextureProvider;
-import net.minecraft.src.powercrystals.minefactoryreloaded.MineFactoryReloadedCore;
 
-/* Metadata reference
- * 0	-X
- * 1	-Z
- * 2	+X
- * 3	+Z
- * 4	-X +Y
- * 5	+X +Y
- * 6	+Y +Z
- * 7	+Y -Z
- * 8	+X -Y
- * 9	-X -Y
- * 10	-Y -Z
- * 11	-Y +Z
- */
-
-public class BlockFactoryConveyor extends Block implements ITextureProvider
+public class BlockConveyor extends Block implements ITextureProvider
 {
-	public BlockFactoryConveyor(int i, int j)
+	public BlockConveyor(int i, int j)
 	{
 		super(i, j, Material.circuits);
 		setBlockBounds(0.0F, 0.0F, 0.0F, 0.1F, 0.1F, 0.1F);
-		setBlockName("conveyor");
-		setHardness(0.5F);
-		setStepSound(Block.soundMetalFootstep);
+		setRequiresSelfNotify();
 	}
 
 	public void onEntityCollidedWithBlock(World world, int i, int j, int k, Entity entity)
 	{
-		if((entity instanceof EntityItem) || (entity instanceof EntityLiving))
+		/*if((entity instanceof EntityItem) || (entity instanceof EntityLiving))
 		{
 			int l = world.getBlockMetadata(i, j, k);
 			if(l == 4)
@@ -147,7 +129,7 @@ public class BlockFactoryConveyor extends Block implements ITextureProvider
 					setEntityVelocity(entity, 0.0D, 0.0D, 0.1D);
 				}
 			}
-		}
+		}*/
 	}
 
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k)
@@ -210,18 +192,6 @@ public class BlockFactoryConveyor extends Block implements ITextureProvider
 		}
 	}
 
-	public int getBlockTextureFromSideAndMetadata(int i, int j)
-	{
-		if(j == 7 || j == 5 || j == 8 || j == 10)
-		{
-			return MineFactoryReloadedCore.conveyorReverseTexture;
-		}
-		else
-		{
-			return blockIndexInTexture;
-		}
-	}
-
 	public boolean renderAsNormalBlock()
 	{
 		return false;
@@ -229,7 +199,7 @@ public class BlockFactoryConveyor extends Block implements ITextureProvider
 
 	public int getRenderType()
 	{
-		return MineFactoryReloadedCore.proxy.getConveyorRenderId();
+		return MineFactoryReloadedCore.proxy.getRenderId();
 	}
 
 	public int quantityDropped(Random random)
@@ -246,34 +216,17 @@ public class BlockFactoryConveyor extends Block implements ITextureProvider
 	{
 		if(!MineFactoryReloadedCore.proxy.isClient(world))
 		{
-			world.setBlockMetadataWithNotify(i, j, k, 1);
-			checkSurroundingTrack(world, i, j, k, 1);
+			world.setBlockMetadataWithNotify(i, j, k, 0);
+			//checkSurroundingTrack(world, i, j, k, 1);
 		}
 	}
 
 	public boolean blockActivated(World world, int i, int j, int k, EntityPlayer entityplayer)
 	{
-		if(entityplayer.inventory.getCurrentItem() != null &&
+		if(!MineFactoryReloadedCore.proxy.isClient(world) && entityplayer.inventory.getCurrentItem() != null &&
 				entityplayer.inventory.getCurrentItem().itemID == MineFactoryReloadedCore.factoryHammerItem.shiftedIndex)
 		{
-			int currentMetadata = world.getBlockMetadata(i, j, k);
-			if(currentMetadata == 3)
-			{
-				world.setBlockMetadataWithNotify(i, j, k, 0);
-			}
-			else if(currentMetadata < 4)
-			{
-				world.setBlockMetadataWithNotify(i, j, k, currentMetadata + 1);
-			}
-			else if(currentMetadata < 8)
-			{
-				world.setBlockMetadataWithNotify(i, j, k, currentMetadata + 4);
-			}
-			else if(currentMetadata < 12)
-			{
-				world.setBlockMetadataWithNotify(i, j, k, currentMetadata - 4);
-			}
-			world.markBlockNeedsUpdate(i, j, k);
+			rotate(world, i, j, k);
 		}
 		return true;
 	}
@@ -284,82 +237,107 @@ public class BlockFactoryConveyor extends Block implements ITextureProvider
 		{
 			return;
 		}
-		int i1 = world.getBlockMetadata(i, j, k);
-		checkSurroundingTrack(world, i, j, k, i1);
-		boolean flag = false;
 		if(!world.isBlockOpaqueCube(i, j - 1, k))
-		{
-			flag = true;
-		}
-		if(flag)
 		{
 			dropBlockAsItem(world, i, j, k, world.getBlockMetadata(i, j, k));
 			world.setBlockWithNotify(i, j, k, 0);
 		}
 	}
-
-	private void checkSurroundingTrack(World world, int x, int y, int z, int ourMetadata)
+	
+	public void rotate(World world, int x, int y, int z)
 	{
-		if(world.getBlockId(x + 1, y + 1, z) == blockID)
+		int md = world.getBlockMetadata(x, y, z);
+		if(md == 0)
 		{
-			int nextMetadata = world.getBlockMetadata(x + 1, y + 1, z);
-			if(nextMetadata == 0 || nextMetadata == 9)
+			int nextBlockId = world.getBlockId(x + 1, y, z);
+			if(Block.blocksList[nextBlockId] != null && Block.blocksList[nextBlockId].isOpaqueCube())
 			{
-				if(ourMetadata != 8 && ourMetadata != 9)
-				{
-					world.setBlockMetadataWithNotify(x, y, z, 9);
-				}
+				rotateTo(world, x, y, z, 4);
 			}
-			else if(ourMetadata != 4 && ourMetadata != 5)
+			else
 			{
-				world.setBlockMetadataWithNotify(x, y, z, 5);
+				rotateTo(world, x, y, z, 1);
 			}
 		}
-		else if(world.getBlockId(x - 1, y + 1, z) == blockID)
+		else if(md == 4)
 		{
-			int nextMetadata = world.getBlockMetadata(x - 1, y + 1, z);
-			if(nextMetadata == 2 || nextMetadata == 8)
+			rotateTo(world, x, y, z, 8);
+		}
+		else if(md == 8)
+		{
+			rotateTo(world, x, y, z, 1);
+		}
+		
+		else if(md == 1)
+		{
+			int nextBlockId = world.getBlockId(x, y, z + 1);
+			if(Block.blocksList[nextBlockId] != null && Block.blocksList[nextBlockId].isOpaqueCube())
 			{
-				if(ourMetadata != 8 && ourMetadata != 9)
-				{
-					world.setBlockMetadataWithNotify(x, y, z, 8);
-				}
+				rotateTo(world, x, y, z, 5);
 			}
-			else if(ourMetadata != 5 && ourMetadata != 4)
+			else
 			{
-				world.setBlockMetadataWithNotify(x, y, z, 4);
+				rotateTo(world, x, y, z, 2);
 			}
 		}
-		else if(world.getBlockId(x, y + 1, z - 1) == blockID)
+		else if(md == 5)
 		{
-			int nextMetadata = world.getBlockMetadata(x, y + 1, z - 1);
-			if(nextMetadata == 3 || nextMetadata == 11)
+			rotateTo(world, x, y, z, 9);
+		}
+		else if(md == 9)
+		{
+			rotateTo(world, x, y, z, 2);
+		}
+
+		
+		else if(md == 2)
+		{
+			int nextBlockId = world.getBlockId(x - 1, y, z);
+			if(Block.blocksList[nextBlockId] != null && Block.blocksList[nextBlockId].isOpaqueCube())
 			{
-				if(ourMetadata != 10 && ourMetadata != 11)
-				{
-					world.setBlockMetadataWithNotify(x, y, z, 11);
-				}
+				rotateTo(world, x, y, z, 6);
 			}
-			else if(ourMetadata != 6 && ourMetadata != 7)
+			else
 			{
-				world.setBlockMetadataWithNotify(x, y, z, 7);
+				rotateTo(world, x, y, z, 3);
 			}
 		}
-		else if(world.getBlockId(x, y + 1, z + 1) == blockID)
+		else if(md == 6)
 		{
-			int nextMetadata = world.getBlockMetadata(x, y + 1, z + 1);
-			if(nextMetadata == 1 || nextMetadata == 10)
+			rotateTo(world, x, y, z, 10);
+		}
+		else if(md == 10)
+		{
+			rotateTo(world, x, y, z, 3);
+		}
+		
+		
+		else if(md == 3)
+		{
+			int nextBlockId = world.getBlockId(x, y, z - 1);
+			if(Block.blocksList[nextBlockId] != null && Block.blocksList[nextBlockId].isOpaqueCube())
 			{
-				if(ourMetadata != 10 && ourMetadata != 11)
-				{
-					world.setBlockMetadataWithNotify(x, y, z, 10);
-				}
+				rotateTo(world, x, y, z, 7);
 			}
-			else if(ourMetadata != 7 && ourMetadata != 6)
+			else
 			{
-				world.setBlockMetadataWithNotify(x, y, z, 6);
+				rotateTo(world, x, y, z, 0);
 			}
 		}
+		else if(md == 7)
+		{
+			rotateTo(world, x, y, z, 11);
+		}
+		else if(md == 11)
+		{
+			rotateTo(world, x, y, z, 0);
+		}
+	}
+	
+	private void rotateTo(World world, int x, int y, int z, int newmd)
+	{
+		System.out.println("Currently at " + world.getBlockMetadata(x, y, z) + ", setting to " + newmd);
+		world.setBlockMetadataWithNotify(x, y, z, newmd);
 	}
 	
 	private void setEntityVelocity(Entity e, double x, double y, double z)

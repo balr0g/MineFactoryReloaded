@@ -12,6 +12,7 @@ import net.minecraft.src.buildcraft.api.IPowerReceptor;
 import net.minecraft.src.buildcraft.api.PowerFramework;
 import net.minecraft.src.buildcraft.api.PowerProvider;
 import net.minecraft.src.powercrystals.minefactoryreloaded.MineFactoryReloadedCore.PowerSystem;
+import net.minecraft.src.powercrystals.minefactoryreloaded.core.InventoryUtil;
 
 public abstract class TileEntityFactory extends TileEntity implements IInventory, IPowerReceptor
 {
@@ -21,14 +22,11 @@ public abstract class TileEntityFactory extends TileEntity implements IInventory
 	private PowerProvider powerProvider;
 	private int powerNeeded;
 	
-	private int inventorySize;
-	
-	protected TileEntityFactory(int bcEnergyNeededToWork, int bcEnergyNeededToActivate, int inventorySize)
+	protected TileEntityFactory(int bcEnergyNeededToWork, int bcEnergyNeededToActivate)
 	{
 		powerProvider = PowerFramework.currentFramework.createPowerProvider();
 		powerNeeded = bcEnergyNeededToWork;
 		powerProvider.configure(25, powerNeeded, powerNeeded, bcEnergyNeededToActivate, powerNeeded);
-		this.inventorySize = inventorySize; 
 		inventory = new ItemStack[getSizeInventory()];
 	}
 	
@@ -128,7 +126,7 @@ public abstract class TileEntityFactory extends TileEntity implements IInventory
 	@Override
 	public int getSizeInventory()
 	{
-		return inventorySize;
+		return 27;
 	}
 
 	@Override
@@ -201,7 +199,7 @@ public abstract class TileEntityFactory extends TileEntity implements IInventory
     public void readFromNBT(NBTTagCompound nbttagcompound)
     {
         super.readFromNBT(nbttagcompound);
-        if(inventorySize > 0)
+        if(getSizeInventory() > 0)
         {
 	        NBTTagList nbttaglist = nbttagcompound.getTagList("Items");
 	        inventory = new ItemStack[getSizeInventory()];
@@ -224,7 +222,7 @@ public abstract class TileEntityFactory extends TileEntity implements IInventory
     public void writeToNBT(NBTTagCompound nbttagcompound)
     {
         super.writeToNBT(nbttagcompound);
-        if(inventorySize > 0)
+        if(getSizeInventory() > 0)
         {
 	        NBTTagList nbttaglist = new NBTTagList();
 	        for(int i = 0; i < inventory.length; i++)

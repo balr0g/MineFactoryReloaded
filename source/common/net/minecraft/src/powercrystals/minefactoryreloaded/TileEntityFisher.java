@@ -8,7 +8,7 @@ public class TileEntityFisher extends TileEntityFactory
 {
 	public TileEntityFisher()
 	{
-		super(5, 1, 27);
+		super(5, 1);
 	}
 
 	@Override
