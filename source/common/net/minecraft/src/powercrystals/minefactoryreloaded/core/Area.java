@@ -36,12 +36,12 @@ public class Area
 		zMax = pmax.z;
 	}
 	
-	public Area(BlockPosition center, int radius)
+	public Area(BlockPosition center, int radius, int yNegOffset, int yPosOffset)
 	{
 		xMin = center.x - radius;
 		xMax = center.x + radius;
-		yMin = center.y - radius;
-		yMax = center.y + radius;
+		yMin = center.y + yNegOffset;
+		yMax = center.y + yPosOffset;
 		zMin = center.z - radius;
 		zMax = center.z + radius;
 	}

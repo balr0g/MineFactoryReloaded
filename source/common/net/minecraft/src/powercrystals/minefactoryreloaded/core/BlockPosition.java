@@ -1,9 +1,12 @@
 package net.minecraft.src.powercrystals.minefactoryreloaded.core;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.buildcraft.api.Orientations;
-import net.minecraft.src.powercrystals.minefactoryreloaded.TileEntityFactoryRotateable;
+import net.minecraft.src.powercrystals.minefactoryreloaded.TileEntityFactory;
 
 public class BlockPosition
 {
@@ -52,12 +55,11 @@ public class BlockPosition
 		z = tile.zCoord;
 	}
 	
-	public BlockPosition(TileEntityFactoryRotateable tile)
+	public static BlockPosition fromFactoryTile(TileEntityFactory te)
 	{
-		x = tile.xCoord;
-		y = tile.yCoord;
-		z = tile.zCoord;
-		orientation = tile.getDirectionFacing();
+		BlockPosition bp = new BlockPosition(te);
+		bp.orientation = te.getDirectionFacing();
+		return bp;
 	}
 	
 	public void moveRight(int step)
@@ -150,5 +152,20 @@ public class BlockPosition
 	public BlockPosition max (BlockPosition p)
 	{
 		return new BlockPosition(p.x < x ? x : p.x, p.y < y ? y : p.y, p.z < z ? z : p.z);
+	}
+	
+	public List<BlockPosition> getAdjacent(boolean includeVertical)
+	{
+		List<BlockPosition> a = new ArrayList<BlockPosition>();
+		a.add(new BlockPosition(x + 1, y, z));
+		a.add(new BlockPosition(x - 1, y, z));
+		a.add(new BlockPosition(x, y, z + 1));
+		a.add(new BlockPosition(x, y, z - 1));
+		if(includeVertical)
+		{
+			a.add(new BlockPosition(x, y + 1, z));
+			a.add(new BlockPosition(x, y - 1, z));
+		}
+		return a;
 	}
 }

@@ -10,7 +10,7 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.buildcraft.api.Orientations;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryRanchable;
 
-public class TileEntityRancher extends TileEntityFactoryRotateable
+public class TileEntityRancher extends TileEntityFactoryInventory
 {
 	private static Map<Class<?>, IFactoryRanchable> ranchables = new HashMap<Class<?>, IFactoryRanchable>();
 

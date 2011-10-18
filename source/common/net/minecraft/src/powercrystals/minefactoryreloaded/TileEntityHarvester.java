@@ -12,7 +12,7 @@ import net.minecraft.src.powercrystals.minefactoryreloaded.core.Area;
 import net.minecraft.src.powercrystals.minefactoryreloaded.core.BlockPosition;
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.HarvestType;
 
-public class TileEntityHarvester extends TileEntityFactoryRotateable
+public class TileEntityHarvester extends TileEntityFactoryPowered
 {
 	private static Map<Integer, IFactoryHarvestable> harvestables = new HashMap<Integer, IFactoryHarvestable>();
 	
@@ -25,26 +25,15 @@ public class TileEntityHarvester extends TileEntityFactoryRotateable
 	{
 		super(5, 1);
 	}
-	
-	@Override
-	public int getSizeInventory()
-	{
-		return 0;
-	}
-
-	@Override
-	public String getInvName()
-	{
-		return null;
-	}
 
 	@Override
 	public void doWork()
-	{
+	{	
 		if(!powerAvailable())
 		{
 			return;
 		}
+		System.out.println("harvester: starting work, direction: " + getDirectionFacing());
 		
 		int harvestedBlockId = 0;
 		int harvestedBlockMetadata = 0;
@@ -53,30 +42,35 @@ public class TileEntityHarvester extends TileEntityFactoryRotateable
 		
 		if(getDirectionFacing() == Orientations.XPos)
 		{
-			dropOffsetX = 1.5F;
+			dropOffsetX = -0.5F;
 			dropOffsetZ = 0.5F;
 		}
 		else if(getDirectionFacing() == Orientations.ZPos)
 		{
 			dropOffsetX = 0.5F;
-			dropOffsetZ = 1.5F;
+			dropOffsetZ = -0.5F;
 		}
 		else if(getDirectionFacing() == Orientations.XNeg)
 		{
-			dropOffsetX = -0.5F;
+			dropOffsetX = 1.5F;
 			dropOffsetZ = 0.5F;
 		}
 		else if(getDirectionFacing() == Orientations.ZNeg)
 		{
 			dropOffsetX = 0.5F;
-			dropOffsetZ = -0.5F;
+			dropOffsetZ = 1.5F;
 		}
 
 		BlockPosition targetCoords = getNextHarvest();
+		
+		
 		if(targetCoords == null)
 		{
+			System.out.println("harvester: coords null");
 			return;
 		}
+		
+		System.out.println("harvester: coords " + targetCoords.x + "," + targetCoords.y + "," + targetCoords.z);
 		
 		harvestedBlockId = worldObj.getBlockId(targetCoords.x, targetCoords.y, targetCoords.z);
 		harvestedBlockMetadata = worldObj.getBlockMetadata(targetCoords.x, targetCoords.y, targetCoords.z);
@@ -117,10 +111,12 @@ public class TileEntityHarvester extends TileEntityFactoryRotateable
 		Area harvestArea = getHarvestArea();
 		for(BlockPosition bp : harvestArea.getPositions())
 		{
+			System.out.println("Checking" + bp.x + "," + bp.y + "," + bp.z);
 			int searchId = worldObj.getBlockId(bp.x, bp.y, bp.z);
 			
 			if(!harvestables.containsKey(new Integer(searchId)))
 			{
+				System.out.println(searchId + " is not harvestable");
 				continue;
 			}
 			
@@ -129,7 +125,8 @@ public class TileEntityHarvester extends TileEntityFactoryRotateable
 			{
 				if(harvestable.getHarvestType() == HarvestType.Normal)
 				{
-					return new BlockPosition(bp.x, bp.y, bp.z);
+					System.out.println("Found normal harvest");
+					return bp;
 				}
 				else if(harvestable.getHarvestType() == HarvestType.LeaveBottom)
 				{
@@ -138,10 +135,12 @@ public class TileEntityHarvester extends TileEntityFactoryRotateable
 					{
 						continue;
 					}
+					System.out.println("Found vertical harvest at " + temp.x + "," + temp.y + "," + temp.z);
 					return temp;
 				}
 				else if(harvestable.getHarvestType() == HarvestType.Tree)
 				{
+					System.out.println("Found tree");
 					return getNextLog(bp.x, bp.y, bp.z);
 				}
 			}
@@ -197,11 +196,13 @@ public class TileEntityHarvester extends TileEntityFactoryRotateable
 					if(harvestables.containsKey(new Integer(blockId))
 							&& harvestables.get(new Integer(blockId)).canBeHarvested(worldObj, searchX, searchY, searchZ))
 					{
+						System.out.println("Found tree harvest at " + searchX + "," + searchY + "," + searchZ);
 						return new BlockPosition(searchX, searchY, searchZ);
 					}
 				}
 			}
 		}
+		System.out.println("Tree search returning null!");
 		return null;
 	}
 

@@ -56,8 +56,7 @@ public class mod_MineFactory extends BaseModMp
 	{
 		if(MineFactoryReloadedCore.AnimateBlockFaces)
 		{
-			ModLoader.addAnimation(new TextureFrameAnimFX(MineFactoryReloadedCore.conveyorNormalTexture, "/MineFactorySprites/animations/ConveyorNormal.png", MineFactoryReloadedCore.AnimationTileSize));
-			ModLoader.addAnimation(new TextureFrameAnimFX(MineFactoryReloadedCore.conveyorReverseTexture, "/MineFactorySprites/animations/ConveyorReversed.png", MineFactoryReloadedCore.AnimationTileSize));
+			ModLoader.addAnimation(new TextureFrameAnimFX(MineFactoryReloadedCore.conveyorTexture, "/MineFactorySprites/animations/Conveyor.png", MineFactoryReloadedCore.AnimationTileSize));
 			ModLoader.addAnimation(new TextureFrameAnimFX(MineFactoryReloadedCore.harvesterAnimatedTexture, "/MineFactorySprites/animations/Harvester.png", MineFactoryReloadedCore.AnimationTileSize));
 			ModLoader.addAnimation(new TextureFrameAnimFX(MineFactoryReloadedCore.rancherAnimatedTexture, "/MineFactorySprites/animations/Rancher.png", MineFactoryReloadedCore.AnimationTileSize));
 		}

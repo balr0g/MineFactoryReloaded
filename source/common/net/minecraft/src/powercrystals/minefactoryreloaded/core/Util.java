@@ -4,16 +4,17 @@ import java.util.LinkedList;
 import java.util.List;
 
 import net.minecraft.src.Block;
+import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.InventoryLargeChest;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
+import net.minecraft.src.powercrystals.minefactoryreloaded.MineFactoryReloadedCore;
 
-public class InventoryUtil
+public class Util
 {
-	
 	public static int addToInventory(IInventory targetInventory, ItemStack stackToAdd)
 	{
 		int amountLeftToAdd = stackToAdd.stackSize;
@@ -156,5 +157,27 @@ public class InventoryUtil
 		}
 		return ((IInventory)te);
 	}
-
+	
+	public static boolean isRedstonePowered(TileEntity te)
+	{
+		if(te.worldObj.isBlockIndirectlyGettingPowered(te.xCoord, te.yCoord, te.zCoord))
+		{
+			return true;
+		}
+		for(BlockPosition bp : new BlockPosition(te).getAdjacent(false))
+		{
+			int blockId = te.worldObj.getBlockId(bp.x, bp.y, bp.z);
+			if(blockId == Block.redstoneWire.blockID && Block.blocksList[blockId].isPoweringTo(te.worldObj, bp.x, bp.y, bp.z, 1))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static boolean isHoldingWrench(EntityPlayer player)
+	{
+		return player.inventory.getCurrentItem() != null && 
+			player.inventory.getCurrentItem().itemID == MineFactoryReloadedCore.factoryHammerItem.shiftedIndex;
+	}
 }

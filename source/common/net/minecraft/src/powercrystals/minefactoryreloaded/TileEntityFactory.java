@@ -1,42 +1,31 @@
 package net.minecraft.src.powercrystals.minefactoryreloaded;
 
 import net.minecraft.src.EntityItem;
-import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
-import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.NBTTagList;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
-import net.minecraft.src.buildcraft.api.IPowerReceptor;
-import net.minecraft.src.buildcraft.api.PowerFramework;
-import net.minecraft.src.buildcraft.api.PowerProvider;
-import net.minecraft.src.powercrystals.minefactoryreloaded.MineFactoryReloadedCore.PowerSystem;
-import net.minecraft.src.powercrystals.minefactoryreloaded.core.InventoryUtil;
+import net.minecraft.src.buildcraft.api.Orientations;
+import net.minecraft.src.powercrystals.minefactoryreloaded.core.Area;
+import net.minecraft.src.powercrystals.minefactoryreloaded.core.BlockPosition;
+import net.minecraft.src.powercrystals.minefactoryreloaded.core.Util;
 
-public abstract class TileEntityFactory extends TileEntity implements IInventory, IPowerReceptor
+public abstract class TileEntityFactory extends TileEntity implements IRotateableTile
 {
-	private boolean lastRedstonePowerState = false;
-	private boolean redstonePowerAvailable = false;
+	private Orientations forwardDirection;
 	
-	private PowerProvider powerProvider;
-	private int powerNeeded;
-	
-	protected TileEntityFactory(int bcEnergyNeededToWork, int bcEnergyNeededToActivate)
+	protected TileEntityFactory()
 	{
-		powerProvider = PowerFramework.currentFramework.createPowerProvider();
-		powerNeeded = bcEnergyNeededToWork;
-		powerProvider.configure(25, powerNeeded, powerNeeded, bcEnergyNeededToActivate, powerNeeded);
-		inventory = new ItemStack[getSizeInventory()];
+		forwardDirection = Orientations.XPos;
 	}
 	
 	protected void dropStack(World world, ItemStack s, float dropX, float dropY, float dropZ, int harvesterX, int harvesterY, int harvesterZ)
 	{
 		if(MineFactoryReloadedCore.HarvesterCanDropInChests)
 		{
-			for(IInventory chest : InventoryUtil.findChests(world, harvesterX, harvesterY, harvesterZ))
+			for(IInventory chest : Util.findChests(world, harvesterX, harvesterY, harvesterZ))
 			{
-				s.stackSize = InventoryUtil.addToInventory(chest, s);
+				s.stackSize = Util.addToInventory(chest, s);
 				if(s.stackSize == 0)
 				{
 					return;
@@ -53,203 +42,88 @@ public abstract class TileEntityFactory extends TileEntity implements IInventory
 		}
 	}
 	
-	public void neighborBlockChanged()
+	protected int getHarvestRadius()
 	{
-		boolean isPowered = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
-		if(isPowered && !lastRedstonePowerState && MineFactoryReloadedCore.powerSystem == MineFactoryReloadedCore.PowerSystem.Redstone)
+		return 1;
+	}
+	
+	protected Area getHarvestArea()
+	{
+		BlockPosition ourpos = BlockPosition.fromFactoryTile(this);
+		ourpos.moveForwards(getHarvestRadius() + 1);
+		return new Area(ourpos, getHarvestRadius(), 0, 0);
+	}
+	
+	public Orientations getDirectionFacing()
+	{
+		return forwardDirection;
+	}
+	
+	@Override
+	public boolean canRotate()
+	{
+		return true;
+	}
+	
+	@Override
+	public void rotate()
+	{
+		if(forwardDirection == Orientations.XPos)
 		{
-			lastRedstonePowerState = isPowered;
-			redstonePowerAvailable = true;
-			doWork();
-			redstonePowerAvailable = false;
+			forwardDirection = Orientations.ZPos;
+		}
+		else if(forwardDirection == Orientations.ZPos)
+		{
+			forwardDirection = Orientations.XNeg;
+		}
+		else if(forwardDirection == Orientations.XNeg)
+		{
+			forwardDirection = Orientations.ZNeg;
+		}
+		else if(forwardDirection == Orientations.ZNeg)
+		{
+			forwardDirection = Orientations.XPos;
 		}
 		else
 		{
-			lastRedstonePowerState = isPowered;
+			forwardDirection = Orientations.XPos;
 		}
 	}
 	
-	protected boolean powerAvailable()
+	public int getRotatedSide(int side)
 	{
-		if(MineFactoryReloadedCore.powerSystem == PowerSystem.Redstone)
+		if(side < 2)
 		{
-			return redstonePowerAvailable;
+			return side;
 		}
-		else if(MineFactoryReloadedCore.powerSystem == PowerSystem.BuildCraft)
+		else if(forwardDirection == Orientations.ZPos)
 		{
-			if(powerProvider.useEnergy(powerNeeded, powerNeeded, false) >= powerNeeded)
-			{
-				powerProvider.useEnergy(powerNeeded, powerNeeded, true);
-				return true;
-			}
-			return false;
+			return addToSide(side, 1);
 		}
-		return false;
-	}
-	
-	// base methods
-	
-	@Override
-	public void updateEntity()
-	{
-		super.updateEntity();
-		if(MineFactoryReloadedCore.powerSystem == PowerSystem.BuildCraft)
+		else if(forwardDirection == Orientations.XNeg)
 		{
-			getPowerProvider().update(this);
+			return addToSide(side, 2);
 		}
-	}
-	
-	// IPowerReceptor methods
-
-	@Override
-	public void setPowerProvider(PowerProvider provider)
-	{
-		powerProvider = provider;
-	}
-
-	@Override
-	public PowerProvider getPowerProvider()
-	{
-		return powerProvider;
-	}
-
-	@Override
-	public int powerRequest()
-	{
-		return powerNeeded;
-	}
-	
-	// IInventory methods
-	
-	protected ItemStack[] inventory;
-	
-	@Override
-	public int getSizeInventory()
-	{
-		return 27;
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i)
-	{
-		return inventory[i];
-	}
-	
-	@Override
-	public void openChest()
-	{
-	}
-	
-	@Override
-	public void closeChest()
-	{
-	}
-
-	@Override
-    public ItemStack decrStackSize(int i, int j)
-    {
-        if(inventory[i] != null)
-        {
-            if(inventory[i].stackSize <= j)
-            {
-                ItemStack itemstack = inventory[i];
-                inventory[i] = null;
-                return itemstack;
-            }
-            ItemStack itemstack1 = inventory[i].splitStack(j);
-            if(inventory[i].stackSize == 0)
-            {
-                inventory[i] = null;
-            }
-            return itemstack1;
-        }
-        else
-        {
-            return null;
-        }
-    }
-
-	@Override
-    public void setInventorySlotContents(int i, ItemStack itemstack)
-    {
-        inventory[i] = itemstack;
-        if(itemstack != null && itemstack.stackSize > getInventoryStackLimit())
-        {
-            itemstack.stackSize = getInventoryStackLimit();
-        }
-    }
-
-	@Override
-	public int getInventoryStackLimit()
-	{
-		return 64;
-	}
-
-	@Override
-	public boolean canInteractWith(EntityPlayer entityplayer)
-	{
-        if(worldObj.getBlockTileEntity(xCoord, yCoord, zCoord) != this)
-        {
-            return false;
-        }
-        return entityplayer.getDistanceSq((double)xCoord + 0.5D, (double)yCoord + 0.5D, (double)zCoord + 0.5D) <= 64D;
-	}
-	
-	@Override
-    public void readFromNBT(NBTTagCompound nbttagcompound)
-    {
-        super.readFromNBT(nbttagcompound);
-        if(getSizeInventory() > 0)
-        {
-	        NBTTagList nbttaglist = nbttagcompound.getTagList("Items");
-	        inventory = new ItemStack[getSizeInventory()];
-	        for(int i = 0; i < nbttaglist.tagCount(); i++)
-	        {
-	            NBTTagCompound nbttagcompound1 = (NBTTagCompound)nbttaglist.tagAt(i);
-	            int j = nbttagcompound1.getByte("Slot") & 0xff;
-	            if(j >= 0 && j < inventory.length)
-	            {
-	            	ItemStack s = new ItemStack(0, 0, 0);
-	            	s.readFromNBT(nbttagcompound1);
-	                inventory[j] = s;
-	            }
-	        }
-        }
-
-    }
-
-	@Override
-    public void writeToNBT(NBTTagCompound nbttagcompound)
-    {
-        super.writeToNBT(nbttagcompound);
-        if(getSizeInventory() > 0)
-        {
-	        NBTTagList nbttaglist = new NBTTagList();
-	        for(int i = 0; i < inventory.length; i++)
-	        {
-	            if(inventory[i] != null)
-	            {
-	                NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-	                nbttagcompound1.setByte("Slot", (byte)i);
-	                inventory[i].writeToNBT(nbttagcompound1);
-	                nbttaglist.setTag(nbttagcompound1);
-	            }
-	        }
-	
-	        nbttagcompound.setTag("Items", nbttaglist);
-        }
-    }
-	
-	public int findFirstStack(int itemId, int itemDamage)
-	{
-		for(int i = 0; i < getSizeInventory(); i++)
+		else if(forwardDirection == Orientations.ZNeg)
 		{
-			ItemStack s = getStackInSlot(i);
-			if(s != null && s.itemID == itemId && s.getItemDamage() == itemDamage)
-			{
-				return i;
-			}
+			return addToSide(side, 3);
 		}
-		return -1;
+		return side;
+	}
+	
+	private int addToSide(int side, int shift)
+	{
+		// 0 bottom 1 top 2 east 3 west 4 north 5 south
+		int shiftsRemaining = shift;
+		int out = side;
+		while(shiftsRemaining > 0)
+		{
+			if(out == 2) out = 5;
+			else if(out == 3) out = 4;
+			else if(out == 4) out = 2;
+			else if(out == 5) out = 3;
+			shiftsRemaining--;
+		}
+		return out;
 	}
 }

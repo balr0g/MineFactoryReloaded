@@ -8,7 +8,7 @@ import java.util.Map;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryFertilizable;
 
-public class TileEntityFertilizer extends TileEntityFactoryRotateable
+public class TileEntityFertilizer extends TileEntityFactoryInventory
 {
 	private static List<Integer> fertilizerItems = new LinkedList<Integer>();
 	private static Map<Integer, IFactoryFertilizable> fertilizables = new HashMap<Integer, IFactoryFertilizable>();

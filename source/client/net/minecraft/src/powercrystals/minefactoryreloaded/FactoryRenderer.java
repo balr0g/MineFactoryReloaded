@@ -11,7 +11,7 @@ public class FactoryRenderer
 	{
 		Tessellator tessellator = Tessellator.instance;
 		int conveyorMetadata = iblockaccess.getBlockMetadata(blockX, blockY, blockZ);
-		int conveyorTextureIndex = block.getBlockTextureFromSideAndMetadata(0, conveyorMetadata);
+		int conveyorTextureIndex = block.getBlockTexture(iblockaccess, blockX, blockY, blockZ, 0);
 		float f = block.getBlockBrightness(iblockaccess, blockX, blockY, blockZ);
 		tessellator.setColorOpaque_F(f, f, f);
 		int l1 = (conveyorTextureIndex & 0xf) << 4;

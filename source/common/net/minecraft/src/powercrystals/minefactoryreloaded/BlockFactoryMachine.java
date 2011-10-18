@@ -9,11 +9,11 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.Material;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
-import net.minecraft.src.forge.IConnectRedstone;
 import net.minecraft.src.forge.ITextureProvider;
 import net.minecraft.src.powercrystals.minefactoryreloaded.MineFactoryReloadedCore.Machine;
+import net.minecraft.src.powercrystals.minefactoryreloaded.core.Util;
 
-public class BlockFactoryMachine extends BlockContainer implements IConnectRedstone, ITextureProvider
+public class BlockFactoryMachine extends BlockContainer implements ITextureProvider
 {
 	public static int[][] textures = new int[16][6];
 	
@@ -27,9 +27,9 @@ public class BlockFactoryMachine extends BlockContainer implements IConnectRedst
     {
     	int md = iblockaccess.getBlockMetadata(x, y, z);
     	TileEntity te = iblockaccess.getBlockTileEntity(x, y, z);
-    	if(te instanceof TileEntityFactoryRotateable)
+    	if(te instanceof TileEntityFactory)
     	{
-    		return textures[md][((TileEntityFactoryRotateable)te).getRotatedSide(side)];
+    		return textures[md][((TileEntityFactory)te).getRotatedSide(side)];
     	}
     	return textures[md][side];
     }
@@ -70,18 +70,17 @@ public class BlockFactoryMachine extends BlockContainer implements IConnectRedst
 		{
 			return true;
 		}
-		ItemStack hand = entityplayer.inventory.getCurrentItem();
-		if(hand != null && hand.itemID == MineFactoryReloadedCore.factoryHammerItem.shiftedIndex)
+		if(Util.isHoldingWrench(entityplayer))
 		{
-			if(te instanceof TileEntityFactoryRotateable)
+			if(te instanceof TileEntityFactory)
 			{
-				((TileEntityFactoryRotateable)te).rotate();
+				((TileEntityFactory)te).rotate();
 				world.markBlockNeedsUpdate(i, j, k);
 			}
 		}
-		else if(te != null && te instanceof TileEntityFactory && ((TileEntityFactory)te).getSizeInventory() == 27)
+		else if(te != null && te instanceof TileEntityFactoryInventory && ((TileEntityFactoryInventory)te).getSizeInventory() == 27)
 		{
-			entityplayer.displayGUIChest((TileEntityFactory)te);
+			entityplayer.displayGUIChest((TileEntityFactoryInventory)te);
 		}
 		return true;
 	}
@@ -130,9 +129,21 @@ label0:
 
 		super.onBlockRemoval(world, i, j, k);
 	}
+	
+	@Override
+	public void onNeighborBlockChange(World world, int i, int j, int k, int l)
+	{
+		System.out.println("block: neighbor changed");
+		TileEntity te = world.getBlockTileEntity(i, j, k);
+		if(te != null && te instanceof TileEntityFactoryPowered)
+		{
+			System.out.println("block: found TE, triggering update");
+			((TileEntityFactoryPowered)te).neighborBlockChanged();
+		}
+	}
 
 	@Override
-	public boolean canConnectRedstone(IBlockAccess iba, int i, int j, int k, int dir)
+	public boolean canProvidePower()
 	{
 		return true;
 	}

@@ -8,7 +8,7 @@ import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.World;
 import net.minecraft.src.forge.ITextureProvider;
-import net.minecraft.src.powercrystals.minefactoryreloaded.core.InventoryUtil;
+import net.minecraft.src.powercrystals.minefactoryreloaded.core.Util;
 
 public class BlockRailCargoPickup extends BlockRail implements ITextureProvider
 {
@@ -32,7 +32,7 @@ public class BlockRailCargoPickup extends BlockRail implements ITextureProvider
 			return;
 		}
 		
-		for(IInventory chest : InventoryUtil.findChests(world, x, y, z))
+		for(IInventory chest : Util.findChests(world, x, y, z))
 		{
 			for(int slotIndex = 0; slotIndex < chest.getSizeInventory(); slotIndex++)
 			{
@@ -42,7 +42,7 @@ public class BlockRailCargoPickup extends BlockRail implements ITextureProvider
 					continue;
 				}
 				ItemStack stackToAdd = sourceStack.copy();
-				int amountRemaining = InventoryUtil.addToInventory(minecart, stackToAdd);
+				int amountRemaining = Util.addToInventory(minecart, stackToAdd);
 				if(amountRemaining == 0)
 				{
 					chest.setInventorySlotContents(slotIndex, null);

@@ -6,7 +6,7 @@ import java.util.Map;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryPlantable;
 
-public class TileEntityPlanter extends TileEntityFactory
+public class TileEntityPlanter extends TileEntityFactoryInventory
 {
 	private static Map<Integer, IFactoryPlantable> plantables = new HashMap<Integer, IFactoryPlantable>();
 	

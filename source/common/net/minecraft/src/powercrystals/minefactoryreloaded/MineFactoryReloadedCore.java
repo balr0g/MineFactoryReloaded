@@ -26,6 +26,7 @@ import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.Fertilizabl
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.HarvestType;
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.HarvestableStandard;
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.HarvestableStemPlant;
+import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.HarvestableVine;
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.HarvestableWheat;
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.PlantableStandard;
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.PlantableWheat;
@@ -35,7 +36,7 @@ import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.RanchableSt
 
 public class MineFactoryReloadedCore
 {
-	public static PowerSystem powerSystem = PowerSystem.BuildCraft;
+	public static PowerSystem powerSystem = PowerSystem.Redstone;
 	
 	public static String terrainTexture = "/MineFactorySprites/terrain.png";
 	public static String itemTexture = "/MineFactorySprites/items.png";
@@ -54,8 +55,9 @@ public class MineFactoryReloadedCore
 	
 	public static Item machineItem;
 	
-	public static int conveyorNormalTexture;
-	public static int conveyorReverseTexture;
+	public static int conveyorTexture;
+	public static int conveyorOffTexture;
+	public static int conveyorStillOffTexture;
 	public static int harvesterAnimatedTexture;
 	public static int rancherAnimatedTexture;
 	public static int steelSideTexture;
@@ -74,6 +76,9 @@ public class MineFactoryReloadedCore
 	public static int rancherSideTexture;
 	public static int fertilizerBackTexture;
 	public static int fertilizerSideTexture;
+	public static int vetSideTexture;
+	public static int collectorSideTexture;
+	public static int vetAnimatedTexture;
 	
 	public static int factoryWrenchTexture;
 	public static int steelIngotTexture;
@@ -142,6 +147,9 @@ public class MineFactoryReloadedCore
 		machineMetadataMappings.put(Machine.Harvester, 2);
 		machineMetadataMappings.put(Machine.Rancher, 3);
 		machineMetadataMappings.put(Machine.Fertilizer, 4);
+		machineMetadataMappings.put(Machine.Vet, 5);
+		machineMetadataMappings.put(Machine.Collector, 6);
+		machineMetadataMappings.put(Machine.Breaker, 7);
 
 		setupTextures();
 		
@@ -150,7 +158,7 @@ public class MineFactoryReloadedCore
 		cargoRailDropoffBlock = new BlockRailCargoDropoff(CargoDropoffRailBlockID, cargoRailDropoffTexture);
 		cargoRailPickupBlock = new BlockRailCargoPickup(CargoPickupRailBlockID, cargoRailPickupTexture);
 		
-		conveyorBlock = new BlockConveyor(conveyorBlockID, conveyorNormalTexture);
+		conveyorBlock = new BlockConveyor(conveyorBlockID, conveyorTexture);
 		
 		machineBlock = new BlockFactoryMachine(machineBlockID, 0, Material.circuits);
 		
@@ -174,6 +182,7 @@ public class MineFactoryReloadedCore
 		ModLoader.RegisterTileEntity(TileEntityHarvester.class, "factoryHarvester");
 		ModLoader.RegisterTileEntity(TileEntityRancher.class, "factoryRancher");
 		ModLoader.RegisterTileEntity(TileEntityFertilizer.class, "factoryFertilizer");
+		ModLoader.RegisterTileEntity(TileEntityConveyor.class, "factoryConveyor");
 
 		/*
 
@@ -312,6 +321,7 @@ public class MineFactoryReloadedCore
 		registerHarvestable(new HarvestableStemPlant(Block.pumpkin.blockID, HarvestType.Normal));
 		registerHarvestable(new HarvestableStemPlant(Block.melon.blockID, HarvestType.Normal));
 		registerHarvestable(new HarvestableWheat());
+		registerHarvestable(new HarvestableVine());
 		if(HarvesterHarvestsSmallMushrooms)
 		{
 			registerHarvestable(new HarvestableStandard(Block.mushroomBrown.blockID, HarvestType.Normal));
@@ -348,8 +358,8 @@ public class MineFactoryReloadedCore
 		planterMushroomTexture = 7;
 		planterSaplingTexture = 8;
 		planterSugarTexture = 9;
-		conveyorNormalTexture = 10;
-		conveyorReverseTexture = 11;
+		conveyorTexture = 10;
+		conveyorOffTexture = 11;
 		harvesterAnimatedTexture = 12;
 		rancherAnimatedTexture = 13;
 		fisherBucketTexture = 14;
@@ -358,6 +368,10 @@ public class MineFactoryReloadedCore
 		rancherSideTexture = 17;
 		fertilizerBackTexture = 18;
 		fertilizerSideTexture = 19;
+		conveyorStillOffTexture = 20;
+		vetSideTexture = 21;
+		collectorSideTexture = 22;
+		vetAnimatedTexture = 21;
 		
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Planter)][0] = steelHoleTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Planter)][1] = steelSideTexture;
@@ -375,24 +389,31 @@ public class MineFactoryReloadedCore
 		
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Harvester)][0] = steelSideTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Harvester)][1] = steelSideTexture;
-		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Harvester)][2] = harvesterAnimatedTexture;
-		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Harvester)][3] = steelHoleTexture;
-		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Harvester)][4] = harvesterSideTexture;
-		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Harvester)][5] = harvesterSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Harvester)][5] = harvesterAnimatedTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Harvester)][4] = steelHoleTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Harvester)][2] = harvesterSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Harvester)][3] = harvesterSideTexture;
 		
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Rancher)][0] = steelSideTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Rancher)][1] = steelSideTexture;
-		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Rancher)][2] = rancherAnimatedTexture;
-		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Rancher)][3] = steelHoleTexture;
-		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Rancher)][4] = rancherSideTexture;
-		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Rancher)][5] = rancherSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Rancher)][5] = rancherAnimatedTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Rancher)][4] = steelHoleTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Rancher)][2] = rancherSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Rancher)][3] = rancherSideTexture;
 		
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][0] = fertilizerSideTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][1] = fertilizerSideTexture;
-		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][2] = fertilizerSideTexture;
-		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][3] = fertilizerSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][5] = fertilizerSideTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][4] = fertilizerSideTexture;
-		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][5] = fertilizerBackTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][2] = fertilizerSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][3] = fertilizerBackTexture;
+		
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Vet)][0] = steelSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Vet)][1] = steelSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Vet)][5] = vetAnimatedTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Vet)][4] = steelHoleTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Vet)][2] = vetSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Vet)][3] = vetSideTexture;
 	}
 	
 	public static void registerPlantable(IFactoryPlantable plantable)
