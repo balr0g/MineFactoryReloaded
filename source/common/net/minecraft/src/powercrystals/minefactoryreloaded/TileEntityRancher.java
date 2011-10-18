@@ -9,6 +9,7 @@ import net.minecraft.src.EntityLiving;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.buildcraft.api.Orientations;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryRanchable;
+import net.minecraft.src.powercrystals.minefactoryreloaded.core.Util;
 
 public class TileEntityRancher extends TileEntityFactoryInventory
 {
@@ -86,7 +87,7 @@ public class TileEntityRancher extends TileEntityFactoryInventory
 					dropStack(worldObj, s, (float)xCoord + dropOffsetX, (float)yCoord, (float)zCoord + dropOffsetZ, xCoord, yCoord, zCoord);
 				}
 				
-				if(MineFactoryReloadedCore.RancherInjuresAnimals && r.getDamageRanchedEntity(worldObj, e, drops))
+				if(Util.getBool(MineFactoryReloadedCore.rancherInjuresAnimals) && r.getDamageRanchedEntity(worldObj, e, drops))
 				{
 					e.attackEntityFrom(DamageSource.generic, r.getDamageAmount(worldObj, e, drops));
 				}

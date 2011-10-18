@@ -3,6 +3,7 @@ package net.minecraft.src.powercrystals.minefactoryreloaded;
 import net.minecraft.src.Block;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
+import net.minecraft.src.powercrystals.minefactoryreloaded.core.IRotateableTile;
 
 public class TileEntityConveyor extends TileEntity implements IRotateableTile
 {

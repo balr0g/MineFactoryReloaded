@@ -28,13 +28,11 @@ public abstract class TileEntityFactoryPowered extends TileEntityFactory impleme
 		{
 			lastRedstonePowerState = isPowered;
 			redstonePowerAvailable = true;
-			System.out.println("te: power available, starting work");
 			doWork();
 			redstonePowerAvailable = false;
 		}
 		else
 		{
-			System.out.println("te: no power available, not starting work");
 			lastRedstonePowerState = isPowered;
 		}
 	}
@@ -43,7 +41,6 @@ public abstract class TileEntityFactoryPowered extends TileEntityFactory impleme
 	{
 		if(MineFactoryReloadedCore.powerSystem == PowerSystem.Redstone)
 		{
-			System.out.println("Power framework is redstone; power available: " + redstonePowerAvailable);
 			return redstonePowerAvailable;
 		}
 		else if(MineFactoryReloadedCore.powerSystem == PowerSystem.BuildCraft)

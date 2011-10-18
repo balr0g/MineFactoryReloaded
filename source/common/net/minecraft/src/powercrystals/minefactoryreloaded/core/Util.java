@@ -11,6 +11,7 @@ import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
+import net.minecraft.src.forge.Property;
 import net.minecraft.src.powercrystals.minefactoryreloaded.MineFactoryReloadedCore;
 
 public class Util
@@ -179,5 +180,15 @@ public class Util
 	{
 		return player.inventory.getCurrentItem() != null && 
 			player.inventory.getCurrentItem().itemID == MineFactoryReloadedCore.factoryHammerItem.shiftedIndex;
+	}
+	
+	public static boolean getBool(Property property)
+	{
+		return Boolean.parseBoolean(property.value);
+	}
+	
+	public static int getInt(Property property)
+	{
+		return Integer.parseInt(property.value);
 	}
 }

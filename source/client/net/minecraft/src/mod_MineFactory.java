@@ -9,10 +9,12 @@ import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryHarvestab
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryPlantable;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryRanchable;
 import net.minecraft.src.powercrystals.minefactoryreloaded.core.IMFRProxy;
+import net.minecraft.src.powercrystals.minefactoryreloaded.core.Util;
 import net.minecraft.src.powercrystals.minefactoryreloaded.FactoryRenderer;
 import net.minecraft.src.powercrystals.minefactoryreloaded.MineFactoryReloadedCore;
 import net.minecraft.src.powercrystals.minefactoryreloaded.MineFactoryReloadedCore.Machine;
 import net.minecraft.src.powercrystals.minefactoryreloaded.TextureFrameAnimFX;
+import net.minecraft.src.powercrystals.minefactoryreloaded.TileEntityFactory;
 
 public class mod_MineFactory extends BaseModMp
 {
@@ -40,28 +42,48 @@ public class mod_MineFactory extends BaseModMp
 	}
 
 	@Override
+	public void HandlePacket(Packet230ModLoader p)
+	{
+		if(p.packetType == 0)
+		{
+			World w = WorldProvider.getProviderForDimension(p.dataInt[0]).worldObj;
+			if(w != null)
+			{
+				TileEntity te = w.getBlockTileEntity(p.dataInt[1], p.dataInt[2], p.dataInt[3]);
+				if(te instanceof TileEntityFactory)
+				{
+					((TileEntityFactory)te).rotateDirectlyTo(p.dataInt[4]);
+				}
+			}
+		}
+	}
+	
+	@Override
 	public void ModsLoaded()
 	{
 		ModLoaderMp.Init();
 		MinecraftForgeClient.preloadTexture(MineFactoryReloadedCore.terrainTexture);
 		MinecraftForgeClient.preloadTexture(MineFactoryReloadedCore.itemTexture);
 	}
-	
+
+	@Override
 	public String Version()
 	{
 		return "1.8.1R1.3.0B";
 	}
 
+	@Override
 	public void RegisterAnimation(Minecraft minecraft)
 	{
-		if(MineFactoryReloadedCore.AnimateBlockFaces)
+		if(Util.getBool(MineFactoryReloadedCore.animateBlockFaces))
 		{
-			ModLoader.addAnimation(new TextureFrameAnimFX(MineFactoryReloadedCore.conveyorTexture, "/MineFactorySprites/animations/Conveyor.png", MineFactoryReloadedCore.AnimationTileSize));
-			ModLoader.addAnimation(new TextureFrameAnimFX(MineFactoryReloadedCore.harvesterAnimatedTexture, "/MineFactorySprites/animations/Harvester.png", MineFactoryReloadedCore.AnimationTileSize));
-			ModLoader.addAnimation(new TextureFrameAnimFX(MineFactoryReloadedCore.rancherAnimatedTexture, "/MineFactorySprites/animations/Rancher.png", MineFactoryReloadedCore.AnimationTileSize));
+			ModLoader.addAnimation(new TextureFrameAnimFX(MineFactoryReloadedCore.conveyorTexture, "/MineFactorySprites/animations/Conveyor.png", Util.getInt(MineFactoryReloadedCore.animationTileSize)));
+			ModLoader.addAnimation(new TextureFrameAnimFX(MineFactoryReloadedCore.harvesterAnimatedTexture, "/MineFactorySprites/animations/Harvester.png", Util.getInt(MineFactoryReloadedCore.animationTileSize)));
+			ModLoader.addAnimation(new TextureFrameAnimFX(MineFactoryReloadedCore.rancherAnimatedTexture, "/MineFactorySprites/animations/Rancher.png", Util.getInt(MineFactoryReloadedCore.animationTileSize)));
 		}
 	}
 
+	@Override
 	public boolean RenderWorldBlock(RenderBlocks renderblocks, IBlockAccess iblockaccess, int i, int j, int k, Block block, int renderId)
 	{
 		if(renderId == mod_MineFactory.renderId)
@@ -146,6 +168,16 @@ public class mod_MineFactory extends BaseModMp
 			int blockId = world.getBlockId(x, y, z);
 			((BlockStem)Block.blocksList[blockId]).func_35294_i(world, x, y, z);
 		}
-		
+
+		@Override
+		public String getConfigPath()
+		{
+			return Minecraft.getMinecraftDir() + "/config/MineFactoryReloaded.cfg";
+		}
+
+		@Override
+		public void sendPacketToAll(Packet230ModLoader packet)
+		{
+		}
 	}
 }

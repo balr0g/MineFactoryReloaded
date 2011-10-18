@@ -8,6 +8,7 @@ import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.Material;
 import net.minecraft.src.World;
 import net.minecraft.src.forge.ITextureProvider;
+import net.minecraft.src.powercrystals.minefactoryreloaded.core.Util;
 
 public class BlockRailPassengerDropoff extends BlockRail implements ITextureProvider
 {
@@ -39,8 +40,6 @@ public class BlockRailPassengerDropoff extends BlockRail implements ITextureProv
 		Entity player = minecart.riddenByEntity;
 		player.mountEntity(minecart);
 		MineFactoryReloadedCore.proxy.movePlayerToCoordinates((EntityPlayer)player, dropCoords[0] + 0.5, dropCoords[1] + 0.5, dropCoords[2] + 0.5);
-		//((EntityPlayerMP)player).playerNetServerHandler.teleportTo(dropCoords[0] + 0.5, dropCoords[1] + 0.5, dropCoords[2] + 0.5,
-		//		player.rotationYaw, player.rotationPitch);
 	}
 	
 	private int[] findSpaceForPlayer(int x, int y, int z, World world)
@@ -56,11 +55,11 @@ public class BlockRailPassengerDropoff extends BlockRail implements ITextureProv
 		int targetY;
 		int targetZ;
 		
-		for(offsetX = -MineFactoryReloadedCore.PassengerRailMaxHorizontal; offsetX < MineFactoryReloadedCore.PassengerRailMaxHorizontal; offsetX++)
+		for(offsetX = -Util.getInt(MineFactoryReloadedCore.passengerRailSearchMaxHorizontal); offsetX < Util.getInt(MineFactoryReloadedCore.passengerRailSearchMaxHorizontal); offsetX++)
 		{
-			for(offsetY = -MineFactoryReloadedCore.PassengerRailMaxVertical; offsetY < MineFactoryReloadedCore.PassengerRailMaxVertical; offsetY++)
+			for(offsetY = -Util.getInt(MineFactoryReloadedCore.passengerRailSearchMaxVertical); offsetY < Util.getInt(MineFactoryReloadedCore.passengerRailSearchMaxVertical); offsetY++)
 			{
-				for(offsetZ = -MineFactoryReloadedCore.PassengerRailMaxHorizontal; offsetZ < MineFactoryReloadedCore.PassengerRailMaxHorizontal; offsetZ++)
+				for(offsetZ = -Util.getInt(MineFactoryReloadedCore.passengerRailSearchMaxHorizontal); offsetZ < Util.getInt(MineFactoryReloadedCore.passengerRailSearchMaxHorizontal); offsetZ++)
 				{
 					targetX = x + offsetX;
 					targetY = y + offsetY;

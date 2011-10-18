@@ -1,4 +1,4 @@
-package net.minecraft.src.powercrystals.minefactoryreloaded;
+package net.minecraft.src.powercrystals.minefactoryreloaded.core;
 
 public interface IRotateableTile
 {

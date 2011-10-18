@@ -10,6 +10,7 @@ import net.minecraft.src.buildcraft.api.Orientations;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryHarvestable;
 import net.minecraft.src.powercrystals.minefactoryreloaded.core.Area;
 import net.minecraft.src.powercrystals.minefactoryreloaded.core.BlockPosition;
+import net.minecraft.src.powercrystals.minefactoryreloaded.core.Util;
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.HarvestType;
 
 public class TileEntityHarvester extends TileEntityFactoryPowered
@@ -33,7 +34,6 @@ public class TileEntityHarvester extends TileEntityFactoryPowered
 		{
 			return;
 		}
-		System.out.println("harvester: starting work, direction: " + getDirectionFacing());
 		
 		int harvestedBlockId = 0;
 		int harvestedBlockMetadata = 0;
@@ -66,11 +66,9 @@ public class TileEntityHarvester extends TileEntityFactoryPowered
 		
 		if(targetCoords == null)
 		{
-			System.out.println("harvester: coords null");
 			return;
 		}
 		
-		System.out.println("harvester: coords " + targetCoords.x + "," + targetCoords.y + "," + targetCoords.z);
 		
 		harvestedBlockId = worldObj.getBlockId(targetCoords.x, targetCoords.y, targetCoords.z);
 		harvestedBlockMetadata = worldObj.getBlockMetadata(targetCoords.x, targetCoords.y, targetCoords.z);
@@ -97,7 +95,7 @@ public class TileEntityHarvester extends TileEntityFactoryPowered
 			}
 		}
 		
-		if(MineFactoryReloadedCore.PlaySounds)
+		if(Util.getBool(MineFactoryReloadedCore.playSounds))
 		{
 			worldObj.playSoundEffect(xCoord, yCoord, zCoord, "damage.fallsmall", 1.0F, 1.0F);
 		}
@@ -111,12 +109,10 @@ public class TileEntityHarvester extends TileEntityFactoryPowered
 		Area harvestArea = getHarvestArea();
 		for(BlockPosition bp : harvestArea.getPositions())
 		{
-			System.out.println("Checking" + bp.x + "," + bp.y + "," + bp.z);
 			int searchId = worldObj.getBlockId(bp.x, bp.y, bp.z);
 			
 			if(!harvestables.containsKey(new Integer(searchId)))
 			{
-				System.out.println(searchId + " is not harvestable");
 				continue;
 			}
 			
@@ -125,7 +121,6 @@ public class TileEntityHarvester extends TileEntityFactoryPowered
 			{
 				if(harvestable.getHarvestType() == HarvestType.Normal)
 				{
-					System.out.println("Found normal harvest");
 					return bp;
 				}
 				else if(harvestable.getHarvestType() == HarvestType.LeaveBottom)
@@ -135,12 +130,10 @@ public class TileEntityHarvester extends TileEntityFactoryPowered
 					{
 						continue;
 					}
-					System.out.println("Found vertical harvest at " + temp.x + "," + temp.y + "," + temp.z);
 					return temp;
 				}
 				else if(harvestable.getHarvestType() == HarvestType.Tree)
 				{
-					System.out.println("Found tree");
 					return getNextLog(bp.x, bp.y, bp.z);
 				}
 			}
@@ -152,7 +145,7 @@ public class TileEntityHarvester extends TileEntityFactoryPowered
 	{
 		int highestBlockOffset = -1;
 		
-		for(int currentYoffset = 1; currentYoffset < MineFactoryReloadedCore.SugarAndCactusSearchMaxVertical; currentYoffset++)
+		for(int currentYoffset = 1; currentYoffset < Util.getInt(MineFactoryReloadedCore.verticalHarvestSearchMaxVertical); currentYoffset++)
 		{
 			int blockId = worldObj.getBlockId(x, y + currentYoffset, z);
 			if(harvestables.containsKey(new Integer(blockId)) && harvestables.get(new Integer(blockId)).canBeHarvested(worldObj, x, y + currentYoffset, z))
@@ -183,11 +176,11 @@ public class TileEntityHarvester extends TileEntityFactoryPowered
 		int searchZ;
 		int blockId;
  
-		for(currentYoffset = MineFactoryReloadedCore.TreeSearchMaxVertical; currentYoffset >= 0 ; currentYoffset--)
+		for(currentYoffset = Util.getInt(MineFactoryReloadedCore.treeSearchMaxVertical); currentYoffset >= 0 ; currentYoffset--)
 		{
-			for(currentXoffset = -MineFactoryReloadedCore.TreeSearchMaxHorizontal; currentXoffset < MineFactoryReloadedCore.TreeSearchMaxHorizontal; currentXoffset++)
+			for(currentXoffset = -Util.getInt(MineFactoryReloadedCore.treeSearchMaxHorizontal); currentXoffset < Util.getInt(MineFactoryReloadedCore.treeSearchMaxHorizontal); currentXoffset++)
 			{
-				for(currentZoffset = -MineFactoryReloadedCore.TreeSearchMaxHorizontal; currentZoffset < MineFactoryReloadedCore.TreeSearchMaxHorizontal; currentZoffset++)
+				for(currentZoffset = -Util.getInt(MineFactoryReloadedCore.treeSearchMaxHorizontal); currentZoffset < Util.getInt(MineFactoryReloadedCore.treeSearchMaxHorizontal); currentZoffset++)
 				{
 					searchX = i + currentXoffset;
 					searchY = j + currentYoffset;
@@ -196,13 +189,11 @@ public class TileEntityHarvester extends TileEntityFactoryPowered
 					if(harvestables.containsKey(new Integer(blockId))
 							&& harvestables.get(new Integer(blockId)).canBeHarvested(worldObj, searchX, searchY, searchZ))
 					{
-						System.out.println("Found tree harvest at " + searchX + "," + searchY + "," + searchZ);
 						return new BlockPosition(searchX, searchY, searchZ);
 					}
 				}
 			}
 		}
-		System.out.println("Tree search returning null!");
 		return null;
 	}
 

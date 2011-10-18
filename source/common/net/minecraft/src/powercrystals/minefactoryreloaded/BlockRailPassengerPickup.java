@@ -10,6 +10,7 @@ import net.minecraft.src.EntityMinecart;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.World;
 import net.minecraft.src.forge.ITextureProvider;
+import net.minecraft.src.powercrystals.minefactoryreloaded.core.Util;
 
 public class BlockRailPassengerPickup extends BlockRail implements ITextureProvider
 {
@@ -34,12 +35,12 @@ public class BlockRailPassengerPickup extends BlockRail implements ITextureProvi
 		}
 		
 		AxisAlignedBB bb = AxisAlignedBB.getBoundingBox(
-				x - MineFactoryReloadedCore.PassengerRailMaxHorizontal,
-				y - MineFactoryReloadedCore.PassengerRailMaxVertical,
-				z - MineFactoryReloadedCore.PassengerRailMaxHorizontal,
-				x + MineFactoryReloadedCore.PassengerRailMaxHorizontal + 1,
-				y + MineFactoryReloadedCore.PassengerRailMaxVertical + 1,
-				z + MineFactoryReloadedCore.PassengerRailMaxHorizontal + 1);
+				x - Util.getInt(MineFactoryReloadedCore.passengerRailSearchMaxHorizontal),
+				y - Util.getInt(MineFactoryReloadedCore.passengerRailSearchMaxVertical),
+				z - Util.getInt(MineFactoryReloadedCore.passengerRailSearchMaxHorizontal),
+				x + Util.getInt(MineFactoryReloadedCore.passengerRailSearchMaxHorizontal) + 1,
+				y + Util.getInt(MineFactoryReloadedCore.passengerRailSearchMaxVertical) + 1,
+				z + Util.getInt(MineFactoryReloadedCore.passengerRailSearchMaxHorizontal) + 1);
 		
 		@SuppressWarnings("rawtypes")
 		List entities = world.getEntitiesWithinAABB(EntityPlayer.class, bb);

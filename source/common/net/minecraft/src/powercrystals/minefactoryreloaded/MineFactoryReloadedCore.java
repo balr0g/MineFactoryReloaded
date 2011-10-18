@@ -5,20 +5,23 @@ import net.minecraft.src.EntitySheep;
 import net.minecraft.src.EntitySlime;
 import net.minecraft.src.EntitySquid;
 import net.minecraft.src.ItemStack;
-import net.minecraft.src.MLProp;
 import net.minecraft.src.Material;
 import net.minecraft.src.ModLoader;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.Item;
+import net.minecraft.src.forge.Configuration;
+import net.minecraft.src.forge.Property;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryFertilizable;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryHarvestable;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryPlantable;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryRanchable;
 import net.minecraft.src.powercrystals.minefactoryreloaded.core.IMFRProxy;
+import net.minecraft.src.powercrystals.minefactoryreloaded.core.Util;
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.FertilizableGiantMushroom;
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.FertilizableSapling;
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.FertilizableStemPlants;
@@ -82,63 +85,41 @@ public class MineFactoryReloadedCore
 	
 	public static int factoryWrenchTexture;
 	public static int steelIngotTexture;
-	public static int fertilizerItemTexture;
 	
 	public static IMFRProxy proxy;
 	
 	public static Map<MineFactoryReloadedCore.Machine, Integer> machineMetadataMappings;
+
+	// Config
+	public static Property machineBlockId;
+	public static Property conveyorBlockId;
+	public static Property passengerPickupRailBlockId;
+	public static Property passengerDropoffRailBlockId;
+	public static Property cargoPickupRailBlockId;
+	public static Property cargoDropoffRailBlockId;
 	
-	// TODO
-	@MLProp(min=1, max=255)
-	public static int machineBlockID = 124;
-	@MLProp(min=1, max=255)
-	public static int conveyorBlockID = 125;
-	@MLProp(min=1, max=255)
-	public static int PassengerPickupRailBlockID = 129;
-	@MLProp(min=1, max=255)
-	public static int PassengerDropoffRailBlockID = 130;
-	@MLProp(min=1, max=255)
-	public static int CargoPickupRailBlockID = 131;
-	@MLProp(min=1, max=255)
-	public static int CargoDropoffRailBlockID = 132;
+	public static Property steelIngotItemId;
+	public static Property hammerItemId;
 	
-	@MLProp(min=256, max=32767)
-	public static int SteelIngotItemID = 124;
-	@MLProp(min=256, max=32767)
-	public static int FertilizerItemID = 989;
-	@MLProp(min=256, max=32767)
-	public static int FactoryWrenchItemID = 988;
-	
-	@MLProp(info="If true, conveyor belts and harvesters will be animated. If you are using HD textures or Minecraft Extended, you may need to disable this for blocks to render properly..")
-	public static boolean AnimateBlockFaces = true;
-	@MLProp(min=0, max=128, info="The maximum number of squares to search upward for trees when harvesting.")
-	public static int TreeSearchMaxVertical = 15;
-	@MLProp(min=0, max=128, info="The maximum number of squares to search on the X and Z axis for trees when harvesting. This is the distance from the center; not the entire width of the search area.")
-	public static int TreeSearchMaxHorizontal = 5;
-	@MLProp(min=0, max=128, info="The maximum number of squares to search on the X and Z axis for players to pick up or places to put them on. This is the distance from the center; not the entire width of the search area.")
-	public static int PassengerRailMaxHorizontal = 3;
-	@MLProp(min=0, max=128, info="The maximum number of squares to search on the Y axis for players to pick up or places to put them on. This is the distance from the center; not the entire width of the search area.")
-	public static int PassengerRailMaxVertical = 2;
-	@MLProp(min=0, max=128, info="The maximum number of squares to search upward for cactus and sugarcane blocks when harvesting.")
-	public static int SugarAndCactusSearchMaxVertical = 3;
-	@MLProp(info="If true, play sounds when a block is harvested.")
-	public static boolean PlaySounds = true;
-	@MLProp(info="If true, harvesters will attempt to drop harvested items into chests located behind them.")
-	public static boolean HarvesterCanDropInChests = true;
-	@MLProp(info="If true, the rancher will sometimes cause damage to animals it is harvesting from.")
-	public static boolean RancherInjuresAnimals = true;
-	@MLProp(info="If true, the harvester will harvest small (old-style) mushrooms. False by default so that they can be fertilized into big mushrooms.")
-	public static boolean HarvesterHarvestsSmallMushrooms = false;
-   
-	@MLProp(info="The size of each tile for the animated textures, in pixels. Assumes square tiles.")
-	public static int AnimationTileSize = 16;
+	public static Property animateBlockFaces;
+	public static Property animationTileSize;
+	public static Property treeSearchMaxVertical;
+	public static Property treeSearchMaxHorizontal;
+	public static Property passengerRailSearchMaxVertical;
+	public static Property passengerRailSearchMaxHorizontal;
+	public static Property verticalHarvestSearchMaxVertical;
+	public static Property playSounds;
+	public static Property machinesCanDropInChests;
+	public static Property rancherInjuresAnimals;
+	public static Property harvesterHarvestsSmallMushrooms;
 	
 	public static void Init(IMFRProxy proxyParam)
 	{
 		proxy = proxyParam;
 		
+		loadConfig();
+		
 		factoryWrenchTexture = 0;
-		fertilizerItemTexture = 1;
 		steelIngotTexture = 2;
 		
 		machineMetadataMappings = new HashMap<Machine, Integer>();
@@ -153,19 +134,19 @@ public class MineFactoryReloadedCore
 
 		setupTextures();
 		
-		passengerRailPickupBlock = new BlockRailPassengerPickup(PassengerPickupRailBlockID, passengerRailPickupTexture);
-		passengerRailDropoffBlock = new BlockRailPassengerDropoff(PassengerDropoffRailBlockID, passengerRailDropoffTexture);
-		cargoRailDropoffBlock = new BlockRailCargoDropoff(CargoDropoffRailBlockID, cargoRailDropoffTexture);
-		cargoRailPickupBlock = new BlockRailCargoPickup(CargoPickupRailBlockID, cargoRailPickupTexture);
+		passengerRailPickupBlock = new BlockRailPassengerPickup(Util.getInt(passengerPickupRailBlockId), passengerRailPickupTexture);
+		passengerRailDropoffBlock = new BlockRailPassengerDropoff(Util.getInt(passengerDropoffRailBlockId), passengerRailDropoffTexture);
+		cargoRailDropoffBlock = new BlockRailCargoDropoff(Util.getInt(cargoDropoffRailBlockId), cargoRailDropoffTexture);
+		cargoRailPickupBlock = new BlockRailCargoPickup(Util.getInt(cargoPickupRailBlockId), cargoRailPickupTexture);
 		
-		conveyorBlock = new BlockConveyor(conveyorBlockID, conveyorTexture);
+		conveyorBlock = new BlockConveyor(Util.getInt(conveyorBlockId), conveyorTexture);
 		
-		machineBlock = new BlockFactoryMachine(machineBlockID, 0, Material.circuits);
+		machineBlock = new BlockFactoryMachine(Util.getInt(machineBlockId), 0, Material.circuits);
 		
-		steelIngotItem = (new ItemFactory(SteelIngotItemID))
+		steelIngotItem = (new ItemFactory(Util.getInt(steelIngotItemId)))
 			.setIconIndex(steelIngotTexture)
 			.setItemName("steelIngot");
-		factoryHammerItem = (new ItemFactory(FactoryWrenchItemID))
+		factoryHammerItem = (new ItemFactory(Util.getInt(hammerItemId)))
 			.setIconIndex(factoryWrenchTexture)
 			.setItemName("factoryWrench")
 			.setMaxStackSize(1);
@@ -322,7 +303,7 @@ public class MineFactoryReloadedCore
 		registerHarvestable(new HarvestableStemPlant(Block.melon.blockID, HarvestType.Normal));
 		registerHarvestable(new HarvestableWheat());
 		registerHarvestable(new HarvestableVine());
-		if(HarvesterHarvestsSmallMushrooms)
+		if(Util.getBool(harvesterHarvestsSmallMushrooms))
 		{
 			registerHarvestable(new HarvestableStandard(Block.mushroomBrown.blockID, HarvestType.Normal));
 			registerHarvestable(new HarvestableStandard(Block.mushroomRed.blockID, HarvestType.Normal));
@@ -414,6 +395,46 @@ public class MineFactoryReloadedCore
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Vet)][4] = steelHoleTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Vet)][2] = vetSideTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Vet)][3] = vetSideTexture;
+	}
+	
+	private static void loadConfig()
+	{
+		File configFile = new File(proxy.getConfigPath());
+		Configuration c = new Configuration(configFile);
+		c.load();
+		machineBlockId = c.getOrCreateBlockIdProperty("ID.MachineBlock", 124);
+		conveyorBlockId = c.getOrCreateBlockIdProperty("ID.ConveyorBlock", 125);
+		passengerPickupRailBlockId = c.getOrCreateBlockIdProperty("ID.PassengerRailPickupBlock", 129);
+		passengerDropoffRailBlockId = c.getOrCreateBlockIdProperty("ID.PassengerRailDropoffBlock", 130);
+		cargoPickupRailBlockId = c.getOrCreateBlockIdProperty("ID.PassengerRailPickupBlock", 129);
+		cargoDropoffRailBlockId = c.getOrCreateBlockIdProperty("ID.PassengerRailDropoffBlock", 130);
+		
+		steelIngotItemId = c.getOrCreateIntProperty("ID.SteelIngot", Configuration.ITEM_PROPERTY, 124);
+		hammerItemId = c.getOrCreateIntProperty("ID.Hammer", Configuration.ITEM_PROPERTY, 988);
+		
+		animateBlockFaces = c.getOrCreateBooleanProperty("AnimateBlockFaces", Configuration.GENERAL_PROPERTY, true);
+		animateBlockFaces.comment = "Set to false to disable animation of harvester, rancher, conveyor, etc. This may be required if using certain mods that affect rendering.";
+		animationTileSize = c.getOrCreateIntProperty("AnimationTileSize", Configuration.GENERAL_PROPERTY, 16);
+		animationTileSize.comment = "Set this to match the size of your texture pack to allow animations to work with HD texture packs. Setting this incorrect may cause unreliable behavior.";
+		playSounds = c.getOrCreateBooleanProperty("PlaySounds", Configuration.GENERAL_PROPERTY, true);
+		playSounds.comment = "Set to false to disable the harvester's sound when a block is harvested.";
+		harvesterHarvestsSmallMushrooms = c.getOrCreateBooleanProperty("HarvesterHarvestsSmallMushrooms", Configuration.GENERAL_PROPERTY, false);
+		harvesterHarvestsSmallMushrooms.comment = "Set to true to enable old-style mushroom farms (but will prevent giant mushrooms from working correctly as the small ones will be harvested immediately)";
+		rancherInjuresAnimals = c.getOrCreateBooleanProperty("RancherInjuresAnimals", Configuration.GENERAL_PROPERTY, true);
+		rancherInjuresAnimals.comment = "If false, the rancher will never injure animals. Intended for those who want to play in a (pseudo)-creative style.";
+	
+		treeSearchMaxHorizontal = c.getOrCreateIntProperty("SearchDistance.TreeMaxHoriztonal", Configuration.GENERAL_PROPERTY, 5);
+		treeSearchMaxHorizontal.comment = "When searching for parts of a tree, how far out to the sides (radius) to search";
+		treeSearchMaxVertical = c.getOrCreateIntProperty("SearchDistance.TreeMaxVertical", Configuration.GENERAL_PROPERTY, 15);
+		treeSearchMaxVertical.comment = "When searching for parts of a tree, how far up to search";
+		verticalHarvestSearchMaxVertical = c.getOrCreateIntProperty("SearchDistance.StackingBlockMaxVertical", Configuration.GENERAL_PROPERTY, 3);
+		verticalHarvestSearchMaxVertical.comment = "How far upward to search for members of \"stacking\" blocks, like cactus and sugarcane";
+		passengerRailSearchMaxVertical = c.getOrCreateIntProperty("SearchDistance.PassengerRailMaxVertical", Configuration.GENERAL_PROPERTY, 2);
+		passengerRailSearchMaxVertical.comment = "When searching for players or dropoff locations, how far up to search";
+		passengerRailSearchMaxHorizontal = c.getOrCreateIntProperty("SearchDistance.PassengerRailMaxHorizontal", Configuration.GENERAL_PROPERTY, 3);
+		passengerRailSearchMaxHorizontal.comment = "When searching for players or dropoff locations, how far out to the sides (radius) to search";
+		
+		c.save();
 	}
 	
 	public static void registerPlantable(IFactoryPlantable plantable)

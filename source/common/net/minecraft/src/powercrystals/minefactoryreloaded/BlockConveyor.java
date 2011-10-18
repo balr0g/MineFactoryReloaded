@@ -15,6 +15,7 @@ import net.minecraft.src.TileEntity;
 import net.minecraft.src.Vec3D;
 import net.minecraft.src.World;
 import net.minecraft.src.forge.ITextureProvider;
+import net.minecraft.src.powercrystals.minefactoryreloaded.core.IRotateableTile;
 import net.minecraft.src.powercrystals.minefactoryreloaded.core.Util;
 
 public class BlockConveyor extends BlockContainer implements ITextureProvider
@@ -147,7 +148,7 @@ public class BlockConveyor extends BlockContainer implements ITextureProvider
 		{
 			if(Util.isRedstonePowered(te))
 			{
-				if(MineFactoryReloadedCore.AnimateBlockFaces)
+				if(Util.getBool(MineFactoryReloadedCore.animateBlockFaces))
 				{
 					return MineFactoryReloadedCore.conveyorOffTexture;
 				}
