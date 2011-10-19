@@ -1,6 +1,8 @@
 package net.minecraft.src.powercrystals.minefactoryreloaded;
 
+import net.minecraft.src.AxisAlignedBB;
 import net.minecraft.src.BlockContainer;
+import net.minecraft.src.Entity;
 import net.minecraft.src.EntityItem;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IBlockAccess;
@@ -18,10 +20,12 @@ public class BlockFactoryMachine extends BlockContainer implements IPipeConnecti
 {
 	public static int[][] textures = new int[16][6];
 	
-	public BlockFactoryMachine(int i, int j, Material material)
+	public BlockFactoryMachine(int i, int j)
 	{
-		super(i, j, material);
+		super(i, j, Material.clay);
 		setBlockName("blockFactoryMachine");
+		setHardness(0.5F);
+		setStepSound(soundMetalFootstep);
 	}
 
     public int getBlockTexture(IBlockAccess iblockaccess, int x, int y, int z, int side)
@@ -61,6 +65,8 @@ public class BlockFactoryMachine extends BlockContainer implements IPipeConnecti
 	    if(md == MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Rancher)) return new TileEntityRancher();
 	    if(md == MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Fertilizer)) return new TileEntityFertilizer();
 	    if(md == MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Vet)) return new TileEntityVet();
+	    if(md == MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Collector)) return new TileEntityCollector();
+	    if(md == MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Breaker)) return new TileEntityBlockBreaker();
 	    return null;
 	}
 
@@ -74,7 +80,7 @@ public class BlockFactoryMachine extends BlockContainer implements IPipeConnecti
 		}
 		if(Util.isHoldingWrench(entityplayer))
 		{
-			if(te instanceof TileEntityFactory)
+			if(te instanceof TileEntityFactory && ((TileEntityFactory)te).canRotate())
 			{
 				((TileEntityFactory)te).rotate();
 				world.markBlockNeedsUpdate(i, j, k);
@@ -141,6 +147,37 @@ label0:
 			((TileEntityFactoryPowered)te).neighborBlockChanged();
 		}
 	}
+	
+	@Override
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z)
+	{
+		TileEntity te = world.getBlockTileEntity(x, y, z);
+		if(te != null && te instanceof TileEntityCollector)
+		{
+			float shrinkAmount = 0.125F;
+			return AxisAlignedBB.getBoundingBoxFromPool(x + shrinkAmount, y + shrinkAmount, z + shrinkAmount,
+					x + 1 - shrinkAmount, y + 1 - shrinkAmount, z + 1 - shrinkAmount);
+		}
+		else
+		{
+			return super.getCollisionBoundingBoxFromPool(world, x, y, z);
+		}
+	}
+
+	@Override
+    public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity)
+    {
+		int md = world.getBlockMetadata(x, y, z);
+		if(md == MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Collector))
+		{
+			TileEntity te = world.getBlockTileEntity(x, y, z);
+			if(te != null && te instanceof TileEntityCollector && entity instanceof EntityItem)
+			{
+				((TileEntityCollector)te).addToChests((EntityItem)entity);
+			}
+		}
+		super.onEntityCollidedWithBlock(world, x, y, z, entity);
+    }
 
 	@Override
 	public boolean canProvidePower()

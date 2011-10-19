@@ -5,7 +5,6 @@ import net.minecraft.src.EntitySheep;
 import net.minecraft.src.EntitySlime;
 import net.minecraft.src.EntitySquid;
 import net.minecraft.src.ItemStack;
-import net.minecraft.src.Material;
 import net.minecraft.src.ModLoader;
 
 import java.io.File;
@@ -14,6 +13,8 @@ import java.util.Map;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.Item;
+import net.minecraft.src.buildcraft.api.API;
+import net.minecraft.src.buildcraft.api.LiquidData;
 import net.minecraft.src.forge.Configuration;
 import net.minecraft.src.forge.Property;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryFertilizable;
@@ -55,6 +56,7 @@ public class MineFactoryReloadedCore
 	
 	public static Item steelIngotItem;
 	public static Item factoryHammerItem;
+	public static Item milkItem;
 	
 	public static Item machineItem;
 	
@@ -83,8 +85,9 @@ public class MineFactoryReloadedCore
 	public static int collectorSideTexture;
 	public static int vetAnimatedTexture;
 	
-	public static int factoryWrenchTexture;
+	public static int factoryHammerTexture;
 	public static int steelIngotTexture;
+	public static int milkTexture;
 	
 	public static IMFRProxy proxy;
 	
@@ -100,6 +103,7 @@ public class MineFactoryReloadedCore
 	
 	public static Property steelIngotItemId;
 	public static Property hammerItemId;
+	public static Property milkItemId;
 	
 	public static Property animateBlockFaces;
 	public static Property animationTileSize;
@@ -118,9 +122,6 @@ public class MineFactoryReloadedCore
 		proxy = proxyParam;
 		
 		loadConfig();
-		
-		factoryWrenchTexture = 0;
-		steelIngotTexture = 2;
 		
 		machineMetadataMappings = new HashMap<Machine, Integer>();
 		machineMetadataMappings.put(Machine.Planter, 0);
@@ -141,15 +142,18 @@ public class MineFactoryReloadedCore
 		
 		conveyorBlock = new BlockConveyor(Util.getInt(conveyorBlockId), conveyorTexture);
 		
-		machineBlock = new BlockFactoryMachine(Util.getInt(machineBlockId), 0, Material.circuits);
+		machineBlock = new BlockFactoryMachine(Util.getInt(machineBlockId), 0);
 		
 		steelIngotItem = (new ItemFactory(Util.getInt(steelIngotItemId)))
 			.setIconIndex(steelIngotTexture)
 			.setItemName("steelIngot");
 		factoryHammerItem = (new ItemFactory(Util.getInt(hammerItemId)))
-			.setIconIndex(factoryWrenchTexture)
+			.setIconIndex(factoryHammerTexture)
 			.setItemName("factoryWrench")
 			.setMaxStackSize(1);
+		milkItem = (new ItemFactory(Util.getInt(milkItemId)))
+			.setIconIndex(milkTexture)
+			.setItemName("milkItem");
 
 		ModLoader.RegisterBlock(machineBlock, ItemFactoryMachine.class);
 		ModLoader.RegisterBlock(conveyorBlock);
@@ -165,6 +169,8 @@ public class MineFactoryReloadedCore
 		ModLoader.RegisterTileEntity(TileEntityFertilizer.class, "factoryFertilizer");
 		ModLoader.RegisterTileEntity(TileEntityConveyor.class, "factoryConveyor");
 		ModLoader.RegisterTileEntity(TileEntityVet.class, "factoryVet");
+		ModLoader.RegisterTileEntity(TileEntityCollector.class, "factoryItemCollector");
+		ModLoader.RegisterTileEntity(TileEntityBlockBreaker.class, "factoryBlockBreaker");
 
 		/*
 
@@ -327,8 +333,17 @@ public class MineFactoryReloadedCore
 		registerRanchable(new RanchableStandard(EntitySquid.class, new ItemStack(Item.dyePowder), 10, 1, 40));
 	}
 	
+	public static void afterModsLoaded()
+	{
+		API.liquids.add(new LiquidData(milkItem.shiftedIndex, Item.bucketMilk.shiftedIndex));
+	}
+	
 	private static void setupTextures()
 	{
+		factoryHammerTexture = 0;
+		steelIngotTexture = 2;
+		milkTexture = 3;
+		
 		// 0 bottom 1 top 2 east 3 west 4 north 5 south
 		cargoRailDropoffTexture = 0;
 		cargoRailPickupTexture = 1;
@@ -396,6 +411,20 @@ public class MineFactoryReloadedCore
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Vet)][4] = steelHoleTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Vet)][2] = vetSideTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Vet)][3] = vetSideTexture;
+		
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Collector)][0] = steelSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Collector)][1] = steelSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Collector)][5] = collectorSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Collector)][4] = collectorSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Collector)][2] = collectorSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Collector)][3] = collectorSideTexture;
+		
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Breaker)][0] = steelSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Breaker)][1] = steelSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Breaker)][5] = harvesterAnimatedTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Breaker)][4] = steelHoleTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Breaker)][2] = steelHoleTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Breaker)][3] = steelHoleTexture;
 	}
 	
 	private static void loadConfig()
@@ -412,17 +441,18 @@ public class MineFactoryReloadedCore
 		
 		steelIngotItemId = c.getOrCreateIntProperty("ID.SteelIngot", Configuration.ITEM_PROPERTY, 124);
 		hammerItemId = c.getOrCreateIntProperty("ID.Hammer", Configuration.ITEM_PROPERTY, 988);
+		milkItemId = c.getOrCreateIntProperty("ID.Milk", Configuration.ITEM_PROPERTY, 987);
 		
 		animateBlockFaces = c.getOrCreateBooleanProperty("AnimateBlockFaces", Configuration.GENERAL_PROPERTY, true);
 		animateBlockFaces.comment = "Set to false to disable animation of harvester, rancher, conveyor, etc. This may be required if using certain mods that affect rendering.";
 		animationTileSize = c.getOrCreateIntProperty("AnimationTileSize", Configuration.GENERAL_PROPERTY, 16);
-		animationTileSize.comment = "Set this to match the size of your texture pack to allow animations to work with HD texture packs. Setting this incorrect may cause unreliable behavior.";
+		animationTileSize.comment = "Set this to match the size of your texture pack to allow animations to work with HD texture packs. Setting this incorrectly may cause unreliable behavior.";
 		playSounds = c.getOrCreateBooleanProperty("PlaySounds", Configuration.GENERAL_PROPERTY, true);
 		playSounds.comment = "Set to false to disable the harvester's sound when a block is harvested.";
 		harvesterHarvestsSmallMushrooms = c.getOrCreateBooleanProperty("HarvesterHarvestsSmallMushrooms", Configuration.GENERAL_PROPERTY, false);
 		harvesterHarvestsSmallMushrooms.comment = "Set to true to enable old-style mushroom farms (but will prevent giant mushrooms from working correctly as the small ones will be harvested immediately)";
 		rancherInjuresAnimals = c.getOrCreateBooleanProperty("RancherInjuresAnimals", Configuration.GENERAL_PROPERTY, true);
-		rancherInjuresAnimals.comment = "If false, the rancher will never injure animals. Intended for those who want to play in a (pseudo)-creative style.";
+		rancherInjuresAnimals.comment = "If false, the rancher will never injure animals. Intended for those who want to play in a (pseudo-)creative style.";
 		machinesCanDropInChests = c.getOrCreateBooleanProperty("MachinesCanDropInChests", Configuration.GENERAL_PROPERTY, true);
 		machinesCanDropInChests.comment = "Set to false to disable machines placing items into chests adjacent to them";
 	

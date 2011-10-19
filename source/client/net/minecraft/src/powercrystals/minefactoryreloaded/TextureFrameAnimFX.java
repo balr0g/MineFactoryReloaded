@@ -73,14 +73,7 @@ public class TextureFrameAnimFX extends TextureFX
 
     public void bindImage(RenderEngine renderengine)
     {
-        if(tileImage == 0)
-        {
-        	MinecraftForgeClient.bindTexture(MineFactoryReloadedCore.terrainTexture);
-        }
-        else if(tileImage == 1)
-        {
-        	MinecraftForgeClient.bindTexture(MineFactoryReloadedCore.itemTexture);
-        }
+    	MinecraftForgeClient.bindTexture(MineFactoryReloadedCore.terrainTexture);
     }
 
     protected int fileBuffer[];

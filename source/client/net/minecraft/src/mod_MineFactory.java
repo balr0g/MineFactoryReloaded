@@ -15,6 +15,7 @@ import net.minecraft.src.powercrystals.minefactoryreloaded.FactoryRenderer;
 import net.minecraft.src.powercrystals.minefactoryreloaded.MineFactoryReloadedCore;
 import net.minecraft.src.powercrystals.minefactoryreloaded.MineFactoryReloadedCore.Machine;
 import net.minecraft.src.powercrystals.minefactoryreloaded.TextureFrameAnimFX;
+import net.minecraft.src.powercrystals.minefactoryreloaded.TextureLiquidFX;
 import net.minecraft.src.powercrystals.minefactoryreloaded.TileEntityFactory;
 
 public class mod_MineFactory extends BaseModMp
@@ -30,7 +31,9 @@ public class mod_MineFactory extends BaseModMp
 		ModLoader.AddName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Harvester)), "Harvester");
 		ModLoader.AddName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Rancher)), "Rancher");
 		ModLoader.AddName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Fertilizer)), "Fertilizer");
-		ModLoader.AddName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Vet)), "Veterinary");
+		ModLoader.AddName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Vet)), "Veterinary Station");
+		ModLoader.AddName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Collector)), "Item Collector");
+		ModLoader.AddName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Breaker)), "Block Breaker");
 		
 		ModLoader.AddName(MineFactoryReloadedCore.passengerRailPickupBlock, "Passenger Pickup Rail");
 		ModLoader.AddName(MineFactoryReloadedCore.passengerRailDropoffBlock, "Passenger Dropoff Rail");
@@ -49,6 +52,7 @@ public class mod_MineFactory extends BaseModMp
 		ModLoaderMp.Init();
 		MinecraftForgeClient.preloadTexture(MineFactoryReloadedCore.terrainTexture);
 		MinecraftForgeClient.preloadTexture(MineFactoryReloadedCore.itemTexture);
+		MineFactoryReloadedCore.afterModsLoaded();
 	}
 
 	@Override
@@ -65,6 +69,7 @@ public class mod_MineFactory extends BaseModMp
 			ModLoader.addAnimation(new TextureFrameAnimFX(MineFactoryReloadedCore.conveyorTexture, "/MineFactorySprites/animations/Conveyor.png", Util.getInt(MineFactoryReloadedCore.animationTileSize)));
 			ModLoader.addAnimation(new TextureFrameAnimFX(MineFactoryReloadedCore.harvesterAnimatedTexture, "/MineFactorySprites/animations/Harvester.png", Util.getInt(MineFactoryReloadedCore.animationTileSize)));
 			ModLoader.addAnimation(new TextureFrameAnimFX(MineFactoryReloadedCore.rancherAnimatedTexture, "/MineFactorySprites/animations/Rancher.png", Util.getInt(MineFactoryReloadedCore.animationTileSize)));
+			ModLoader.addAnimation(new TextureLiquidFX(MineFactoryReloadedCore.milkTexture, MineFactoryReloadedCore.itemTexture, 240, 255, 240, 255, 230, 245, Util.getInt(MineFactoryReloadedCore.animationTileSize)));
 		}
 	}
 

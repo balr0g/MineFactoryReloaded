@@ -29,7 +29,7 @@ public abstract class TileEntityFactory extends TileEntity implements IRotateabl
 		return true;
 	}
 	
-	protected void dropStack(ItemStack s, float dropX, float dropY, float dropZ)
+	protected void dropStack(ItemStack s, float dropOffsetX, float dropOffsetY, float dropZ)
 	{
 		for(Orientations o : Util.findPipes(worldObj, xCoord, yCoord, zCoord))
 		{
@@ -65,7 +65,7 @@ public abstract class TileEntityFactory extends TileEntity implements IRotateabl
 		}
 		if(s.stackSize > 0)
 		{
-			EntityItem entityitem = new EntityItem(worldObj, xCoord, yCoord, zCoord, s);
+			EntityItem entityitem = new EntityItem(worldObj, xCoord + dropOffsetX, yCoord + dropOffsetY, zCoord + dropZ, s);
 			entityitem.motionX = 0.0D;
 			entityitem.motionY = 0.3D;
 			entityitem.motionZ = 0.0D;
@@ -160,14 +160,25 @@ public abstract class TileEntityFactory extends TileEntity implements IRotateabl
 	private int addToSide(int side, int shift)
 	{
 		// 0 bottom 1 top 2 east 3 west 4 north 5 south
+		// east xpos, north zneg
+		// rotation is xpos -> zpos -> xneg -> zneg
+		// which is east -> south -> west -> north
+		// and thus 2 -> 5 -> 3 -> 4
+		
+		// n/s backwards, so: 2 -> 4 -> 3 -> 5
+		
 		int shiftsRemaining = shift;
 		int out = side;
 		while(shiftsRemaining > 0)
 		{
-			if(out == 2) out = 5;
+			/*if(out == 2) out = 5;
 			else if(out == 3) out = 4;
 			else if(out == 4) out = 2;
-			else if(out == 5) out = 3;
+			else if(out == 5) out = 3;*/
+			if(out == 2) out = 4;
+			else if(out == 4) out = 3;
+			else if(out == 3) out = 5;
+			else if(out == 5) out = 2;
 			shiftsRemaining--;
 		}
 		return out;

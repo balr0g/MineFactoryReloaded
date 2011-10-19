@@ -17,10 +17,17 @@ public class mod_MineFactory extends BaseModMp
 		ModLoaderMp.InitModLoaderMp();
 		instance = this;
 	}
-	
+
+	@Override
 	public String Version()
 	{
 		return "1.8.1R1.2.2";
+	}
+	
+	@Override
+	public void ModsLoaded()
+	{
+		MineFactoryReloadedCore.afterModsLoaded();
 	}
 	
 	public static void registerPlantable(IFactoryPlantable plantable)

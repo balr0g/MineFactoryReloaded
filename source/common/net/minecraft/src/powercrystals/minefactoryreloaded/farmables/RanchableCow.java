@@ -8,6 +8,7 @@ import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.World;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryRanchable;
+import net.minecraft.src.powercrystals.minefactoryreloaded.MineFactoryReloadedCore;
 import net.minecraft.src.powercrystals.minefactoryreloaded.TileEntityRancher;
 
 public class RanchableCow implements IFactoryRanchable
@@ -37,6 +38,10 @@ public class RanchableCow implements IFactoryRanchable
 			{
 				drops.add(new ItemStack(Item.bucketMilk));
 				rancher.setInventorySlotContents(bucketIndex, null);
+			}
+			else
+			{
+				drops.add(new ItemStack(MineFactoryReloadedCore.milkItem));
 			}
 		}
 		

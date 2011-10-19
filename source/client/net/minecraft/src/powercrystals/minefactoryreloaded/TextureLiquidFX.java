@@ -1,0 +1,129 @@
+package net.minecraft.src.powercrystals.minefactoryreloaded;
+
+import net.minecraft.src.RenderEngine;
+import net.minecraft.src.TextureFX;
+import net.minecraft.src.forge.MinecraftForgeClient;
+
+public class TextureLiquidFX extends TextureFX
+{
+    protected float array0[];
+    protected float array1[];
+    protected float array2[];
+    protected float array3[];
+    private int tickCounter;
+    
+    private String texture;
+    
+    private int rMin;
+    private int rMax;
+    private int gMin;
+    private int gMax;
+    private int bMin;
+    private int bMax;
+    
+    private int tileSize;
+    
+	public TextureLiquidFX(int textureIndex, String texture, int rMin, int rMax, int gMin, int gMax, int bMin, int bMax, int tileSize)
+    {
+        super(textureIndex);
+        
+        this.tileSize = tileSize;
+        
+        this.texture = texture;
+        
+        this.rMin = rMin;
+        this.rMax = rMax;
+        this.gMin = gMin;
+        this.gMax = gMax;
+        this.bMin = bMin;
+        this.bMax = bMax;
+        
+        array0 = new float[tileSize * tileSize];
+        array1 = new float[tileSize * tileSize];
+        array2 = new float[tileSize * tileSize];
+        array3 = new float[tileSize * tileSize];
+        tickCounter = 0;
+    }
+
+	@Override
+	public void bindImage(RenderEngine renderengine)
+	{
+		MinecraftForgeClient.bindTexture(texture);
+	}
+	
+	@Override
+    public void onTick()
+    {
+        tickCounter++;
+        for(int i = 0; i < tileSize; i++)
+        {
+            for(int k = 0; k < tileSize; k++)
+            {
+                float f = 0.0F;
+                for(int j1 = i - 1; j1 <= i + 1; j1++)
+                {
+                    int k1 = j1 & 0xf;
+                    int i2 = k & 0xf;
+                    f += array0[k1 + i2 * 16];
+                }
+
+                array1[i + k * tileSize] = f / 3.3F + array2[i + k * tileSize] * 0.8F;
+            }
+
+        }
+
+        for(int j = 0; j < tileSize; j++)
+        {
+            for(int l = 0; l < tileSize; l++)
+            {
+                array2[j + l * tileSize] += array3[j + l * tileSize] * 0.05F;
+                if(array2[j + l * tileSize] < 0.0F)
+                {
+                    array2[j + l * tileSize] = 0.0F;
+                }
+                array3[j + l * tileSize] -= 0.1F;
+                if(Math.random() < 0.050000000000000003D)
+                {
+                    array3[j + l * tileSize] = 0.5F;
+                }
+            }
+
+        }
+
+        float af[] = array1;
+        array1 = array0;
+        array0 = af;
+        for(int i1 = 0; i1 < tileSize * tileSize; i1++)
+        {
+            float f1 = array0[i1];
+            if(f1 > 1.0F)
+            {
+                f1 = 1.0F;
+            }
+            if(f1 < 0.0F)
+            {
+                f1 = 0.0F;
+            }
+            float f2 = f1 * f1;
+            int r = (int)(rMin + f2 * (rMax - rMin));
+            int g = (int)(gMin + f2 * (gMax - gMin));
+            int b = (int)(bMin + f2 * (bMax - bMin));
+            int a = 255;
+            
+            if(anaglyphEnabled)
+            {
+                int i3 = (r * 30 + g * 59 + b * 11) / 100;
+                int j3 = (r * 30 + g * 70) / 100;
+                int k3 = (r * 30 + b * 70) / 100;
+                r = i3;
+                g = j3;
+                b = k3;
+            }
+            
+            imageData[i1 * 4 + 0] = (byte)r;
+            imageData[i1 * 4 + 1] = (byte)g;
+            imageData[i1 * 4 + 2] = (byte)b;
+            imageData[i1 * 4 + 3] = (byte)a;
+        }
+    }
+}

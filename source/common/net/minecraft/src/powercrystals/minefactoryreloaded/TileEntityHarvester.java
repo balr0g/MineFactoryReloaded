@@ -80,18 +80,18 @@ public class TileEntityHarvester extends TileEntityFactoryPowered
 		
 		if(harvestable.hasDifferentDrops())
 		{
-			drops = harvestable.getDifferentDrops(worldObj, xCoord, yCoord, zCoord);
+			drops = harvestable.getDifferentDrops(worldObj, targetCoords.x, targetCoords.y, targetCoords.z);
 		}
 		else
 		{
-			drops = Block.blocksList[harvestedBlockId].getBlockDropped(worldObj, xCoord, yCoord, zCoord, harvestedBlockMetadata);
+			drops = Block.blocksList[harvestedBlockId].getBlockDropped(worldObj, targetCoords.x, targetCoords.y, targetCoords.z, harvestedBlockMetadata);
 		}
 
 		if(drops != null)
 		{
 			for(ItemStack dropStack : drops)
 			{
-				dropStack(dropStack, (float)xCoord + dropOffsetX, (float)yCoord, (float)zCoord + dropOffsetZ);
+				dropStack(dropStack, dropOffsetX, 0, dropOffsetZ);
 			}
 		}
 		
