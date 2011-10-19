@@ -3,6 +3,7 @@ package net.minecraft.src;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.IBlockAccess;
 import net.minecraft.src.RenderBlocks;
+import net.minecraft.src.buildcraft.api.APIProxy;
 import net.minecraft.src.forge.MinecraftForgeClient;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryFertilizable;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryHarvestable;
@@ -29,6 +30,7 @@ public class mod_MineFactory extends BaseModMp
 		ModLoader.AddName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Harvester)), "Harvester");
 		ModLoader.AddName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Rancher)), "Rancher");
 		ModLoader.AddName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Fertilizer)), "Fertilizer");
+		ModLoader.AddName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Vet)), "Veterinary");
 		
 		ModLoader.AddName(MineFactoryReloadedCore.passengerRailPickupBlock, "Passenger Pickup Rail");
 		ModLoader.AddName(MineFactoryReloadedCore.passengerRailDropoffBlock, "Passenger Dropoff Rail");
@@ -39,23 +41,6 @@ public class mod_MineFactory extends BaseModMp
 		ModLoader.AddName(MineFactoryReloadedCore.factoryHammerItem, "Factory Hammer");
 		
 		renderId = ModLoader.getUniqueBlockModelID(this, false);
-	}
-
-	@Override
-	public void HandlePacket(Packet230ModLoader p)
-	{
-		if(p.packetType == 0)
-		{
-			World w = WorldProvider.getProviderForDimension(p.dataInt[0]).worldObj;
-			if(w != null)
-			{
-				TileEntity te = w.getBlockTileEntity(p.dataInt[1], p.dataInt[2], p.dataInt[3]);
-				if(te instanceof TileEntityFactory)
-				{
-					((TileEntityFactory)te).rotateDirectlyTo(p.dataInt[4]);
-				}
-			}
-		}
 	}
 	
 	@Override
@@ -96,6 +81,17 @@ public class mod_MineFactory extends BaseModMp
 			return false;
 		}
 	}
+	
+	@Override
+    public void HandleTileEntityPacket(int i, int j, int k, int l, int ai[], float af[], String as[])
+    {
+		World w = APIProxy.getWorld();
+		TileEntity te = w.getBlockTileEntity(i, j, k);
+		if(te != null && te instanceof TileEntityFactory)
+		{
+			((TileEntityFactory)te).rotateDirectlyTo(ai[0]);
+		}
+    }
 	
 	public static void registerPlantable(IFactoryPlantable plantable)
 	{
@@ -176,8 +172,9 @@ public class mod_MineFactory extends BaseModMp
 		}
 
 		@Override
-		public void sendPacketToAll(Packet230ModLoader packet)
+		public Packet getTileEntityPacket(TileEntity te, int[] dataInt, float[] dataFloat, String[] dataString)
 		{
+			return null;
 		}
 	}
 }

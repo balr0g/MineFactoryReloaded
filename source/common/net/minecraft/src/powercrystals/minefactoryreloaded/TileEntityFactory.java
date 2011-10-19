@@ -4,10 +4,12 @@ import net.minecraft.src.EntityItem;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.Packet230ModLoader;
+import net.minecraft.src.Packet;
 import net.minecraft.src.TileEntity;
-import net.minecraft.src.World;
+import net.minecraft.src.buildcraft.api.EntityPassiveItem;
+import net.minecraft.src.buildcraft.api.IPipeEntry;
 import net.minecraft.src.buildcraft.api.Orientations;
+import net.minecraft.src.buildcraft.api.Position;
 import net.minecraft.src.powercrystals.minefactoryreloaded.core.Area;
 import net.minecraft.src.powercrystals.minefactoryreloaded.core.BlockPosition;
 import net.minecraft.src.powercrystals.minefactoryreloaded.core.IRotateableTile;
@@ -22,11 +24,37 @@ public abstract class TileEntityFactory extends TileEntity implements IRotateabl
 		forwardDirection = Orientations.XPos;
 	}
 	
-	protected void dropStack(World world, ItemStack s, float dropX, float dropY, float dropZ, int harvesterX, int harvesterY, int harvesterZ)
+	protected boolean canDropInPipeAt(Orientations o)
 	{
+		return true;
+	}
+	
+	protected void dropStack(ItemStack s, float dropX, float dropY, float dropZ)
+	{
+		for(Orientations o : Util.findPipes(worldObj, xCoord, yCoord, zCoord))
+		{
+			BlockPosition bp = new BlockPosition(xCoord, yCoord, zCoord);
+			bp.orientation = o;
+			bp.moveForwards(1);
+			TileEntity te = worldObj.getBlockTileEntity(bp.x, bp.y, bp.z);
+			if(te != null && te instanceof IPipeEntry && canDropInPipeAt(o) && ((IPipeEntry)te).acceptItems())
+			{
+				Position ep = new Position(this);
+				ep.x += 0.5;
+				ep.y += 0.25;
+				ep.z += 0.5;
+				ep.orientation = o;
+				ep.moveForwards(0.5);
+				
+				EntityPassiveItem i = new EntityPassiveItem(worldObj, ep.x, ep.y, ep.z, s);
+				((IPipeEntry)te).entityEntering(i, o);
+				return;
+			}
+		}
+		
 		if(Util.getBool(MineFactoryReloadedCore.machinesCanDropInChests))
 		{
-			for(IInventory chest : Util.findChests(world, harvesterX, harvesterY, harvesterZ))
+			for(IInventory chest : Util.findChests(worldObj, xCoord, yCoord, zCoord))
 			{
 				s.stackSize = Util.addToInventory(chest, s);
 				if(s.stackSize == 0)
@@ -37,11 +65,11 @@ public abstract class TileEntityFactory extends TileEntity implements IRotateabl
 		}
 		if(s.stackSize > 0)
 		{
-			EntityItem entityitem = new EntityItem(world, dropX, dropY, dropZ, s);
+			EntityItem entityitem = new EntityItem(worldObj, xCoord, yCoord, zCoord, s);
 			entityitem.motionX = 0.0D;
 			entityitem.motionY = 0.3D;
 			entityitem.motionZ = 0.0D;
-			world.entityJoinedWorld(entityitem);
+			worldObj.entityJoinedWorld(entityitem);
 		}
 	}
 	
@@ -50,7 +78,17 @@ public abstract class TileEntityFactory extends TileEntity implements IRotateabl
 		return 1;
 	}
 	
-	protected Area getHarvestArea()
+	protected int getHarvestDistanceDown()
+	{
+		return 0;
+	}
+	
+	protected int getHarvestDistanceUp()
+	{
+		return 0;
+	}
+	
+	protected final Area getHarvestArea()
 	{
 		BlockPosition ourpos = BlockPosition.fromFactoryTile(this);
 		ourpos.moveForwards(getHarvestRadius() + 1);
@@ -90,19 +128,6 @@ public abstract class TileEntityFactory extends TileEntity implements IRotateabl
 		else
 		{
 			forwardDirection = Orientations.XPos;
-		}
-		
-		if(MineFactoryReloadedCore.proxy.isServer())
-		{
-			Packet230ModLoader p = new Packet230ModLoader();
-			p.packetType = 0;
-			p.dataInt = new int[5];
-			p.dataInt[0] = worldObj.getWorldInfo().getDimension();
-			p.dataInt[1] = xCoord;
-			p.dataInt[2] = yCoord;
-			p.dataInt[3] = zCoord;
-			p.dataInt[4] = getDirectionFacing().ordinal();
-			MineFactoryReloadedCore.proxy.sendPacketToAll(p);
 		}
 	}
 	
@@ -146,6 +171,14 @@ public abstract class TileEntityFactory extends TileEntity implements IRotateabl
 			shiftsRemaining--;
 		}
 		return out;
+	}
+	
+	public Packet getDescriptionPacket()
+	{
+		int[] data = new int[1];
+		data[0] = getDirectionFacing().ordinal();
+		Packet p = MineFactoryReloadedCore.proxy.getTileEntityPacket(this, data, null, null);
+		return p;
 	}
 	
 	@Override

@@ -164,6 +164,7 @@ public class MineFactoryReloadedCore
 		ModLoader.RegisterTileEntity(TileEntityRancher.class, "factoryRancher");
 		ModLoader.RegisterTileEntity(TileEntityFertilizer.class, "factoryFertilizer");
 		ModLoader.RegisterTileEntity(TileEntityConveyor.class, "factoryConveyor");
+		ModLoader.RegisterTileEntity(TileEntityVet.class, "factoryVet");
 
 		/*
 
@@ -406,8 +407,8 @@ public class MineFactoryReloadedCore
 		conveyorBlockId = c.getOrCreateBlockIdProperty("ID.ConveyorBlock", 125);
 		passengerPickupRailBlockId = c.getOrCreateBlockIdProperty("ID.PassengerRailPickupBlock", 129);
 		passengerDropoffRailBlockId = c.getOrCreateBlockIdProperty("ID.PassengerRailDropoffBlock", 130);
-		cargoPickupRailBlockId = c.getOrCreateBlockIdProperty("ID.PassengerRailPickupBlock", 129);
-		cargoDropoffRailBlockId = c.getOrCreateBlockIdProperty("ID.PassengerRailDropoffBlock", 130);
+		cargoPickupRailBlockId = c.getOrCreateBlockIdProperty("ID.CargoRailPickupBlock", 131);
+		cargoDropoffRailBlockId = c.getOrCreateBlockIdProperty("ID.CargoRailDropoffBlock", 132);
 		
 		steelIngotItemId = c.getOrCreateIntProperty("ID.SteelIngot", Configuration.ITEM_PROPERTY, 124);
 		hammerItemId = c.getOrCreateIntProperty("ID.Hammer", Configuration.ITEM_PROPERTY, 988);
@@ -422,6 +423,8 @@ public class MineFactoryReloadedCore
 		harvesterHarvestsSmallMushrooms.comment = "Set to true to enable old-style mushroom farms (but will prevent giant mushrooms from working correctly as the small ones will be harvested immediately)";
 		rancherInjuresAnimals = c.getOrCreateBooleanProperty("RancherInjuresAnimals", Configuration.GENERAL_PROPERTY, true);
 		rancherInjuresAnimals.comment = "If false, the rancher will never injure animals. Intended for those who want to play in a (pseudo)-creative style.";
+		machinesCanDropInChests = c.getOrCreateBooleanProperty("MachinesCanDropInChests", Configuration.GENERAL_PROPERTY, true);
+		machinesCanDropInChests.comment = "Set to false to disable machines placing items into chests adjacent to them";
 	
 		treeSearchMaxHorizontal = c.getOrCreateIntProperty("SearchDistance.TreeMaxHoriztonal", Configuration.GENERAL_PROPERTY, 5);
 		treeSearchMaxHorizontal.comment = "When searching for parts of a tree, how far out to the sides (radius) to search";

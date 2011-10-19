@@ -11,6 +11,8 @@ import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
+import net.minecraft.src.buildcraft.api.IPipeEntry;
+import net.minecraft.src.buildcraft.api.Orientations;
 import net.minecraft.src.forge.Property;
 import net.minecraft.src.powercrystals.minefactoryreloaded.MineFactoryReloadedCore;
 
@@ -95,65 +97,51 @@ public class Util
 		return -1;
 	}
 
+	public static List<Orientations> findPipes(World world, int x, int y, int z)
+	{
+		List<Orientations> pipes = new LinkedList<Orientations>();
+		BlockPosition ourpos = new BlockPosition(x, y, z);
+		for(Orientations o : Orientations.values())
+		{
+			BlockPosition bp = new BlockPosition(ourpos);
+			bp.orientation = o;
+			bp.moveForwards(1);
+			TileEntity te = world.getBlockTileEntity(bp.x, bp.y, bp.z);
+			if(te instanceof IPipeEntry)
+			{
+				pipes.add(o);
+			}
+		}
+		
+		return pipes;
+	}
+	
 	public static List<IInventory> findChests(World world, int x, int y, int z)
 	{
 		List<IInventory> chests = new LinkedList<IInventory>();
-		TileEntity te;
+		BlockPosition ourpos = new BlockPosition(x, y, z);
 		
-		te = world.getBlockTileEntity(x + 1, y, z);
-		if(te != null && te instanceof IInventory)
+		for(BlockPosition bp : ourpos.getAdjacent(true))
 		{
-			chests.add(checkForDoubleChest(world, te, x + 1, y, z));
+			TileEntity te = world.getBlockTileEntity(bp.x, bp.y, bp.z);
+			if(te != null && te instanceof IInventory)
+			{
+				chests.add(checkForDoubleChest(world, te, bp));
+			}
 		}
-		te = world.getBlockTileEntity(x - 1, y, z);
-		if(te != null && te instanceof IInventory)
-		{
-			chests.add(checkForDoubleChest(world, te, x - 1, y, z));
-		}
-		te = world.getBlockTileEntity(x, y, z + 1);
-		if(te != null && te instanceof IInventory)
-		{
-			chests.add(checkForDoubleChest(world, te, x, y, z + 1));
-		}
-		te = world.getBlockTileEntity(x, y, z - 1);
-		if(te != null && te instanceof IInventory)
-		{
-			chests.add(checkForDoubleChest(world, te, x, y, z - 1));
-		}
-		te = world.getBlockTileEntity(x, y + 1, z);
-		if(te != null && te instanceof IInventory)
-		{
-			chests.add(checkForDoubleChest(world, te, x, y + 1, z));
-		}
-		te = world.getBlockTileEntity(x, y - 1, z);
-		if(te != null && te instanceof IInventory)
-		{
-			chests.add(checkForDoubleChest(world, te, x, y - 1, z));
-		}
-		
 		return chests;
 	}
 	
-	private static IInventory checkForDoubleChest(World world, TileEntity te, int x, int y, int z)
+	private static IInventory checkForDoubleChest(World world, TileEntity te, BlockPosition chestloc)
 	{
-		int blockId = world.getBlockId(x, y, z);
-		if(blockId == Block.chest.blockID)
+		if(world.getBlockId(chestloc.x, chestloc.y, chestloc.z) == Block.chest.blockID)
 		{
-			if(world.getBlockId(x + 1, y, z) == Block.chest.blockID)
+			for(BlockPosition bp : chestloc.getAdjacent(false))
 			{
-				return new InventoryLargeChest("Large Chest", ((IInventory)te), ((IInventory)world.getBlockTileEntity(x + 1, y, z)));
-			}
-			if(world.getBlockId(x - 1, y, z) == Block.chest.blockID)
-			{
-				return new InventoryLargeChest("Large Chest", ((IInventory)te), ((IInventory)world.getBlockTileEntity(x - 1, y, z)));
-			}
-			if(world.getBlockId(x, y, z + 1) == Block.chest.blockID)
-			{
-				return new InventoryLargeChest("Large Chest", ((IInventory)te), ((IInventory)world.getBlockTileEntity(x, y, z + 1)));
-			}
-			if(world.getBlockId(x, y, z - 1) == Block.chest.blockID)
-			{
-				return new InventoryLargeChest("Large Chest", ((IInventory)te), ((IInventory)world.getBlockTileEntity(x, y, z - 1)));
+				if(world.getBlockId(bp.x, bp.y, bp.z) == Block.chest.blockID)
+				{
+					return new InventoryLargeChest("Large Chest", ((IInventory)te), ((IInventory)world.getBlockTileEntity(bp.x, bp.y, bp.z)));
+				}
 			}
 		}
 		return ((IInventory)te);

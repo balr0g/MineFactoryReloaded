@@ -36,6 +36,24 @@ public class TileEntityRancher extends TileEntityFactoryInventory
 	{
 		return 2;
 	}
+	
+	@Override
+	protected int getHarvestDistanceDown()
+	{
+		return 1;
+	}
+	
+	@Override
+	protected int getHarvestDistanceUp()
+	{
+		return 3;
+	}
+	
+	@Override
+	protected boolean canDropInPipeAt(Orientations o)
+	{
+		return o == getDirectionFacing().reverse();
+	}
 
 	@Override
 	public void doWork()
@@ -84,7 +102,7 @@ public class TileEntityRancher extends TileEntityFactoryInventory
 				List<ItemStack> drops = r.ranch(worldObj, e, this);
 				for(ItemStack s : drops)
 				{
-					dropStack(worldObj, s, (float)xCoord + dropOffsetX, (float)yCoord, (float)zCoord + dropOffsetZ, xCoord, yCoord, zCoord);
+					dropStack(s, (float)xCoord + dropOffsetX, (float)yCoord, (float)zCoord + dropOffsetZ);
 				}
 				
 				if(Util.getBool(MineFactoryReloadedCore.rancherInjuresAnimals) && r.getDamageRanchedEntity(worldObj, e, drops))

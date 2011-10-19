@@ -9,11 +9,12 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.Material;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
+import net.minecraft.src.buildcraft.api.IPipeConnection;
 import net.minecraft.src.forge.ITextureProvider;
 import net.minecraft.src.powercrystals.minefactoryreloaded.MineFactoryReloadedCore.Machine;
 import net.minecraft.src.powercrystals.minefactoryreloaded.core.Util;
 
-public class BlockFactoryMachine extends BlockContainer implements ITextureProvider
+public class BlockFactoryMachine extends BlockContainer implements IPipeConnection, ITextureProvider
 {
 	public static int[][] textures = new int[16][6];
 	
@@ -58,7 +59,8 @@ public class BlockFactoryMachine extends BlockContainer implements ITextureProvi
 	    if(md == MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Fisher)) return new TileEntityFisher();
 	    if(md == MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Harvester)) return new TileEntityHarvester();
 	    if(md == MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Rancher)) return new TileEntityRancher();
-	    if(md == MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Rancher)) return new TileEntityFertilizer();
+	    if(md == MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Fertilizer)) return new TileEntityFertilizer();
+	    if(md == MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Vet)) return new TileEntityVet();
 	    return null;
 	}
 
@@ -133,17 +135,21 @@ label0:
 	@Override
 	public void onNeighborBlockChange(World world, int i, int j, int k, int l)
 	{
-		System.out.println("block: neighbor changed");
 		TileEntity te = world.getBlockTileEntity(i, j, k);
 		if(te != null && te instanceof TileEntityFactoryPowered)
 		{
-			System.out.println("block: found TE, triggering update");
 			((TileEntityFactoryPowered)te).neighborBlockChanged();
 		}
 	}
 
 	@Override
 	public boolean canProvidePower()
+	{
+		return true;
+	}
+
+	@Override
+	public boolean isPipeConnected(IBlockAccess blockAccess, int x1, int y1, int z1, int x2, int y2, int z2)
 	{
 		return true;
 	}

@@ -11,6 +11,7 @@ public abstract class TileEntityFactoryInventory extends TileEntityFactoryPowere
 	protected TileEntityFactoryInventory(int bcEnergyNeededToWork,	int bcEnergyNeededToActivate)
 	{
 		super(bcEnergyNeededToWork, bcEnergyNeededToActivate);
+		inventory = new ItemStack[getSizeInventory()];
 	}
 	
 	// IInventory methods

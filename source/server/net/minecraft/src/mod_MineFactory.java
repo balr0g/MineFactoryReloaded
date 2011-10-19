@@ -13,7 +13,7 @@ public class mod_MineFactory extends BaseModMp
 	
 	public mod_MineFactory()
 	{
-		MineFactoryReloadedCore.Init(null);
+		MineFactoryReloadedCore.Init(new ServerProxy());
 		ModLoaderMp.InitModLoaderMp();
 		instance = this;
 	}
@@ -103,11 +103,10 @@ public class mod_MineFactory extends BaseModMp
 		{
 			return "config/MineFactoryReloaded.cfg";
 		}
-
 		@Override
-		public void sendPacketToAll(Packet230ModLoader packet)
+		public Packet getTileEntityPacket(TileEntity te, int[] dataInt, float[] dataFloat, String[] dataString)
 		{
-			ModLoaderMp.SendPacketToAll(instance, packet);
+			return ModLoaderMp.GetTileEntityPacket(instance, te.xCoord, te.yCoord, te.zCoord, 0, dataInt, dataFloat, dataString);
 		}
 	}
 }

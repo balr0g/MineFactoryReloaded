@@ -91,7 +91,7 @@ public class TileEntityHarvester extends TileEntityFactoryPowered
 		{
 			for(ItemStack dropStack : drops)
 			{
-				dropStack(worldObj, dropStack, (float)xCoord + dropOffsetX, (float)yCoord, (float)zCoord + dropOffsetZ, xCoord, yCoord, zCoord);
+				dropStack(dropStack, (float)xCoord + dropOffsetX, (float)yCoord, (float)zCoord + dropOffsetZ);
 			}
 		}
 		
@@ -134,7 +134,7 @@ public class TileEntityHarvester extends TileEntityFactoryPowered
 				}
 				else if(harvestable.getHarvestType() == HarvestType.Tree)
 				{
-					return getNextLog(bp.x, bp.y, bp.z);
+					return getNextTreeSegment(bp.x, bp.y, bp.z);
 				}
 			}
 		}
@@ -166,33 +166,23 @@ public class TileEntityHarvester extends TileEntityFactoryPowered
 		return new BlockPosition(x, y + highestBlockOffset, z);
 	}
 
-	private BlockPosition getNextLog(int i, int j, int k)
+	private BlockPosition getNextTreeSegment(int x, int y, int z)
 	{
-		int currentXoffset;
-		int currentYoffset;
-		int currentZoffset;
-		int searchX;
-		int searchY;
-		int searchZ;
 		int blockId;
  
-		for(currentYoffset = Util.getInt(MineFactoryReloadedCore.treeSearchMaxVertical); currentYoffset >= 0 ; currentYoffset--)
+		Area a = new Area(x - Util.getInt(MineFactoryReloadedCore.treeSearchMaxHorizontal), x + Util.getInt(MineFactoryReloadedCore.treeSearchMaxHorizontal),
+				y, y + Util.getInt(MineFactoryReloadedCore.treeSearchMaxVertical),
+				z - Util.getInt(MineFactoryReloadedCore.treeSearchMaxHorizontal), z + Util.getInt(MineFactoryReloadedCore.treeSearchMaxHorizontal));
+		
+		for(BlockPosition bp : a.getPositions())
 		{
-			for(currentXoffset = -Util.getInt(MineFactoryReloadedCore.treeSearchMaxHorizontal); currentXoffset < Util.getInt(MineFactoryReloadedCore.treeSearchMaxHorizontal); currentXoffset++)
+			blockId = worldObj.getBlockId(bp.x, bp.y, bp.z);
+			if(harvestables.containsKey(new Integer(blockId))
+					&& harvestables.get(new Integer(blockId)).canBeHarvested(worldObj, bp.x, bp.y, bp.z))
 			{
-				for(currentZoffset = -Util.getInt(MineFactoryReloadedCore.treeSearchMaxHorizontal); currentZoffset < Util.getInt(MineFactoryReloadedCore.treeSearchMaxHorizontal); currentZoffset++)
-				{
-					searchX = i + currentXoffset;
-					searchY = j + currentYoffset;
-					searchZ = k + currentZoffset;
-					blockId = worldObj.getBlockId(searchX, searchY, searchZ);
-					if(harvestables.containsKey(new Integer(blockId))
-							&& harvestables.get(new Integer(blockId)).canBeHarvested(worldObj, searchX, searchY, searchZ))
-					{
-						return new BlockPosition(searchX, searchY, searchZ);
-					}
-				}
+				return new BlockPosition(bp.x, bp.y, bp.z);
 			}
+
 		}
 		return null;
 	}

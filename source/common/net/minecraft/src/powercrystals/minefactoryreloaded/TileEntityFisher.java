@@ -34,14 +34,14 @@ public class TileEntityFisher extends TileEntityFactoryInventory
 					int bucketIndex = findFirstStack(Item.bucketEmpty.shiftedIndex, 0);
 					if(bucketIndex >= 0)
 					{
-						dropStack(worldObj, new ItemStack(Item.bucketWater), xCoord + 0.5F, yCoord + 1.5F, zCoord + 0.5F, xCoord, yCoord, zCoord);
+						dropStack(new ItemStack(Item.bucketWater), xCoord + 0.5F, yCoord + 1.5F, zCoord + 0.5F);
 						setInventorySlotContents(bucketIndex, null);
 						worldObj.setBlockWithNotify(xCoord + xOffset, yCoord - 1, zCoord + zOffset, 0);
 						return;
 					}
 					if(worldObj.rand.nextInt(100) < 1)
 					{
-						dropStack(worldObj, new ItemStack(Item.fishRaw), xCoord + 0.5F, yCoord + 1.5F, zCoord + 0.5F, xCoord, yCoord, zCoord);
+						dropStack(new ItemStack(Item.fishRaw), xCoord + 0.5F, yCoord + 1.5F, zCoord + 0.5F);
 						return;
 					}
 				}
