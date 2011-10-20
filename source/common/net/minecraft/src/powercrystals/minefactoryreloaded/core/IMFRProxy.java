@@ -3,6 +3,7 @@ package net.minecraft.src.powercrystals.minefactoryreloaded.core;
 import net.minecraft.src.Block;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.Packet;
+import net.minecraft.src.Packet230ModLoader;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 
@@ -23,4 +24,6 @@ public interface IMFRProxy
 	public String getConfigPath();
 	
 	public Packet getTileEntityPacket(TileEntity te, int[] dataInt, float[] dataFloat, String[] dataString);
+	
+	public void sendPacketToAll(Packet230ModLoader p);
 }

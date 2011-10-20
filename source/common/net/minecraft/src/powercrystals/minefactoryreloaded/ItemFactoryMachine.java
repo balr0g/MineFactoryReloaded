@@ -24,6 +24,12 @@ public class ItemFactoryMachine extends ItemBlock
     {
         return i;
     }
+    
+    // server version - MCP doesn't name them the same..
+    public int getMetadata(int i)
+    {
+        return getPlacedBlockMetadata(i);
+    }
 
     public String getItemNameIS(ItemStack itemstack)
     {

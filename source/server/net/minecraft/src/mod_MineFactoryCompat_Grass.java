@@ -8,7 +8,7 @@ public class mod_MineFactoryCompat_Grass extends BaseModMp {
 	@Override
 	public String Version()
 	{
-		return "MineFactoryCompat_Grass 1.0.0";
+		return "1.3.0B";
 	}
 	
 	@Override

@@ -287,6 +287,11 @@ public class BlockConveyor extends BlockContainer implements ITextureProvider
 		e.motionZ = z;
 	}
 
+	public float getBlockBrightness(IBlockAccess iblockaccess, int x, int y, int z)
+	{
+		return 1.0F;
+	}
+	
 	@Override
 	public TileEntity getBlockEntity()
 	{

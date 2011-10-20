@@ -187,5 +187,10 @@ public class mod_MineFactory extends BaseModMp
 		{
 			return null;
 		}
+
+		@Override
+		public void sendPacketToAll(Packet230ModLoader p)
+		{	
+		}
 	}
 }

@@ -5,6 +5,7 @@ import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.Packet;
+import net.minecraft.src.Packet230ModLoader;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.buildcraft.api.EntityPassiveItem;
 import net.minecraft.src.buildcraft.api.IPipeEntry;
@@ -129,11 +130,20 @@ public abstract class TileEntityFactory extends TileEntity implements IRotateabl
 		{
 			forwardDirection = Orientations.XPos;
 		}
+		
+		if(MineFactoryReloadedCore.proxy.isServer())
+		{
+			MineFactoryReloadedCore.proxy.sendPacketToAll((Packet230ModLoader)getDescriptionPacket());
+		}
 	}
 	
 	public void rotateDirectlyTo(int rotation)
 	{
 		forwardDirection = Orientations.values()[rotation];
+		if(MineFactoryReloadedCore.proxy.isClient(worldObj))
+		{
+			worldObj.markBlockNeedsUpdate(xCoord, yCoord, zCoord);
+		}
 	}
 	
 	public int getRotatedSide(int side)
@@ -159,22 +169,10 @@ public abstract class TileEntityFactory extends TileEntity implements IRotateabl
 	
 	private int addToSide(int side, int shift)
 	{
-		// 0 bottom 1 top 2 east 3 west 4 north 5 south
-		// east xpos, north zneg
-		// rotation is xpos -> zpos -> xneg -> zneg
-		// which is east -> south -> west -> north
-		// and thus 2 -> 5 -> 3 -> 4
-		
-		// n/s backwards, so: 2 -> 4 -> 3 -> 5
-		
 		int shiftsRemaining = shift;
 		int out = side;
 		while(shiftsRemaining > 0)
 		{
-			/*if(out == 2) out = 5;
-			else if(out == 3) out = 4;
-			else if(out == 4) out = 2;
-			else if(out == 5) out = 3;*/
 			if(out == 2) out = 4;
 			else if(out == 4) out = 3;
 			else if(out == 3) out = 5;
