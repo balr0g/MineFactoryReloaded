@@ -7,7 +7,9 @@ import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.Packet;
 import net.minecraft.src.Packet230ModLoader;
 import net.minecraft.src.TileEntity;
+import net.minecraft.src.buildcraft.api.API;
 import net.minecraft.src.buildcraft.api.EntityPassiveItem;
+import net.minecraft.src.buildcraft.api.ILiquidContainer;
 import net.minecraft.src.buildcraft.api.IPipeEntry;
 import net.minecraft.src.buildcraft.api.Orientations;
 import net.minecraft.src.buildcraft.api.Position;
@@ -57,6 +59,10 @@ public abstract class TileEntityFactory extends TileEntity implements IRotateabl
 		{
 			for(IInventory chest : Util.findChests(worldObj, xCoord, yCoord, zCoord))
 			{
+				if(chest.getInvName() == "Engine")
+				{
+					continue;
+				}
 				s.stackSize = Util.addToInventory(chest, s);
 				if(s.stackSize == 0)
 				{
@@ -204,4 +210,42 @@ public abstract class TileEntityFactory extends TileEntity implements IRotateabl
 		super.writeToNBT(nbttagcompound);
 		nbttagcompound.setInteger("rotation", getDirectionFacing().ordinal());
     }
+	
+	protected boolean produceLiquid(int liquidId)
+	{
+		Orientations or = getValidLiquidContainer(liquidId);
+		if(or != null)
+		{
+			BlockPosition p = new BlockPosition(this);
+			p.orientation = or;
+			p.moveForwards(1);
+			ILiquidContainer lc = (ILiquidContainer)worldObj.getBlockTileEntity(p.x, p.y, p.z);
+			lc.fill(or.reverse(), API.BUCKET_VOLUME, liquidId, true);
+			return true;
+		}
+		return false;
+	}
+	
+	private Orientations getValidLiquidContainer(int liquidId)
+	{
+		for(int i = 0; i < 6; i++)
+		{
+			Orientations or = Orientations.values()[i];
+			
+			BlockPosition p = new BlockPosition(xCoord, yCoord, zCoord, or);
+			p.moveForwards(1);
+
+			TileEntity tile = worldObj.getBlockTileEntity(p.x, p.y,	p.z);
+
+			if(tile instanceof ILiquidContainer && !(p.x == xCoord && p.y == yCoord && p.z == zCoord))
+			{
+				ILiquidContainer lc = (ILiquidContainer)tile;
+				if((lc.getLiquidQuantity() == 0 || lc.getLiquidId() == liquidId))
+				{
+					return or;
+				}
+			}
+		}
+		return null;
+	}
 }

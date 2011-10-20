@@ -7,12 +7,10 @@ import java.util.Map;
 import net.minecraft.src.DamageSource;
 import net.minecraft.src.EntityLiving;
 import net.minecraft.src.ItemStack;
-import net.minecraft.src.TileEntity;
 import net.minecraft.src.buildcraft.api.API;
 import net.minecraft.src.buildcraft.api.ILiquidContainer;
 import net.minecraft.src.buildcraft.api.Orientations;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryRanchable;
-import net.minecraft.src.powercrystals.minefactoryreloaded.core.BlockPosition;
 import net.minecraft.src.powercrystals.minefactoryreloaded.core.Util;
 
 public class TileEntityRancher extends TileEntityFactoryInventory implements ILiquidContainer
@@ -108,15 +106,7 @@ public class TileEntityRancher extends TileEntityFactoryInventory implements ILi
 				{
 					if(API.getBucketForLiquid(s.itemID) != 0)
 					{
-						Orientations or = getValidLiquidContainer(s.itemID);
-						if(or != null)
-						{
-							BlockPosition p = new BlockPosition(this);
-							p.orientation = or;
-							p.moveForwards(1);
-							ILiquidContainer lc = (ILiquidContainer)worldObj.getBlockTileEntity(p.x, p.y, p.z);
-							lc.fill(or.reverse(), API.BUCKET_VOLUME, s.itemID, true);
-						}
+						produceLiquid(s.itemID);
 						continue; // abort if we got a liquid block/item - nowhere to put it, it'll just be destroyed
 					}
 					dropStack(s, dropOffsetX, 0, dropOffsetZ);
@@ -133,29 +123,6 @@ public class TileEntityRancher extends TileEntityFactoryInventory implements ILi
 				}
 			}
 		}
-	}
-	
-	private Orientations getValidLiquidContainer(int liquidId)
-	{
-		for(int i = 0; i < 6; i++)
-		{
-			Orientations or = Orientations.values()[i];
-			
-			BlockPosition p = new BlockPosition(xCoord, yCoord, zCoord, or);
-			p.moveForwards(1);
-
-			TileEntity tile = worldObj.getBlockTileEntity(p.x, p.y,	p.z);
-
-			if(tile instanceof ILiquidContainer && !(p.x == xCoord && p.y == yCoord && p.z == zCoord))
-			{
-				ILiquidContainer lc = (ILiquidContainer)tile;
-				if((lc.getLiquidQuantity() == 0 || lc.getLiquidId() == liquidId))
-				{
-					return or;
-				}
-			}
-		}
-		return null;
 	}
 
 	@Override

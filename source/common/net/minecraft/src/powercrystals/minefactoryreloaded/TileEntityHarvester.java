@@ -24,7 +24,7 @@ public class TileEntityHarvester extends TileEntityFactoryPowered
 	
 	public TileEntityHarvester()
 	{
-		super(5, 1);
+		super(1, 1);
 	}
 
 	@Override

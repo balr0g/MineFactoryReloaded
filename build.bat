@@ -7,7 +7,7 @@ set CLEANSRC=%MCP%\src-dev
 set PROJBASE=%USERPROFILE%\Mod Stuff\MineFactory
 set SPRITEFOLDER=MineFactorySprites
 set MODNAME=MineFactoryReloaded
-set MODVERSION=1.3.0B
+set MODVERSION=1.3.0
 
 set ZIPPATH=%USERPROFILE%\Mod Stuff\zip.exe
 

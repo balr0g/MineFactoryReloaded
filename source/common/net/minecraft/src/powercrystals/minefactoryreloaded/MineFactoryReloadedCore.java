@@ -419,8 +419,8 @@ public class MineFactoryReloadedCore
 		vetAnimatedTexture = 27;
 		blockBreakerSideTexture = 28;
 		
-		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Planter)][0] = steelHoleTexture;
-		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Planter)][1] = steelSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Planter)][0] = steelSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Planter)][1] = steelHoleTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Planter)][2] = planterCactusTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Planter)][3] = planterMushroomTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Planter)][4] = planterSaplingTexture;
@@ -450,9 +450,9 @@ public class MineFactoryReloadedCore
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][0] = steelSideTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][1] = steelSideTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][5] = fertilizerAnimatedTexture;
-		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][4] = fertilizerSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][4] = fertilizerBackTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][2] = fertilizerSideTexture;
-		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][3] = fertilizerBackTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][3] = fertilizerSideTexture;
 		
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Vet)][0] = steelSideTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Vet)][1] = steelSideTexture;

@@ -31,7 +31,7 @@ public class TileEntityFertilizer extends TileEntityFactoryInventory
 
 	public TileEntityFertilizer()
 	{
-		super(10, 1);
+		super(10, 10);
 	}
 
 	@Override

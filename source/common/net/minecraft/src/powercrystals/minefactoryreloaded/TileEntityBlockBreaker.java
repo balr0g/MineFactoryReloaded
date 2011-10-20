@@ -12,7 +12,7 @@ public class TileEntityBlockBreaker extends TileEntityFactoryPowered {
 
 	public TileEntityBlockBreaker()
 	{
-		super(10, 10);
+		super(25, 25);
 	}
 
 	@Override

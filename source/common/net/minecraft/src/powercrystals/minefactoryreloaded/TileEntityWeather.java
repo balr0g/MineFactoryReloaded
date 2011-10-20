@@ -3,8 +3,11 @@ package net.minecraft.src.powercrystals.minefactoryreloaded;
 import net.minecraft.src.Block;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
+import net.minecraft.src.buildcraft.api.API;
+import net.minecraft.src.buildcraft.api.ILiquidContainer;
+import net.minecraft.src.buildcraft.api.Orientations;
 
-public class TileEntityWeather extends TileEntityFactoryInventory
+public class TileEntityWeather extends TileEntityFactoryInventory implements ILiquidContainer
 {
 	public TileEntityWeather()
 	{
@@ -35,7 +38,10 @@ public class TileEntityWeather extends TileEntityFactoryInventory
 			}
 			else
 			{
-				dropStack(new ItemStack(Item.snowball), 0.5F, -0.5F, 0.5F);
+				if(!produceLiquid(API.getLiquidForBucket(Item.bucketWater.shiftedIndex)))
+				{
+					dropStack(new ItemStack(Item.snowball), 0.5F, -0.5F, 0.5F);
+				}
 			}
 		}
 	}
@@ -51,5 +57,35 @@ public class TileEntityWeather extends TileEntityFactoryInventory
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public int fill(Orientations from, int quantity, int id, boolean doFill)
+	{
+		return 0;
+	}
+
+	@Override
+	public int empty(int quantityMax, boolean doEmpty)
+	{
+		return 0;
+	}
+
+	@Override
+	public int getLiquidQuantity()
+	{
+		return 0;
+	}
+
+	@Override
+	public int getCapacity()
+	{
+		return 0;
+	}
+
+	@Override
+	public int getLiquidId()
+	{
+		return 0;
 	}
 }
