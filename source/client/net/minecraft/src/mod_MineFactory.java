@@ -70,6 +70,8 @@ public class mod_MineFactory extends BaseModMp
 			ModLoader.addAnimation(new TextureFrameAnimFX(MineFactoryReloadedCore.conveyorTexture, "/MineFactorySprites/animations/Conveyor.png", Util.getInt(MineFactoryReloadedCore.animationTileSize)));
 			ModLoader.addAnimation(new TextureFrameAnimFX(MineFactoryReloadedCore.harvesterAnimatedTexture, "/MineFactorySprites/animations/Harvester.png", Util.getInt(MineFactoryReloadedCore.animationTileSize)));
 			ModLoader.addAnimation(new TextureFrameAnimFX(MineFactoryReloadedCore.rancherAnimatedTexture, "/MineFactorySprites/animations/Rancher.png", Util.getInt(MineFactoryReloadedCore.animationTileSize)));
+			ModLoader.addAnimation(new TextureFrameAnimFX(MineFactoryReloadedCore.blockBreakerAnimatedTexture, "/MineFactorySprites/animations/BlockBreaker.png", Util.getInt(MineFactoryReloadedCore.animationTileSize)));
+			ModLoader.addAnimation(new TextureFrameAnimFX(MineFactoryReloadedCore.fertilizerAnimatedTexture, "/MineFactorySprites/animations/Fertilizer.png", Util.getInt(MineFactoryReloadedCore.animationTileSize)));
 			ModLoader.addAnimation(new TextureLiquidFX(MineFactoryReloadedCore.milkTexture, MineFactoryReloadedCore.itemTexture, 240, 255, 240, 255, 230, 245, Util.getInt(MineFactoryReloadedCore.animationTileSize)));
 		}
 	}

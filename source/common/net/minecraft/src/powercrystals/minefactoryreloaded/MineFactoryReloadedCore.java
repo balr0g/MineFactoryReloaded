@@ -17,6 +17,7 @@ import net.minecraft.src.buildcraft.api.API;
 import net.minecraft.src.buildcraft.api.LiquidData;
 import net.minecraft.src.forge.Configuration;
 import net.minecraft.src.forge.Property;
+import net.minecraft.src.powercrystals.minefactoryreloaded.api.HarvestType;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryFertilizable;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryHarvestable;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryPlantable;
@@ -27,7 +28,6 @@ import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.Fertilizabl
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.FertilizableSapling;
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.FertilizableStemPlants;
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.FertilizableWheat;
-import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.HarvestType;
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.HarvestableStandard;
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.HarvestableStemPlant;
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.HarvestableVine;
@@ -83,9 +83,12 @@ public class MineFactoryReloadedCore
 	public static int fertilizerSideTexture;
 	public static int vetSideTexture;
 	public static int collectorSideTexture;
-	public static int vetAnimatedTexture;
 	public static int weatherTopTexture;
 	public static int weatherSnowSideTexture;
+	public static int blockBreakerAnimatedTexture;
+	public static int fertilizerAnimatedTexture;
+	
+	public static int vetAnimatedTexture;
 	
 	public static int factoryHammerTexture;
 	public static int steelIngotTexture;
@@ -304,7 +307,7 @@ public class MineFactoryReloadedCore
 		registerPlantable(new PlantableWheat());
 		
 		registerHarvestable(new HarvestableStandard(Block.wood.blockID, HarvestType.Tree));
-		registerHarvestable(new HarvestableStandard(Block.leaves.blockID, HarvestType.Tree));
+		registerHarvestable(new HarvestableStandard(Block.leaves.blockID, HarvestType.TreeLeaf));
 		registerHarvestable(new HarvestableStandard(Block.reed.blockID, HarvestType.LeaveBottom));
 		registerHarvestable(new HarvestableStandard(Block.cactus.blockID, HarvestType.LeaveBottom));
 		registerHarvestable(new HarvestableStandard(Block.plantRed.blockID, HarvestType.Normal));
@@ -376,6 +379,9 @@ public class MineFactoryReloadedCore
 		collectorSideTexture = 22;
 		weatherTopTexture = 23;
 		weatherSnowSideTexture = 24;
+		blockBreakerAnimatedTexture = 25;
+		fertilizerAnimatedTexture = 26;
+		
 		vetAnimatedTexture = 21;
 		
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Planter)][0] = steelHoleTexture;
@@ -385,8 +391,8 @@ public class MineFactoryReloadedCore
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Planter)][4] = planterSaplingTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Planter)][5] = planterSugarTexture;
 		
-		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fisher)][0] = steelHoleTexture;
-		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fisher)][1] = rancherAnimatedTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fisher)][0] = rancherAnimatedTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fisher)][1] = steelHoleTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fisher)][2] = fisherBucketTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fisher)][3] = fisherBucketTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fisher)][4] = fisherFishTexture;
@@ -408,7 +414,7 @@ public class MineFactoryReloadedCore
 		
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][0] = steelSideTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][1] = steelSideTexture;
-		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][5] = fertilizerSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][5] = fertilizerAnimatedTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][4] = fertilizerSideTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][2] = fertilizerSideTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][3] = fertilizerBackTexture;
@@ -429,10 +435,10 @@ public class MineFactoryReloadedCore
 		
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Breaker)][0] = steelSideTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Breaker)][1] = steelSideTexture;
-		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Breaker)][5] = harvesterAnimatedTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Breaker)][5] = blockBreakerAnimatedTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Breaker)][4] = steelHoleTexture;
-		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Breaker)][2] = steelHoleTexture;
-		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Breaker)][3] = steelHoleTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Breaker)][2] = steelSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Breaker)][3] = steelSideTexture;
 		
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Weather)][0] = steelHoleTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Weather)][1] = weatherTopTexture;

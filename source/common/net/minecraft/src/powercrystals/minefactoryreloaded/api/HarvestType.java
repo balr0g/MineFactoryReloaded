@@ -1,4 +1,4 @@
-package net.minecraft.src.powercrystals.minefactoryreloaded.farmables;
+package net.minecraft.src.powercrystals.minefactoryreloaded.api;
 
 public enum HarvestType
 {

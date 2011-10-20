@@ -1,5 +1,6 @@
 package net.minecraft.src.powercrystals.minefactoryreloaded;
 
+import net.minecraft.src.Block;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 
@@ -24,7 +25,9 @@ public class TileEntityWeather extends TileEntityFactoryInventory
 			return;
 		}
 		
-		if(worldObj.getWorldInfo().getIsRaining() && worldObj.canBlockSeeTheSky(xCoord, yCoord, zCoord))
+		System.out.println("Starting work: raining: " + worldObj.getWorldInfo().getIsRaining() + ", sky visible: " + canSeeSky());
+		
+		if(worldObj.getWorldInfo().getIsRaining() && canSeeSky())
 		{
 			int bucketIndex = findFirstStack(Item.bucketEmpty.shiftedIndex, 0);
 			if(bucketIndex >= 0)
@@ -37,5 +40,18 @@ public class TileEntityWeather extends TileEntityFactoryInventory
 				dropStack(new ItemStack(Item.snowball), 0.5F, -0.5F, 0.5F);
 			}
 		}
+	}
+	
+	private boolean canSeeSky()
+	{
+		for(int y = yCoord + 1; y <= 128; y++)
+		{
+			int blockId = worldObj.getBlockId(xCoord, y, zCoord);
+			if(Block.blocksList[blockId] != null && !Block.blocksList[blockId].isAirBlock(worldObj, xCoord, y, zCoord))
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 }

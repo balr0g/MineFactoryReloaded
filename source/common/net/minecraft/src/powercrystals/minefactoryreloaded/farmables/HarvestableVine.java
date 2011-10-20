@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.src.Block;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.World;
+import net.minecraft.src.powercrystals.minefactoryreloaded.api.HarvestType;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryHarvestable;
 
 public class HarvestableVine implements IFactoryHarvestable
@@ -19,7 +20,7 @@ public class HarvestableVine implements IFactoryHarvestable
 	@Override
 	public HarvestType getHarvestType()
 	{
-		return HarvestType.Normal;
+		return HarvestType.TreeLeaf;
 	}
 
 	@Override

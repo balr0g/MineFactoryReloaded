@@ -7,11 +7,11 @@ import java.util.Map;
 import net.minecraft.src.Block;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.buildcraft.api.Orientations;
+import net.minecraft.src.powercrystals.minefactoryreloaded.api.HarvestType;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryHarvestable;
 import net.minecraft.src.powercrystals.minefactoryreloaded.core.Area;
 import net.minecraft.src.powercrystals.minefactoryreloaded.core.BlockPosition;
 import net.minecraft.src.powercrystals.minefactoryreloaded.core.Util;
-import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.HarvestType;
 
 public class TileEntityHarvester extends TileEntityFactoryPowered
 {
@@ -107,7 +107,7 @@ public class TileEntityHarvester extends TileEntityFactoryPowered
 	private BlockPosition getNextHarvest()
 	{
 		Area harvestArea = getHarvestArea();
-		for(BlockPosition bp : harvestArea.getPositions())
+		for(BlockPosition bp : harvestArea.getPositionsBottomFirst())
 		{
 			int searchId = worldObj.getBlockId(bp.x, bp.y, bp.z);
 			
@@ -174,10 +174,20 @@ public class TileEntityHarvester extends TileEntityFactoryPowered
 				y, y + Util.getInt(MineFactoryReloadedCore.treeSearchMaxVertical),
 				z - Util.getInt(MineFactoryReloadedCore.treeSearchMaxHorizontal), z + Util.getInt(MineFactoryReloadedCore.treeSearchMaxHorizontal));
 		
-		for(BlockPosition bp : a.getPositions())
+		for(BlockPosition bp : a.getPositionsBottomFirst())
 		{
 			blockId = worldObj.getBlockId(bp.x, bp.y, bp.z);
-			if(harvestables.containsKey(new Integer(blockId))
+			if(harvestables.containsKey(new Integer(blockId)) && harvestables.get(new Integer(blockId)).getHarvestType() == HarvestType.TreeLeaf
+					&& harvestables.get(new Integer(blockId)).canBeHarvested(worldObj, bp.x, bp.y, bp.z))
+			{
+				return new BlockPosition(bp.x, bp.y, bp.z);
+			}
+		}
+		
+		for(BlockPosition bp : a.getPositionsTopFirst())
+		{
+			blockId = worldObj.getBlockId(bp.x, bp.y, bp.z);
+			if(harvestables.containsKey(new Integer(blockId)) && harvestables.get(new Integer(blockId)).getHarvestType() == HarvestType.Tree
 					&& harvestables.get(new Integer(blockId)).canBeHarvested(worldObj, bp.x, bp.y, bp.z))
 			{
 				return new BlockPosition(bp.x, bp.y, bp.z);

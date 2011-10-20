@@ -46,12 +46,28 @@ public class Area
 		zMax = center.z + radius;
 	}
 	
-	public List<BlockPosition> getPositions()
+	public List<BlockPosition> getPositionsTopFirst()
 	{
 		ArrayList<BlockPosition> positions = new ArrayList<BlockPosition>();
-		for(int x = xMin; x <= xMax; x++)
+		for(int y = yMax; y >= yMin; y--)
 		{
-			for(int y = yMin; y <= yMax; y++)
+			for(int x = xMin; x <= xMax; x++)
+			{
+				for(int z = zMin; z <= zMax; z++)
+				{
+					positions.add(new BlockPosition(x, y, z));
+				}
+			}
+		}
+		return positions;
+	}
+	
+	public List<BlockPosition> getPositionsBottomFirst()
+	{
+		ArrayList<BlockPosition> positions = new ArrayList<BlockPosition>();
+		for(int y = yMin; y <= yMax; y++)
+		{
+			for(int x = xMin; x <= xMax; x++)
 			{
 				for(int z = zMin; z <= zMax; z++)
 				{
