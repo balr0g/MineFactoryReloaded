@@ -213,21 +213,7 @@ public abstract class TileEntityFactory extends TileEntity implements IRotateabl
 	
 	protected boolean produceLiquid(int liquidId)
 	{
-		Orientations or = getValidLiquidContainer(liquidId);
-		if(or != null)
-		{
-			BlockPosition p = new BlockPosition(this);
-			p.orientation = or;
-			p.moveForwards(1);
-			ILiquidContainer lc = (ILiquidContainer)worldObj.getBlockTileEntity(p.x, p.y, p.z);
-			lc.fill(or.reverse(), API.BUCKET_VOLUME, liquidId, true);
-			return true;
-		}
-		return false;
-	}
-	
-	private Orientations getValidLiquidContainer(int liquidId)
-	{
+		int amountToFill = API.BUCKET_VOLUME;
 		for(int i = 0; i < 6; i++)
 		{
 			Orientations or = Orientations.values()[i];
@@ -240,12 +226,13 @@ public abstract class TileEntityFactory extends TileEntity implements IRotateabl
 			if(tile instanceof ILiquidContainer && !(p.x == xCoord && p.y == yCoord && p.z == zCoord))
 			{
 				ILiquidContainer lc = (ILiquidContainer)tile;
-				if((lc.getLiquidQuantity() == 0 || lc.getLiquidId() == liquidId))
-				{
-					return or;
-				}
+				amountToFill -= lc.fill(or.reverse(), API.BUCKET_VOLUME, liquidId, true);
 			}
 		}
-		return null;
+		if(amountToFill < API.BUCKET_VOLUME)
+		{
+			return true;
+		}
+		return false;
 	}
 }
