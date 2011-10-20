@@ -6,6 +6,8 @@ import net.minecraft.src.powercrystals.minefactoryreloaded.MineFactoryReloadedCo
 
 public class ItemFactoryMachine extends ItemBlock
 {
+	private static int highestMachineMeta = 8;
+	
 	public ItemFactoryMachine(int i)
 	{
 		super(i);
@@ -15,7 +17,7 @@ public class ItemFactoryMachine extends ItemBlock
 
     public int getIconFromDamage(int i)
     {
-        return i;
+    	return Math.min(i, highestMachineMeta);
     }
 
     public int getPlacedBlockMetadata(int i)
@@ -26,6 +28,12 @@ public class ItemFactoryMachine extends ItemBlock
     public String getItemNameIS(ItemStack itemstack)
     {
         int md = itemstack.getItemDamage();
+        if(md > highestMachineMeta)
+        {
+        	// return highest meta entry
+        	return "factoryWeatherItem";
+        }
+        
 	    if(md == MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Planter)) return "factoryPlanterItem";
 	    if(md == MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Fisher)) return "factoryFisherItem";
 	    if(md == MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Harvester)) return "factoryHarvesterItem";
@@ -33,6 +41,8 @@ public class ItemFactoryMachine extends ItemBlock
 	    if(md == MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Fertilizer)) return "factoryFertilizerItem";
 	    if(md == MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Vet)) return "factoryVetItem";
 	    if(md == MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Collector)) return "factoryCollectorItem";
+	    if(md == MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Breaker)) return "factoryBlockBreakerItem";
+	    if(md == MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Weather)) return "factoryWeatherItem";
 	    return "Invalid";
     }
 }

@@ -40,7 +40,7 @@ import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.RanchableSt
 
 public class MineFactoryReloadedCore
 {
-	public static PowerSystem powerSystem = PowerSystem.Redstone;
+	public static PowerSystem powerSystem;
 	
 	public static String terrainTexture = "/MineFactorySprites/terrain.png";
 	public static String itemTexture = "/MineFactorySprites/items.png";
@@ -84,6 +84,8 @@ public class MineFactoryReloadedCore
 	public static int vetSideTexture;
 	public static int collectorSideTexture;
 	public static int vetAnimatedTexture;
+	public static int weatherTopTexture;
+	public static int weatherSnowSideTexture;
 	
 	public static int factoryHammerTexture;
 	public static int steelIngotTexture;
@@ -117,6 +119,8 @@ public class MineFactoryReloadedCore
 	public static Property rancherInjuresAnimals;
 	public static Property harvesterHarvestsSmallMushrooms;
 	
+	public static Property powerSystemProperty;
+	
 	public static void Init(IMFRProxy proxyParam)
 	{
 		proxy = proxyParam;
@@ -132,6 +136,7 @@ public class MineFactoryReloadedCore
 		machineMetadataMappings.put(Machine.Vet, 5);
 		machineMetadataMappings.put(Machine.Collector, 6);
 		machineMetadataMappings.put(Machine.Breaker, 7);
+		machineMetadataMappings.put(Machine.Weather, 8);
 
 		setupTextures();
 		
@@ -171,6 +176,7 @@ public class MineFactoryReloadedCore
 		ModLoader.RegisterTileEntity(TileEntityVet.class, "factoryVet");
 		ModLoader.RegisterTileEntity(TileEntityCollector.class, "factoryItemCollector");
 		ModLoader.RegisterTileEntity(TileEntityBlockBreaker.class, "factoryBlockBreaker");
+		ModLoader.RegisterTileEntity(TileEntityWeather.class, "factoryWeather");
 
 		/*
 
@@ -368,6 +374,8 @@ public class MineFactoryReloadedCore
 		conveyorStillOffTexture = 20;
 		vetSideTexture = 21;
 		collectorSideTexture = 22;
+		weatherTopTexture = 23;
+		weatherSnowSideTexture = 24;
 		vetAnimatedTexture = 21;
 		
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Planter)][0] = steelHoleTexture;
@@ -378,7 +386,7 @@ public class MineFactoryReloadedCore
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Planter)][5] = planterSugarTexture;
 		
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fisher)][0] = steelHoleTexture;
-		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fisher)][1] = steelSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fisher)][1] = rancherAnimatedTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fisher)][2] = fisherBucketTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fisher)][3] = fisherBucketTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fisher)][4] = fisherFishTexture;
@@ -398,8 +406,8 @@ public class MineFactoryReloadedCore
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Rancher)][2] = rancherSideTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Rancher)][3] = rancherSideTexture;
 		
-		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][0] = fertilizerSideTexture;
-		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][1] = fertilizerSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][0] = steelSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][1] = steelSideTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][5] = fertilizerSideTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][4] = fertilizerSideTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Fertilizer)][2] = fertilizerSideTexture;
@@ -425,6 +433,13 @@ public class MineFactoryReloadedCore
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Breaker)][4] = steelHoleTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Breaker)][2] = steelHoleTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Breaker)][3] = steelHoleTexture;
+		
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Weather)][0] = steelHoleTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Weather)][1] = weatherTopTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Weather)][2] = fisherBucketTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Weather)][3] = fisherBucketTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Weather)][4] = weatherSnowSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Weather)][5] = weatherSnowSideTexture;
 	}
 	
 	private static void loadConfig()
@@ -466,6 +481,18 @@ public class MineFactoryReloadedCore
 		passengerRailSearchMaxVertical.comment = "When searching for players or dropoff locations, how far up to search";
 		passengerRailSearchMaxHorizontal = c.getOrCreateIntProperty("SearchDistance.PassengerRailMaxHorizontal", Configuration.GENERAL_PROPERTY, 3);
 		passengerRailSearchMaxHorizontal.comment = "When searching for players or dropoff locations, how far out to the sides (radius) to search";
+		
+		powerSystemProperty = c.getOrCreateProperty("PowerSystem", Configuration.GENERAL_PROPERTY, "redstone");
+		powerSystemProperty.comment = "Set whether MFR will run off classic alternating redstone of BuildCraft's power system. Values other than \"redstone\" or \"buildcraft\" will cause the system to revert to redstone mode";
+		if(powerSystemProperty.value.toLowerCase().equals("buildcraft"))
+		{
+			powerSystem = PowerSystem.BuildCraft;
+		}
+		else
+		{
+			powerSystem = PowerSystem.Redstone;
+			powerSystemProperty.value = "redstone";
+		}
 		
 		c.save();
 	}
@@ -510,6 +537,7 @@ public class MineFactoryReloadedCore
 		Rancher,
 		Vet,
 		Collector,
-		Breaker
+		Breaker,
+		Weather
 	}
 }

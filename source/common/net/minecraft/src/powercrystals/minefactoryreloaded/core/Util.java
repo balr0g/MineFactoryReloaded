@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import net.minecraft.src.Block;
+import net.minecraft.src.BlockFluid;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.InventoryLargeChest;
@@ -11,6 +12,7 @@ import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
+import net.minecraft.src.buildcraft.api.API;
 import net.minecraft.src.buildcraft.api.IPipeEntry;
 import net.minecraft.src.buildcraft.api.Orientations;
 import net.minecraft.src.forge.Property;
@@ -178,5 +180,10 @@ public class Util
 	public static int getInt(Property property)
 	{
 		return Integer.parseInt(property.value);
+	}
+	
+	public static boolean isBlockUnbreakable(Block b)
+	{
+		return API.unbreakableBlock(b.blockID) || b.getHardness() < 0 || b instanceof BlockFluid;
 	}
 }

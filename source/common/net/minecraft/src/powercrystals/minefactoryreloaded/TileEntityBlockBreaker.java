@@ -4,9 +4,9 @@ import java.util.List;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.ItemStack;
-import net.minecraft.src.buildcraft.api.API;
 import net.minecraft.src.buildcraft.api.Orientations;
 import net.minecraft.src.powercrystals.minefactoryreloaded.core.BlockPosition;
+import net.minecraft.src.powercrystals.minefactoryreloaded.core.Util;
 
 public class TileEntityBlockBreaker extends TileEntityFactoryPowered {
 
@@ -52,7 +52,7 @@ public class TileEntityBlockBreaker extends TileEntityFactoryPowered {
 		int blockId = worldObj.getBlockId(bp.x, bp.y, bp.z);
 		
 		Block b = Block.blocksList[blockId];
-		if(b != null && !b.isAirBlock(worldObj, bp.x, bp.y, bp.z) && b.getHardness() >= 0 && !API.unbreakableBlock(blockId))
+		if(b != null && !b.isAirBlock(worldObj, bp.x, bp.y, bp.z) && !Util.isBlockUnbreakable(b))
 		{
 			List<ItemStack> drops = b.getBlockDropped(worldObj, bp.x, bp.y, bp.z, worldObj.getBlockMetadata(bp.x, bp.y, bp.z));
 			for(ItemStack s : drops)

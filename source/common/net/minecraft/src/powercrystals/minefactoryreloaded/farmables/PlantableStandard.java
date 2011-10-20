@@ -28,7 +28,8 @@ public class PlantableStandard implements IFactoryPlantable
 	@Override
 	public boolean canBePlantedHere(World world, int x, int y, int z, ItemStack stack)
 	{
-		return Block.blocksList[plantedBlockId].canPlaceBlockAt(world, x, y, z) && world.getBlockId(x, y, z) == 0;
+		int blockId = world.getBlockId(x, y, z);
+		return Block.blocksList[plantedBlockId].canPlaceBlockAt(world, x, y, z) && Block.blocksList[blockId].isAirBlock(world, x, y, z);
 	}
 
 	@Override
