@@ -23,6 +23,7 @@ public class BlockConveyor extends BlockContainer implements ITextureProvider
 	public BlockConveyor(int i, int j)
 	{
 		super(i, j, Material.circuits);
+		setHardness(0.5F);
 		setBlockName("factoryConveyor");
 		setBlockBounds(0.0F, 0.0F, 0.0F, 0.1F, 0.1F, 0.1F);
 		setRequiresSelfNotify();

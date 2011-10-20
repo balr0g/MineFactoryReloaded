@@ -12,18 +12,38 @@ import net.minecraft.src.powercrystals.minefactoryreloaded.MineFactoryReloadedCo
 public class TextureFrameAnimFX extends TextureFX
 {
 
-    public TextureFrameAnimFX(int indexToReplace, String filePath, int tileSize)
+    public TextureFrameAnimFX(int indexToReplace, String filePath)
     {
         super(indexToReplace);
-        this.tileResolution = tileSize;
+        tileResolution = 16;
         tick = 0;
-        this.tileSize = 1;
-        numFrames = 0;
-        srcSize = 0;
         try
         {
             BufferedImage bufferedimage = ImageIO.read((net.minecraft.client.Minecraft.class).getResource(filePath));
-            srcSize = bufferedimage.getHeight();
+            
+            /*int srcSize = bufferedimage.getHeight();
+            int srcWidth = bufferedimage.getWidth();
+            
+            if(srcSize != tileSize)
+            {
+            	float scale = tileSize/srcSize;
+        	    BufferedImage scaledBI = new BufferedImage((int)(srcWidth * scale), tileSize, BufferedImage.TYPE_INT_ARGB);
+        	    Graphics2D g = scaledBI.createGraphics();
+        	    g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+        	    g.setComposite(AlphaComposite.Src);
+        	    g.drawImage(scaledBI, 0, 0, (int)(srcWidth * scale), tileSize, null); 
+        	    g.dispose();
+                fileBuffer = new int[scaledBI.getWidth() * scaledBI.getHeight()];
+                numFrames = scaledBI.getWidth() / scaledBI.getHeight();
+                scaledBI.getRGB(0, 0, scaledBI.getWidth(), scaledBI.getHeight(), fileBuffer, 0, scaledBI.getWidth());
+            }
+            else
+            {
+	            fileBuffer = new int[bufferedimage.getWidth() * bufferedimage.getHeight()];
+	            numFrames = bufferedimage.getWidth() / bufferedimage.getHeight();
+	            bufferedimage.getRGB(0, 0, bufferedimage.getWidth(), bufferedimage.getHeight(), fileBuffer, 0, bufferedimage.getWidth());
+            }*/
+            
             fileBuffer = new int[bufferedimage.getWidth() * bufferedimage.getHeight()];
             numFrames = bufferedimage.getWidth() / bufferedimage.getHeight();
             bufferedimage.getRGB(0, 0, bufferedimage.getWidth(), bufferedimage.getHeight(), fileBuffer, 0, bufferedimage.getWidth());
@@ -36,7 +56,7 @@ public class TextureFrameAnimFX extends TextureFX
 
     public void onTick()
     {
-        if(srcSize == 0)
+        if(tileResolution == 0)
         {
             return;
         }
@@ -44,10 +64,10 @@ public class TextureFrameAnimFX extends TextureFX
         tick %= numFrames;
         for(int i = 0; i < tileResolution; i++)
         {
-            int j = i * srcSize * numFrames;
+            int j = i * tileResolution * numFrames;
             for(int k = 0; k < tileResolution; k++)
             {
-                int l = srcSize * tick + k;
+                int l = tileResolution * tick + k;
                 int i1 = fileBuffer[j + l];
                 int j1 = i * tileResolution + k;
                 int k1 = i1 >> 0 & 0xff;
@@ -78,7 +98,6 @@ public class TextureFrameAnimFX extends TextureFX
 
     protected int fileBuffer[];
     private int tick;
-    private int srcSize;
     private int numFrames;
     private int tileResolution;
 }

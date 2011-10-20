@@ -11,6 +11,7 @@ public class TextureLiquidFX extends TextureFX
     protected float array2[];
     protected float array3[];
     private int tickCounter;
+    private int tileResolution;
     
     private String texture;
     
@@ -21,13 +22,11 @@ public class TextureLiquidFX extends TextureFX
     private int bMin;
     private int bMax;
     
-    private int tileSize;
-    
-	public TextureLiquidFX(int textureIndex, String texture, int rMin, int rMax, int gMin, int gMax, int bMin, int bMax, int tileSize)
+	public TextureLiquidFX(int textureIndex, String texture, int rMin, int rMax, int gMin, int gMax, int bMin, int bMax)
     {
         super(textureIndex);
         
-        this.tileSize = tileSize;
+        this.tileResolution = 16;
         
         this.texture = texture;
         
@@ -38,11 +37,13 @@ public class TextureLiquidFX extends TextureFX
         this.bMin = bMin;
         this.bMax = bMax;
         
-        array0 = new float[tileSize * tileSize];
-        array1 = new float[tileSize * tileSize];
-        array2 = new float[tileSize * tileSize];
-        array3 = new float[tileSize * tileSize];
+        array0 = new float[tileResolution * tileResolution];
+        array1 = new float[tileResolution * tileResolution];
+        array2 = new float[tileResolution * tileResolution];
+        array3 = new float[tileResolution * tileResolution];
         tickCounter = 0;
+        
+        //imageData = new byte[tileSize * tileSize * 4];
     }
 
 	@Override
@@ -55,9 +56,9 @@ public class TextureLiquidFX extends TextureFX
     public void onTick()
     {
         tickCounter++;
-        for(int i = 0; i < tileSize; i++)
+        for(int i = 0; i < tileResolution; i++)
         {
-            for(int k = 0; k < tileSize; k++)
+            for(int k = 0; k < tileResolution; k++)
             {
                 float f = 0.0F;
                 for(int j1 = i - 1; j1 <= i + 1; j1++)
@@ -67,24 +68,24 @@ public class TextureLiquidFX extends TextureFX
                     f += array0[k1 + i2 * 16];
                 }
 
-                array1[i + k * tileSize] = f / 3.3F + array2[i + k * tileSize] * 0.8F;
+                array1[i + k * tileResolution] = f / 3.3F + array2[i + k * tileResolution] * 0.8F;
             }
 
         }
 
-        for(int j = 0; j < tileSize; j++)
+        for(int j = 0; j < tileResolution; j++)
         {
-            for(int l = 0; l < tileSize; l++)
+            for(int l = 0; l < tileResolution; l++)
             {
-                array2[j + l * tileSize] += array3[j + l * tileSize] * 0.05F;
-                if(array2[j + l * tileSize] < 0.0F)
+                array2[j + l * tileResolution] += array3[j + l * tileResolution] * 0.05F;
+                if(array2[j + l * tileResolution] < 0.0F)
                 {
-                    array2[j + l * tileSize] = 0.0F;
+                    array2[j + l * tileResolution] = 0.0F;
                 }
-                array3[j + l * tileSize] -= 0.1F;
+                array3[j + l * tileResolution] -= 0.1F;
                 if(Math.random() < 0.050000000000000003D)
                 {
-                    array3[j + l * tileSize] = 0.5F;
+                    array3[j + l * tileResolution] = 0.5F;
                 }
             }
 
@@ -93,7 +94,7 @@ public class TextureLiquidFX extends TextureFX
         float af[] = array1;
         array1 = array0;
         array0 = af;
-        for(int i1 = 0; i1 < tileSize * tileSize; i1++)
+        for(int i1 = 0; i1 < tileResolution * tileResolution; i1++)
         {
             float f1 = array0[i1];
             if(f1 > 1.0F)

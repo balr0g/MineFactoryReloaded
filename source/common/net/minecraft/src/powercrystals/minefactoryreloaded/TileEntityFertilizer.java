@@ -7,6 +7,8 @@ import java.util.Map;
 
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryFertilizable;
+import net.minecraft.src.powercrystals.minefactoryreloaded.core.Area;
+import net.minecraft.src.powercrystals.minefactoryreloaded.core.BlockPosition;
 
 public class TileEntityFertilizer extends TileEntityFactoryInventory
 {
@@ -46,63 +48,34 @@ public class TileEntityFertilizer extends TileEntityFactoryInventory
 			return;
 		}
 		
-        int centerX = xCoord;
-        int centerY = yCoord;
-        int centerZ = zCoord;
-    	int ourMetadata = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
-    	int currentXoffset = -1;
-    	int currentZoffset = -1;
-        if(ourMetadata == 0 || ourMetadata == 5)
-        {
-            centerX -= 2;
-        }
-        else if(ourMetadata == 1 || ourMetadata == 6)
-        {
-            centerZ -= 2;
-        }
-        else if(ourMetadata == 2 || ourMetadata == 7)
-        {
-            centerX += 2;
-        }
-        else if(ourMetadata == 3 || ourMetadata == 8)
-        {
-            centerZ += 2;
-        }
-        else if(ourMetadata == 4 || ourMetadata == 9)
-        {
-            centerY -= 2;
-        }
-        for(currentXoffset = -1; currentXoffset <= 1; currentXoffset++)
-        {
-            for(currentZoffset = -1; currentZoffset <= 1; currentZoffset++)
-            {
-            	int targetX = centerX + currentXoffset;
-            	int targetZ = centerZ + currentZoffset;
-	            int targetId = worldObj.getBlockId(targetX, centerY, targetZ);
-	            if(!fertilizables.containsKey(new Integer(targetId)))
-	            {
-	            	continue;
-	            }
-	            for(int stackIndex = 0; stackIndex < getSizeInventory(); stackIndex++)
-	            {
-	            	ItemStack fertStack = getStackInSlot(stackIndex);
-	            	if(fertStack == null || !fertilizerItems.contains(new Integer(fertStack.itemID)))
-	            	{
-	            		continue;
-	            	}
-	            	IFactoryFertilizable fertilizable = fertilizables.get(new Integer(targetId));
-	            	if(!fertilizable.canFertilizeBlock(worldObj, targetX, centerY, targetZ, fertStack))
-        			{
-	            		continue;
-        			}
-	            	if(fertilizable.fertilize(worldObj, targetX, centerY, targetZ, fertStack))
-	            	{
-	            		decrStackSize(stackIndex, 1);
-	            	}
-	            	return;
-	            }
-            }
-        }
+		Area a = getHarvestArea();
+		
+		for(BlockPosition bp : a.getPositionsBottomFirst())
+		{
+		    int targetId = worldObj.getBlockId(bp.x, bp.y, bp.z);
+		    if(!fertilizables.containsKey(new Integer(targetId)))
+		    {
+		    	continue;
+		    }
+		    for(int stackIndex = 0; stackIndex < getSizeInventory(); stackIndex++)
+		    {
+		    	ItemStack fertStack = getStackInSlot(stackIndex);
+		    	if(fertStack == null || !fertilizerItems.contains(new Integer(fertStack.itemID)))
+		    	{
+		    		continue;
+		    	}
+		    	IFactoryFertilizable fertilizable = fertilizables.get(new Integer(targetId));
+		    	if(!fertilizable.canFertilizeBlock(worldObj, bp.x, bp.y, bp.z, fertStack))
+				{
+		    		continue;
+				}
+		    	if(fertilizable.fertilize(worldObj, bp.x, bp.y, bp.z, fertStack))
+		    	{
+		    		decrStackSize(stackIndex, 1);
+		    	}
+		    	return;
+		    }
+		}
     }
 
 }

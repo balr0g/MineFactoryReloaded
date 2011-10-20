@@ -19,7 +19,7 @@ public class PlantableWheat extends PlantableStandard implements IFactoryPlantab
 		int groundId = world.getBlockId(x, y - 1, z);
 		int ourId = world.getBlockId(x, y, z);
 		return (groundId == Block.dirt.blockID || groundId == Block.grass.blockID || groundId == Block.tilledField.blockID)
-			&& Block.blocksList[ourId].isAirBlock(world, x, y, z);
+			&& (Block.blocksList[ourId] == null || Block.blocksList[ourId].isAirBlock(world, x, y, z));
 	}
 
 	@Override

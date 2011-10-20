@@ -61,7 +61,7 @@ public class mod_MineFactory extends BaseModMp
 	@Override
 	public String Version()
 	{
-		return "1.8.1R1.3.0B";
+		return "1.8.1R1.3.0";
 	}
 
 	@Override
@@ -69,13 +69,13 @@ public class mod_MineFactory extends BaseModMp
 	{
 		if(Util.getBool(MineFactoryReloadedCore.animateBlockFaces))
 		{
-			ModLoader.addAnimation(new TextureFrameAnimFX(MineFactoryReloadedCore.conveyorTexture, "/MineFactorySprites/animations/Conveyor.png", Util.getInt(MineFactoryReloadedCore.animationTileSize)));
-			ModLoader.addAnimation(new TextureFrameAnimFX(MineFactoryReloadedCore.harvesterAnimatedTexture, "/MineFactorySprites/animations/Harvester.png", Util.getInt(MineFactoryReloadedCore.animationTileSize)));
-			ModLoader.addAnimation(new TextureFrameAnimFX(MineFactoryReloadedCore.rancherAnimatedTexture, "/MineFactorySprites/animations/Rancher.png", Util.getInt(MineFactoryReloadedCore.animationTileSize)));
-			ModLoader.addAnimation(new TextureFrameAnimFX(MineFactoryReloadedCore.blockBreakerAnimatedTexture, "/MineFactorySprites/animations/BlockBreaker.png", Util.getInt(MineFactoryReloadedCore.animationTileSize)));
-			ModLoader.addAnimation(new TextureFrameAnimFX(MineFactoryReloadedCore.fertilizerAnimatedTexture, "/MineFactorySprites/animations/Fertilizer.png", Util.getInt(MineFactoryReloadedCore.animationTileSize)));
-			ModLoader.addAnimation(new TextureFrameAnimFX(MineFactoryReloadedCore.vetAnimatedTexture, "/MineFactorySprites/animations/Vet.png", Util.getInt(MineFactoryReloadedCore.animationTileSize)));
-			ModLoader.addAnimation(new TextureLiquidFX(MineFactoryReloadedCore.milkTexture, MineFactoryReloadedCore.itemTexture, 240, 255, 240, 255, 230, 245, Util.getInt(MineFactoryReloadedCore.animationTileSize)));
+			ModLoader.addAnimation(new TextureFrameAnimFX(MineFactoryReloadedCore.conveyorTexture, "/MineFactorySprites/animations/Conveyor.png"));
+			ModLoader.addAnimation(new TextureFrameAnimFX(MineFactoryReloadedCore.harvesterAnimatedTexture, "/MineFactorySprites/animations/Harvester.png"));
+			ModLoader.addAnimation(new TextureFrameAnimFX(MineFactoryReloadedCore.rancherAnimatedTexture, "/MineFactorySprites/animations/Rancher.png"));
+			ModLoader.addAnimation(new TextureFrameAnimFX(MineFactoryReloadedCore.blockBreakerAnimatedTexture, "/MineFactorySprites/animations/BlockBreaker.png"));
+			ModLoader.addAnimation(new TextureFrameAnimFX(MineFactoryReloadedCore.fertilizerAnimatedTexture, "/MineFactorySprites/animations/Fertilizer.png"));
+			ModLoader.addAnimation(new TextureFrameAnimFX(MineFactoryReloadedCore.vetAnimatedTexture, "/MineFactorySprites/animations/Vet.png"));
+			ModLoader.addAnimation(new TextureLiquidFX(MineFactoryReloadedCore.milkTexture, MineFactoryReloadedCore.itemTexture, 240, 255, 240, 255, 230, 245));
 		}
 	}
 

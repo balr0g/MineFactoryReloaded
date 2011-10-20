@@ -260,21 +260,21 @@ public class MineFactoryReloadedCore
 		ModLoader.AddRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Collector)), new Object[]
  			{
  				"SSS", "SCS", "SSS",
- 				Character.valueOf('B'), Block.chest,
+ 				Character.valueOf('C'), Block.chest,
  				Character.valueOf('S'), steelIngotItem
  			}
  		);
 		ModLoader.AddRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Vet)), new Object[]
  			{
  				"SSS", "SBS", "SSS",
- 				Character.valueOf('H'), Item.bread,
+ 				Character.valueOf('B'), Item.bread,
  				Character.valueOf('S'), steelIngotItem
  		    }
  		);
  		ModLoader.AddRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Breaker)), new Object[]
   			{
   				"SSS", "SPS", "SSS",
-  				Character.valueOf('F'), Item.pickaxeSteel,
+  				Character.valueOf('P'), Item.pickaxeSteel,
   				Character.valueOf('S'), steelIngotItem
   			}
   		);
@@ -501,8 +501,8 @@ public class MineFactoryReloadedCore
 		
 		animateBlockFaces = c.getOrCreateBooleanProperty("AnimateBlockFaces", Configuration.GENERAL_PROPERTY, true);
 		animateBlockFaces.comment = "Set to false to disable animation of harvester, rancher, conveyor, etc. This may be required if using certain mods that affect rendering.";
-		animationTileSize = c.getOrCreateIntProperty("AnimationTileSize", Configuration.GENERAL_PROPERTY, 16);
-		animationTileSize.comment = "Set this to match the size of your texture pack to allow animations to work with HD texture packs. Setting this incorrectly may cause unreliable behavior.";
+		//animationTileSize = c.getOrCreateIntProperty("AnimationTileSize", Configuration.GENERAL_PROPERTY, 16);
+		//animationTileSize.comment = "Set this to match the size of your texture pack to allow animations to work with HD texture packs. Setting this incorrectly may cause unreliable behavior.";
 		playSounds = c.getOrCreateBooleanProperty("PlaySounds", Configuration.GENERAL_PROPERTY, true);
 		playSounds.comment = "Set to false to disable the harvester's sound when a block is harvested.";
 		harvesterHarvestsSmallMushrooms = c.getOrCreateBooleanProperty("HarvesterHarvestsSmallMushrooms", Configuration.GENERAL_PROPERTY, false);

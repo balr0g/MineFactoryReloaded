@@ -25,8 +25,6 @@ public class TileEntityWeather extends TileEntityFactoryInventory
 			return;
 		}
 		
-		System.out.println("Starting work: raining: " + worldObj.getWorldInfo().getIsRaining() + ", sky visible: " + canSeeSky());
-		
 		if(worldObj.getWorldInfo().getIsRaining() && canSeeSky())
 		{
 			int bucketIndex = findFirstStack(Item.bucketEmpty.shiftedIndex, 0);
