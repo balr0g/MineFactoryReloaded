@@ -87,8 +87,8 @@ public class MineFactoryReloadedCore
 	public static int weatherSnowSideTexture;
 	public static int blockBreakerAnimatedTexture;
 	public static int fertilizerAnimatedTexture;
-	
 	public static int vetAnimatedTexture;
+	public static int blockBreakerSideTexture;
 	
 	public static int factoryHammerTexture;
 	public static int steelIngotTexture;
@@ -381,8 +381,8 @@ public class MineFactoryReloadedCore
 		weatherSnowSideTexture = 24;
 		blockBreakerAnimatedTexture = 25;
 		fertilizerAnimatedTexture = 26;
-		
-		vetAnimatedTexture = 21;
+		vetAnimatedTexture = 27;
+		blockBreakerSideTexture = 28;
 		
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Planter)][0] = steelHoleTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Planter)][1] = steelSideTexture;
@@ -437,8 +437,8 @@ public class MineFactoryReloadedCore
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Breaker)][1] = steelSideTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Breaker)][5] = blockBreakerAnimatedTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Breaker)][4] = steelHoleTexture;
-		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Breaker)][2] = steelSideTexture;
-		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Breaker)][3] = steelSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Breaker)][2] = blockBreakerSideTexture;
+		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Breaker)][3] = blockBreakerSideTexture;
 		
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Weather)][0] = steelHoleTexture;
 		BlockFactoryMachine.textures[machineMetadataMappings.get(Machine.Weather)][1] = weatherTopTexture;

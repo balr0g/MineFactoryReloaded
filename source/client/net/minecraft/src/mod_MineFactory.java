@@ -36,6 +36,8 @@ public class mod_MineFactory extends BaseModMp
 		ModLoader.AddName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Breaker)), "Block Breaker");
 		ModLoader.AddName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Weather)), "Weather Harvester");
 		
+		ModLoader.AddName(MineFactoryReloadedCore.conveyorBlock, "Conveyor Belt");
+		
 		ModLoader.AddName(MineFactoryReloadedCore.passengerRailPickupBlock, "Passenger Pickup Rail");
 		ModLoader.AddName(MineFactoryReloadedCore.passengerRailDropoffBlock, "Passenger Dropoff Rail");
 		ModLoader.AddName(MineFactoryReloadedCore.cargoRailDropoffBlock, "Cargo Dropoff Rail");
@@ -72,6 +74,7 @@ public class mod_MineFactory extends BaseModMp
 			ModLoader.addAnimation(new TextureFrameAnimFX(MineFactoryReloadedCore.rancherAnimatedTexture, "/MineFactorySprites/animations/Rancher.png", Util.getInt(MineFactoryReloadedCore.animationTileSize)));
 			ModLoader.addAnimation(new TextureFrameAnimFX(MineFactoryReloadedCore.blockBreakerAnimatedTexture, "/MineFactorySprites/animations/BlockBreaker.png", Util.getInt(MineFactoryReloadedCore.animationTileSize)));
 			ModLoader.addAnimation(new TextureFrameAnimFX(MineFactoryReloadedCore.fertilizerAnimatedTexture, "/MineFactorySprites/animations/Fertilizer.png", Util.getInt(MineFactoryReloadedCore.animationTileSize)));
+			ModLoader.addAnimation(new TextureFrameAnimFX(MineFactoryReloadedCore.vetAnimatedTexture, "/MineFactorySprites/animations/Vet.png", Util.getInt(MineFactoryReloadedCore.animationTileSize)));
 			ModLoader.addAnimation(new TextureLiquidFX(MineFactoryReloadedCore.milkTexture, MineFactoryReloadedCore.itemTexture, 240, 255, 240, 255, 230, 245, Util.getInt(MineFactoryReloadedCore.animationTileSize)));
 		}
 	}
