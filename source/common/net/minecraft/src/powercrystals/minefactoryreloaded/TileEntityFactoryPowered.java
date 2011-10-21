@@ -16,9 +16,12 @@ public abstract class TileEntityFactoryPowered extends TileEntityFactory impleme
 	
 	protected TileEntityFactoryPowered(int bcEnergyNeededToWork, int bcEnergyNeededToActivate)
 	{
-		powerProvider = PowerFramework.currentFramework.createPowerProvider();
-		powerNeeded = bcEnergyNeededToWork;
-		powerProvider.configure(25, powerNeeded, powerNeeded, bcEnergyNeededToActivate, powerNeeded);
+		if(PowerFramework.currentFramework != null)
+		{
+			powerProvider = PowerFramework.currentFramework.createPowerProvider();
+			powerNeeded = bcEnergyNeededToWork;
+			powerProvider.configure(25, powerNeeded, powerNeeded, bcEnergyNeededToActivate, powerNeeded);
+		}
 	}
 	
 	public void neighborBlockChanged()
