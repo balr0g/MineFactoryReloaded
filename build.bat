@@ -1,13 +1,13 @@
 @ECHO OFF
 
-set MCP=%USERPROFILE%\mcp\1.8\dev-bcic
+set MCP=%USERPROFILE%\mcp\1.8\dev
 set BUILDSRC=%MCP%\src
 set CLEANSRC=%MCP%\src-dev
 
 set PROJBASE=%USERPROFILE%\Mod Stuff\MineFactory
 set SPRITEFOLDER=MineFactorySprites
 set MODNAME=MineFactoryReloaded
-set MODVERSION=1.3.0
+set MODVERSION=1.3.1
 
 set ZIPPATH=%USERPROFILE%\Mod Stuff\zip.exe
 

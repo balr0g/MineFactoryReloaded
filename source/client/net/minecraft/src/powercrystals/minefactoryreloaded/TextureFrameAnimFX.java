@@ -2,10 +2,14 @@ package net.minecraft.src.powercrystals.minefactoryreloaded;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
+
 import javax.imageio.ImageIO;
 
+import net.minecraft.src.ModLoader;
 import net.minecraft.src.RenderEngine;
 import net.minecraft.src.TextureFX;
+import net.minecraft.src.TexturePackList;
 import net.minecraft.src.forge.MinecraftForgeClient;
 import net.minecraft.src.powercrystals.minefactoryreloaded.MineFactoryReloadedCore;
 
@@ -19,39 +23,39 @@ public class TextureFrameAnimFX extends TextureFX
         tick = 0;
         try
         {
-            BufferedImage bufferedimage = ImageIO.read((net.minecraft.client.Minecraft.class).getResource(filePath));
-            
-            /*int srcSize = bufferedimage.getHeight();
-            int srcWidth = bufferedimage.getWidth();
-            
-            if(srcSize != tileSize)
-            {
-            	float scale = tileSize/srcSize;
-        	    BufferedImage scaledBI = new BufferedImage((int)(srcWidth * scale), tileSize, BufferedImage.TYPE_INT_ARGB);
-        	    Graphics2D g = scaledBI.createGraphics();
-        	    g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-        	    g.setComposite(AlphaComposite.Src);
-        	    g.drawImage(scaledBI, 0, 0, (int)(srcWidth * scale), tileSize, null); 
-        	    g.dispose();
-                fileBuffer = new int[scaledBI.getWidth() * scaledBI.getHeight()];
-                numFrames = scaledBI.getWidth() / scaledBI.getHeight();
-                scaledBI.getRGB(0, 0, scaledBI.getWidth(), scaledBI.getHeight(), fileBuffer, 0, scaledBI.getWidth());
-            }
-            else
-            {
-	            fileBuffer = new int[bufferedimage.getWidth() * bufferedimage.getHeight()];
-	            numFrames = bufferedimage.getWidth() / bufferedimage.getHeight();
-	            bufferedimage.getRGB(0, 0, bufferedimage.getWidth(), bufferedimage.getHeight(), fileBuffer, 0, bufferedimage.getWidth());
-            }*/
+        	TexturePackList tpl = (TexturePackList)ModLoader.getPrivateValue(RenderEngine.class, ModLoader.getMinecraftInstance().renderEngine, 11);
+        	InputStream s;
+        	
+        	s = tpl.selectedTexturePack.getResourceAsStream(filePath);
+        	if(s == null)
+        	{
+        		s = (net.minecraft.client.Minecraft.class).getResourceAsStream(filePath);
+        	}
+        	
+        	BufferedImage bufferedimage = ImageIO.read(s);
             
             fileBuffer = new int[bufferedimage.getWidth() * bufferedimage.getHeight()];
             numFrames = bufferedimage.getWidth() / bufferedimage.getHeight();
+            tileResolution = bufferedimage.getHeight();
             bufferedimage.getRGB(0, 0, bufferedimage.getWidth(), bufferedimage.getHeight(), fileBuffer, 0, bufferedimage.getWidth());
+            imageData = new byte[tileResolution * tileResolution * 4];
         }
         catch(IOException ioexception)
         {
             ioexception.printStackTrace();
         }
+        catch (IllegalArgumentException e)
+        {
+			e.printStackTrace();
+		}
+        catch (SecurityException e)
+        {
+			e.printStackTrace();
+		}
+        catch (NoSuchFieldException e)
+		{
+			e.printStackTrace();
+		}
     }
 
     public void onTick()

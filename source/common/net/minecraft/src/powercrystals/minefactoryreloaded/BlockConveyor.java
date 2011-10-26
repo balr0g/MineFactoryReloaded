@@ -10,6 +10,7 @@ import net.minecraft.src.EntityLiving;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IBlockAccess;
 import net.minecraft.src.Material;
+import net.minecraft.src.MathHelper;
 import net.minecraft.src.MovingObjectPosition;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.Vec3D;
@@ -29,6 +30,33 @@ public class BlockConveyor extends BlockContainer implements ITextureProvider
 		setRequiresSelfNotify();
 	}
 
+	@Override
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving entity)
+    {
+		if(entity == null)
+		{
+			return;
+		}
+        int l = MathHelper.floor_double((double)((entity.rotationYaw * 4F) / 360F) + 0.5D) & 3;
+        if(l == 0)
+        {
+            world.setBlockMetadataWithNotify(x, y, z, 1);
+        }
+        if(l == 1)
+        {
+            world.setBlockMetadataWithNotify(x, y, z, 2);
+        }
+        if(l == 2)
+        {
+            world.setBlockMetadataWithNotify(x, y, z, 3);
+        }
+        if(l == 3)
+        {
+            world.setBlockMetadataWithNotify(x, y, z, 0);
+        }
+    }
+
+	@Override
 	public void onEntityCollidedWithBlock(World world, int i, int j, int k, Entity entity)
 	{
 		if(!(entity instanceof EntityItem) && !(entity instanceof EntityLiving))

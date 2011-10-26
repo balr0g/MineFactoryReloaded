@@ -21,7 +21,7 @@ public class mod_MineFactory extends BaseModMp
 	@Override
 	public String Version()
 	{
-		return "1.8.1R1.3.0";
+		return "1.8.1R1.3.1";
 	}
 	
 	@Override

@@ -17,7 +17,7 @@ public class TileEntityWeather extends TileEntityFactoryInventory implements ILi
 	@Override
 	public String getInvName()
 	{
-		return "Weather Harvester";
+		return "WeatherCollector";
 	}
 
 	@Override
