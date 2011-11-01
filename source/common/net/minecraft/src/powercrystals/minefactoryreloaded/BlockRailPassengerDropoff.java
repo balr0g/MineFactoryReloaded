@@ -96,6 +96,6 @@ public class BlockRailPassengerDropoff extends BlockRail implements ITextureProv
 	@Override
 	public String getTextureFile()
 	{
-		return "MineFactorySprites/terrain.png";
+		return MineFactoryReloadedCore.terrainTexture;
 	}
 }

@@ -147,7 +147,7 @@ public class mod_MineFactory extends BaseModMp
 		@Override
 		public void movePlayerToCoordinates(EntityPlayer e, double x, double y,	double z)
 		{
-			e.setPosition(x, y, z);
+			e.setPosition(x, y + 2.5, z);
 		}
 
 		@Override

@@ -16,6 +16,8 @@ import net.minecraft.src.Item;
 import net.minecraft.src.buildcraft.api.API;
 import net.minecraft.src.buildcraft.api.LiquidData;
 import net.minecraft.src.forge.Configuration;
+import net.minecraft.src.forge.IOreHandler;
+import net.minecraft.src.forge.MinecraftForge;
 import net.minecraft.src.forge.Property;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.HarvestType;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryFertilizable;
@@ -42,8 +44,10 @@ public class MineFactoryReloadedCore
 {
 	public static PowerSystem powerSystem;
 	
-	public static String terrainTexture = "/MineFactorySprites/terrain.png";
-	public static String itemTexture = "/MineFactorySprites/items.png";
+	public static String terrainTexture = "/MineFactorySprites/terrain_0.png";
+	public static String itemTexture = "/MineFactorySprites/items_0.png";
+	
+	public static String version = "1.8.1R1.3.2";
 	
 	public static Block machineBlock;
 	
@@ -181,108 +185,111 @@ public class MineFactoryReloadedCore
 		ModLoader.RegisterTileEntity(TileEntityBlockBreaker.class, "factoryBlockBreaker");
 		ModLoader.RegisterTileEntity(TileEntityWeather.class, "factoryWeather");
 		
-		registerRecipes();
+		ModLoader.AddRecipe(new ItemStack(steelIngotItem, 5), new Object[]
+ 			{
+ 				" C ", "CIC", " C ",
+ 				Character.valueOf('C'), Item.coal,
+ 				Character.valueOf('I'), Item.ingotIron
+ 		    }
+ 		);
+		
+		MinecraftForge.registerOreHandler(new MineFactoryReloadedCore().new OreHandler());
+		MinecraftForge.registerOre("ingotRefinedIron", new ItemStack(steelIngotItem));
+		
 		registerFarmables();
 	}
 	
-	private static void registerRecipes()
+	private static void registerRecipes(ItemStack steelIngot)
 	{
-		ModLoader.AddRecipe(new ItemStack(steelIngotItem, 5), new Object[]
-			{
-				" C ", "CIC", " C ",
-				Character.valueOf('C'), Item.coal,
-				Character.valueOf('I'), Item.ingotIron
-		    }
-		);
 		ModLoader.AddRecipe(new ItemStack(conveyorBlock, 1), new Object[]
 			{
 				"R", "S",
 				Character.valueOf('R'), Item.redstone,
-				Character.valueOf('S'), steelIngotItem
+				Character.valueOf('S'), steelIngot
 		    }
 		);
 		ModLoader.AddRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Fertilizer)), new Object[]
  			{
  				"SSS", "SPS", "SSS",
  				Character.valueOf('P'), Block.sapling,
- 				Character.valueOf('S'), steelIngotItem
+ 				Character.valueOf('S'), steelIngot
  			}
  		);
 		ModLoader.AddRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Fertilizer)), new Object[]
    			{
    				"SSS", "SPS", "SSS",
    				Character.valueOf('P'), new ItemStack(Block.sapling, 1, 1),
-   				Character.valueOf('S'), steelIngotItem
+   				Character.valueOf('S'), steelIngot
    			}
    		);
  		ModLoader.AddRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Fertilizer)), new Object[]
  			{
  				"SSS", "SPS", "SSS",
  				Character.valueOf('P'), new ItemStack(Block.sapling, 1, 2),
- 				Character.valueOf('S'), steelIngotItem
+ 				Character.valueOf('S'), steelIngot
  			}
  		);
 		ModLoader.AddRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Harvester)), new Object[]
 		    {
 				"SSS", "SXS", "SSS",
 				Character.valueOf('X'), Item.axeSteel,
-				Character.valueOf('S'), steelIngotItem
+				Character.valueOf('S'), steelIngot
 		    }
 		);
 		ModLoader.AddRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Harvester)), new Object[]
  		    {
  				"SSS", "SWS", "SSS",
  				Character.valueOf('W'), Item.swordSteel,
- 				Character.valueOf('S'), steelIngotItem
+ 				Character.valueOf('S'), steelIngot
  		    }
  		);
 		ModLoader.AddRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Planter)), new Object[]
 		    {
 				"SSS", "SHS", "SSS",
 				Character.valueOf('H'), Item.hoeSteel,
-				Character.valueOf('S'), steelIngotItem
+				Character.valueOf('S'), steelIngot
 		    }
 		);
 		ModLoader.AddRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Rancher)), new Object[]
 			{
 				"SSS", "SHS", "SSS",
 				Character.valueOf('H'), Item.shears,
-				Character.valueOf('S'), steelIngotItem
+				Character.valueOf('S'), steelIngot
 		    }
 		);
 		ModLoader.AddRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Fisher)), new Object[]
  			{
  				"SSS", "SFS", "SSS",
  				Character.valueOf('F'), Item.fishingRod,
- 				Character.valueOf('S'), steelIngotItem
+ 				Character.valueOf('S'), steelIngot
  			}
  		);
 		ModLoader.AddRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Collector)), new Object[]
  			{
  				"SSS", "SCS", "SSS",
  				Character.valueOf('C'), Block.chest,
- 				Character.valueOf('S'), steelIngotItem
+ 				Character.valueOf('S'), steelIngot
  			}
  		);
 		ModLoader.AddRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Vet)), new Object[]
  			{
  				"SSS", "SBS", "SSS",
  				Character.valueOf('B'), Item.bread,
- 				Character.valueOf('S'), steelIngotItem
+ 				Character.valueOf('S'), steelIngot
  		    }
  		);
  		ModLoader.AddRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Breaker)), new Object[]
   			{
   				"SSS", "SPS", "SSS",
   				Character.valueOf('P'), Item.pickaxeSteel,
-  				Character.valueOf('S'), steelIngotItem
+  				Character.valueOf('S'), steelIngot
   			}
   		);
  		ModLoader.AddRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Weather)), new Object[]
   			{
   				"SSS", "SBS", "SSS",
   				Character.valueOf('B'), Item.bucketEmpty,
-  				Character.valueOf('S'), steelIngotItem
+  				Character.valueOf('S'), steelIngot
   			}
   		);
 		
@@ -290,7 +297,7 @@ public class MineFactoryReloadedCore
  			{
  				" C ", "SDS", "SSS",
  				Character.valueOf('C'), Block.chest,
-				Character.valueOf('S'), steelIngotItem,
+				Character.valueOf('S'), steelIngot,
  				Character.valueOf('D'), Block.railDetector
  			}
  		);
@@ -298,7 +305,7 @@ public class MineFactoryReloadedCore
   			{
 				"SSS", "SDS", " C ",
 				Character.valueOf('C'), Block.chest,
-				Character.valueOf('S'), steelIngotItem,
+				Character.valueOf('S'), steelIngot,
 				Character.valueOf('D'), Block.railDetector
 			}
 		);
@@ -306,7 +313,7 @@ public class MineFactoryReloadedCore
  			{
  				" L ", "SDS", "SSS",
 				Character.valueOf('L'), Block.blockLapis,
-				Character.valueOf('S'), steelIngotItem,
+				Character.valueOf('S'), steelIngot,
 				Character.valueOf('D'), Block.railDetector
  			}
  		);
@@ -314,7 +321,7 @@ public class MineFactoryReloadedCore
 			{
  				"SSS", "SDS", " L ",
 				Character.valueOf('L'), Block.blockLapis,
-				Character.valueOf('S'), steelIngotItem,
+				Character.valueOf('S'), steelIngot,
 				Character.valueOf('D'), Block.railDetector
 			}
 		);
@@ -580,5 +587,17 @@ public class MineFactoryReloadedCore
 		Collector,
 		Breaker,
 		Weather
+	}
+	
+	public class OreHandler implements IOreHandler
+	{
+		@Override
+		public void registerOre(String oreClass, ItemStack ore)
+		{
+			if(oreClass == "ingotRefinedIron")
+			{
+				registerRecipes(ore);
+			}
+		}
 	}
 }

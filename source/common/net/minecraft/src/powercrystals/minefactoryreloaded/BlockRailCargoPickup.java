@@ -59,7 +59,7 @@ public class BlockRailCargoPickup extends BlockRail implements ITextureProvider
 	@Override
 	public String getTextureFile()
 	{
-		return "MineFactorySprites/terrain.png";
+		return MineFactoryReloadedCore.terrainTexture;
 	}
 
 }

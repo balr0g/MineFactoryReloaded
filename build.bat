@@ -7,8 +7,7 @@ set CLEANSRC=%MCP%\src-dev
 set PROJBASE=%USERPROFILE%\Mod Stuff\MineFactory
 set SPRITEFOLDER=MineFactorySprites
 set MODNAME=MineFactoryReloaded
-set MODVERSION=1.3.1
-
+set MODVERSION=1.3.2
 set ZIPPATH=%USERPROFILE%\Mod Stuff\zip.exe
 
 set SRCBASE=%PROJBASE%\source
@@ -38,15 +37,15 @@ xcopy /y /e /q "%MCP%\reobf\minecraft\*" "%RELEASECLIENT%\" > NUL
 xcopy /y /e /q "%MCP%\reobf\minecraft_server\*" "%RELEASESERVER%\" > NUL
 
 mkdir "%RELEASECLIENT%\%SPRITEFOLDER%\animations"
-xcopy /y /e /q "%PROJBASE%\sprites\terrain.png" "%RELEASECLIENT%\%SPRITEFOLDER%" > NUL
-xcopy /y /e /q "%PROJBASE%\sprites\items.png" "%RELEASECLIENT%\%SPRITEFOLDER%" > NUL
+xcopy /y /e /q "%PROJBASE%\sprites\terrain_0.png" "%RELEASECLIENT%\%SPRITEFOLDER%" > NUL
+xcopy /y /e /q "%PROJBASE%\sprites\items_0.png" "%RELEASECLIENT%\%SPRITEFOLDER%" > NUL
 xcopy /y /e /q "%PROJBASE%\sprites\animations\*.png" "%RELEASECLIENT%\%SPRITEFOLDER%\animations" > NUL
 rmdir "%RELEASECLIENT%\%SPRITEFOLDER%\items"
 rmdir "%RELEASECLIENT%\%SPRITEFOLDER%\terrain"
 
 mkdir "%RELEASESERVER%\%SPRITEFOLDER%\animations"
-xcopy /y /e /q "%PROJBASE%\sprites\terrain.png" "%RELEASESERVER%\%SPRITEFOLDER%" > NUL
-xcopy /y /e /q "%PROJBASE%\sprites\items.png" "%RELEASESERVER%\%SPRITEFOLDER%" > NUL
+xcopy /y /e /q "%PROJBASE%\sprites\terrain_0.png" "%RELEASESERVER%\%SPRITEFOLDER%" > NUL
+xcopy /y /e /q "%PROJBASE%\sprites\items_0.png" "%RELEASESERVER%\%SPRITEFOLDER%" > NUL
 xcopy /y /e /q "%PROJBASE%\sprites\animations\*.png" "%RELEASESERVER%\%SPRITEFOLDER%\animations" > NUL
 rmdir /s /q "%RELEASESERVER%\%SPRITEFOLDER%\items"
 rmdir /s /q "%RELEASESERVER%\%SPRITEFOLDER%\terrain"
