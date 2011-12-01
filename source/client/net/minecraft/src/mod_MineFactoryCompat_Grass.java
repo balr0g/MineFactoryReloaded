@@ -5,20 +5,27 @@ import net.minecraft.src.Block;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.World;
+import net.minecraft.src.powercrystals.minefactoryreloaded.MineFactoryReloadedCore;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryFertilizable;
 
 public class mod_MineFactoryCompat_Grass extends BaseModMp
 {
 	@Override
-	public String Version()
+	public String getPriorities()
 	{
-		return "1.3.0B";
+		return "after:mod_MineFactory";
 	}
 	
 	@Override
-	public void ModsLoaded()
+	public void load()
 	{
 		mod_MineFactory.registerFertilizable(new FactoryFertilizableGrass());
+	}
+	
+	@Override
+	public String getVersion()
+	{
+		return MineFactoryReloadedCore.version;
 	}
 	
 	public class FactoryFertilizableGrass implements IFactoryFertilizable

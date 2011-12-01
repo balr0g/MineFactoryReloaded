@@ -81,7 +81,7 @@ public abstract class TileEntityFactoryInventory extends TileEntityFactoryPowere
 	}
 
 	@Override
-	public boolean canInteractWith(EntityPlayer entityplayer)
+	public boolean isUseableByPlayer(EntityPlayer entityplayer)
 	{
         if(worldObj.getBlockTileEntity(xCoord, yCoord, zCoord) != this)
         {

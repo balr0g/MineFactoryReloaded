@@ -1,5 +1,6 @@
 package net.minecraft.src;
 
+import net.minecraft.src.powercrystals.minefactoryreloaded.MineFactoryReloadedCore;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryFertilizable;
 
 
@@ -8,7 +9,7 @@ public class mod_MineFactoryCompat_Grass extends BaseModMp {
 	@Override
 	public String Version()
 	{
-		return "1.3.0B";
+		return MineFactoryReloadedCore.version;
 	}
 	
 	@Override

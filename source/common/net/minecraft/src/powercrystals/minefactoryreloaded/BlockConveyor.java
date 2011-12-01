@@ -304,7 +304,7 @@ public class BlockConveyor extends BlockContainer implements ITextureProvider
 		}
 		if(!world.isBlockOpaqueCube(i, j - 1, k))
 		{
-			dropBlockAsItem(world, i, j, k, world.getBlockMetadata(i, j, k));
+			dropBlockAsItem(world, i, j, k, world.getBlockMetadata(i, j, k), 0);
 			world.setBlockWithNotify(i, j, k, 0);
 		}
 	}

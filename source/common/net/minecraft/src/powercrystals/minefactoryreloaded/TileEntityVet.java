@@ -64,7 +64,7 @@ public class TileEntityVet extends TileEntityFactoryInventory
 					continue;
 				}
 				EntityLiving e = (EntityLiving)o;
-				if(e.health < 20)
+				if(e.getEntityHealth() < e.getMaxHealth())
 				{
 					e.heal(healAmount);
 					decrStackSize(i, 1);

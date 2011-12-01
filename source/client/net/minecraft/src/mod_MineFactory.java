@@ -22,7 +22,7 @@ public class mod_MineFactory extends BaseModMp
 {
 	public static int renderId = 1000;
 	
-	public mod_MineFactory()
+	public void load()
 	{
 		MineFactoryReloadedCore.Init(new ClientProxy());
 		
@@ -59,9 +59,9 @@ public class mod_MineFactory extends BaseModMp
 	}
 
 	@Override
-	public String Version()
+	public String getVersion()
 	{
-		return "1.8.1R1.3.1";
+		return MineFactoryReloadedCore.version;
 	}
 
 	@Override

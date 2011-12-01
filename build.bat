@@ -1,13 +1,13 @@
 @ECHO OFF
 
-set MCP=%USERPROFILE%\mcp\1.8\dev
+set MCP=%USERPROFILE%\mcp\1.9\dev
 set BUILDSRC=%MCP%\src
 set CLEANSRC=%MCP%\src-dev
 
 set PROJBASE=%USERPROFILE%\Mod Stuff\MineFactory
 set SPRITEFOLDER=MineFactorySprites
 set MODNAME=MineFactoryReloaded
-set MODVERSION=1.3.2
+set MODVERSION=1.4.0
 set ZIPPATH=%USERPROFILE%\Mod Stuff\zip.exe
 
 set SRCBASE=%PROJBASE%\source
@@ -42,6 +42,7 @@ xcopy /y /e /q "%PROJBASE%\sprites\items_0.png" "%RELEASECLIENT%\%SPRITEFOLDER%"
 xcopy /y /e /q "%PROJBASE%\sprites\animations\*.png" "%RELEASECLIENT%\%SPRITEFOLDER%\animations" > NUL
 rmdir "%RELEASECLIENT%\%SPRITEFOLDER%\items"
 rmdir "%RELEASECLIENT%\%SPRITEFOLDER%\terrain"
+rmdir /S /Q "%RELEASECLIENT%\buildcraft"
 
 mkdir "%RELEASESERVER%\%SPRITEFOLDER%\animations"
 xcopy /y /e /q "%PROJBASE%\sprites\terrain_0.png" "%RELEASESERVER%\%SPRITEFOLDER%" > NUL
@@ -49,6 +50,7 @@ xcopy /y /e /q "%PROJBASE%\sprites\items_0.png" "%RELEASESERVER%\%SPRITEFOLDER%"
 xcopy /y /e /q "%PROJBASE%\sprites\animations\*.png" "%RELEASESERVER%\%SPRITEFOLDER%\animations" > NUL
 rmdir /s /q "%RELEASESERVER%\%SPRITEFOLDER%\items"
 rmdir /s /q "%RELEASESERVER%\%SPRITEFOLDER%\terrain"
+rmdir /S /Q "%RELEASESERVER%\buildcraft"
 
 cd "%RELEASECLIENT%"
 rmdir /s /q net

@@ -27,17 +27,21 @@ import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryRanchable
 import net.minecraft.src.powercrystals.minefactoryreloaded.core.IMFRProxy;
 import net.minecraft.src.powercrystals.minefactoryreloaded.core.Util;
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.FertilizableGiantMushroom;
+import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.FertilizableNetherWart;
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.FertilizableSapling;
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.FertilizableStemPlants;
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.FertilizableWheat;
+import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.HarvestableNetherWart;
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.HarvestableStandard;
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.HarvestableStemPlant;
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.HarvestableVine;
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.HarvestableWheat;
+import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.PlantableNetherWart;
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.PlantableStandard;
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.PlantableWheat;
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.RanchableChicken;
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.RanchableCow;
+import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.RanchableMooshroom;
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.RanchableStandard;
 
 public class MineFactoryReloadedCore
@@ -47,7 +51,7 @@ public class MineFactoryReloadedCore
 	public static String terrainTexture = "/MineFactorySprites/terrain_0.png";
 	public static String itemTexture = "/MineFactorySprites/items_0.png";
 	
-	public static String version = "1.8.1R1.3.2";
+	public static String version = "1.0.0R1.4.0";
 	
 	public static Block machineBlock;
 	
@@ -127,6 +131,7 @@ public class MineFactoryReloadedCore
 	public static Property harvesterHarvestsSmallMushrooms;
 	
 	public static Property powerSystemProperty;
+	public static Property enableSteelCraftingProperty;
 	
 	public static void Init(IMFRProxy proxyParam)
 	{
@@ -185,13 +190,16 @@ public class MineFactoryReloadedCore
 		ModLoader.RegisterTileEntity(TileEntityBlockBreaker.class, "factoryBlockBreaker");
 		ModLoader.RegisterTileEntity(TileEntityWeather.class, "factoryWeather");
 		
-		ModLoader.AddRecipe(new ItemStack(steelIngotItem, 5), new Object[]
- 			{
- 				" C ", "CIC", " C ",
- 				Character.valueOf('C'), Item.coal,
- 				Character.valueOf('I'), Item.ingotIron
- 		    }
- 		);
+		if(Util.getBool(enableSteelCraftingProperty))
+		{
+			ModLoader.AddRecipe(new ItemStack(steelIngotItem, 5), new Object[]
+ 				{
+ 					" C ", "CIC", " C ",
+ 					Character.valueOf('C'), Item.coal,
+ 					Character.valueOf('I'), Item.ingotIron
+ 				}
+ 			);
+		}
 		
 		MinecraftForge.registerOreHandler(new MineFactoryReloadedCore().new OreHandler());
 		MinecraftForge.registerOre("ingotRefinedIron", new ItemStack(steelIngotItem));
@@ -347,6 +355,7 @@ public class MineFactoryReloadedCore
 		registerPlantable(new PlantableStandard(Block.mushroomBrown.blockID, Block.mushroomBrown.blockID));
 		registerPlantable(new PlantableStandard(Block.mushroomRed.blockID, Block.mushroomRed.blockID));
 		registerPlantable(new PlantableWheat());
+		registerPlantable(new PlantableNetherWart());
 		
 		registerHarvestable(new HarvestableStandard(Block.wood.blockID, HarvestType.Tree));
 		registerHarvestable(new HarvestableStandard(Block.leaves.blockID, HarvestType.TreeLeaf));
@@ -361,6 +370,7 @@ public class MineFactoryReloadedCore
 		registerHarvestable(new HarvestableStemPlant(Block.melon.blockID, HarvestType.Normal));
 		registerHarvestable(new HarvestableWheat());
 		registerHarvestable(new HarvestableVine());
+		registerHarvestable(new HarvestableNetherWart());
 		if(Util.getBool(harvesterHarvestsSmallMushrooms))
 		{
 			registerHarvestable(new HarvestableStandard(Block.mushroomBrown.blockID, HarvestType.Normal));
@@ -373,6 +383,7 @@ public class MineFactoryReloadedCore
 		registerFertilizable(new FertilizableGiantMushroom(Block.mushroomRed.blockID));
 		registerFertilizable(new FertilizableStemPlants(Block.pumpkinStem.blockID));
 		registerFertilizable(new FertilizableStemPlants(Block.melonStem.blockID));
+		registerFertilizable(new FertilizableNetherWart());
 		
 		registerFertilizerItem(Item.dyePowder.shiftedIndex);
 		
@@ -382,6 +393,7 @@ public class MineFactoryReloadedCore
 		registerRanchable(new RanchableStandard(EntitySheep.class, new ItemStack(Block.cloth), 30, 1, 40));
 		registerRanchable(new RanchableStandard(EntitySlime.class, new ItemStack(Item.slimeBall), 25, 1, 30));
 		registerRanchable(new RanchableStandard(EntitySquid.class, new ItemStack(Item.dyePowder), 10, 1, 40));
+		registerRanchable(new RanchableMooshroom());
 	}
 	
 	public static void afterModsLoaded()
@@ -508,8 +520,6 @@ public class MineFactoryReloadedCore
 		
 		animateBlockFaces = c.getOrCreateBooleanProperty("AnimateBlockFaces", Configuration.GENERAL_PROPERTY, true);
 		animateBlockFaces.comment = "Set to false to disable animation of harvester, rancher, conveyor, etc. This may be required if using certain mods that affect rendering.";
-		//animationTileSize = c.getOrCreateIntProperty("AnimationTileSize", Configuration.GENERAL_PROPERTY, 16);
-		//animationTileSize.comment = "Set this to match the size of your texture pack to allow animations to work with HD texture packs. Setting this incorrectly may cause unreliable behavior.";
 		playSounds = c.getOrCreateBooleanProperty("PlaySounds", Configuration.GENERAL_PROPERTY, true);
 		playSounds.comment = "Set to false to disable the harvester's sound when a block is harvested.";
 		harvesterHarvestsSmallMushrooms = c.getOrCreateBooleanProperty("HarvesterHarvestsSmallMushrooms", Configuration.GENERAL_PROPERTY, false);
@@ -541,6 +551,9 @@ public class MineFactoryReloadedCore
 			powerSystem = PowerSystem.Redstone;
 			powerSystemProperty.value = "redstone";
 		}
+		
+		enableSteelCraftingProperty = c.getOrCreateBooleanProperty("EnableSteelCrafting", Configuration.GENERAL_PROPERTY, true);
+		enableSteelCraftingProperty.comment = "Set to false to disable steel crafting. This is provided in case another mod provides a way to get steel ignots via the ore dictionary (like IC2) and the built in recipe becomes unbalanced because of it.";
 		
 		c.save();
 	}
