@@ -1,5 +1,9 @@
 package net.minecraft.src;
 
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Random;
+
 import net.minecraft.src.powercrystals.minefactoryreloaded.MineFactoryReloadedCore;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryFertilizable;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryHarvestable;
@@ -120,6 +124,75 @@ public class mod_MineFactory extends BaseModMp
 		public void sendPacketToAll(Packet230ModLoader p)
 		{
 			ModLoaderMp.SendPacketToAll(instance, p);
+		}
+
+		@Override
+		public int calcItemStackEnchantability(Random random, int i, int j, ItemStack itemstack)
+		{
+			return EnchantmentHelper.func_40642_a(random, i, j, itemstack);
+		}
+
+		@Override
+		public List<?> buildEnchantmentList(Random random, ItemStack itemstack, int i)
+		{
+			return EnchantmentHelper.func_40629_a(random, itemstack, i);
+		}
+
+		@Override
+		public Enchantment getEnchantment(EnchantmentData ed)
+		{
+			return ed.field_40494_a;
+		}
+
+		@Override
+		public int getLevel(EnchantmentData ed)
+		{
+			return ed.field_40493_b;
+		}
+
+		@Override
+		public void applyEnchantment(EnchantmentData ed, ItemStack stack)
+		{
+			stack.func_40605_a(getEnchantment(ed), getLevel(ed));
+		}
+
+		@Override
+		public void setFieldA(EntityAnimal animal, int value)
+		{
+			try
+			{
+				Field f = Class.forName("bi").getDeclaredFields()[0];
+				f.setAccessible(true);
+				f.set(animal, value);
+			}
+			catch(SecurityException e)
+			{
+				e.printStackTrace();
+			}
+			catch(ClassNotFoundException e)
+			{
+				e.printStackTrace();
+			}
+			catch (IllegalArgumentException e)
+			{
+				e.printStackTrace();
+			}
+			catch (IllegalAccessException e)
+			{
+				e.printStackTrace();
+			}	
+		}
+
+		@Override
+		public int getAnimalMethodG(EntityAnimal animal)
+		{
+			return animal.func_40135_j();
+		}
+
+		@Override
+		public void setEntityToAttack(EntityCreature entity, Entity target)
+		{
+			entity.setTarget(target);
 		}
 	}
 }

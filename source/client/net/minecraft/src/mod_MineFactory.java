@@ -1,5 +1,9 @@
 package net.minecraft.src;
 
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Random;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.IBlockAccess;
 import net.minecraft.src.RenderBlocks;
@@ -35,6 +39,8 @@ public class mod_MineFactory extends BaseModMp
 		ModLoader.AddName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Collector)), "Item Collector");
 		ModLoader.AddName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Breaker)), "Block Breaker");
 		ModLoader.AddName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Weather)), "Weather Collector");
+		ModLoader.AddName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.AutoEnchanter)), "Auto-Enchanter");
+		ModLoader.AddName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.AutoBreeder)), "Auto-Breeder");
 		
 		ModLoader.AddName(MineFactoryReloadedCore.conveyorBlock, "Conveyor Belt");
 		
@@ -131,7 +137,6 @@ public class mod_MineFactory extends BaseModMp
 	
 	public class ClientProxy implements IMFRProxy
 	{
-
 		@Override
 		public boolean isClient(World world)
 		{
@@ -191,6 +196,75 @@ public class mod_MineFactory extends BaseModMp
 		@Override
 		public void sendPacketToAll(Packet230ModLoader p)
 		{	
+		}
+
+		@Override
+		public int calcItemStackEnchantability(Random random, int i, int j, ItemStack itemstack)
+		{
+			return EnchantmentHelper.calcItemStackEnchantability(random, i, j, itemstack);
+		}
+
+		@Override
+		public List<?> buildEnchantmentList(Random random, ItemStack itemstack,	int i)
+		{
+			return EnchantmentHelper.buildEnchantmentList(random, itemstack, i);
+		}
+
+		@Override
+		public Enchantment getEnchantment(EnchantmentData ed)
+		{
+			return ed.field_40264_a;
+		}
+
+		@Override
+		public int getLevel(EnchantmentData ed)
+		{
+			return ed.field_40263_b;
+		}
+
+		@Override
+		public void applyEnchantment(EnchantmentData ed, ItemStack stack)
+		{
+			stack.addEnchantment(getEnchantment(ed), getLevel(ed));
+		}
+
+		@Override
+		public void setFieldA(EntityAnimal animal, int value)
+		{
+			try
+			{
+				Field f = Class.forName("fx").getDeclaredFields()[0];
+				f.setAccessible(true);
+				f.set(animal, value);
+			}
+			catch(SecurityException e)
+			{
+				e.printStackTrace();
+			}
+			catch(ClassNotFoundException e)
+			{
+				e.printStackTrace();
+			}
+			catch (IllegalArgumentException e)
+			{
+				e.printStackTrace();
+			}
+			catch (IllegalAccessException e)
+			{
+				e.printStackTrace();
+			}	
+		}
+
+		@Override
+		public int getAnimalMethodG(EntityAnimal animal)
+		{
+			return animal.func_40146_g();
+		}
+
+		@Override
+		public void setEntityToAttack(EntityCreature entity, Entity target)
+		{
+			entity.setEntityToAttack(target);
 		}
 	}
 }

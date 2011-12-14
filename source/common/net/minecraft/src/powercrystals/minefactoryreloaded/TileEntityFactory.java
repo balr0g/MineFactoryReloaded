@@ -32,7 +32,7 @@ public abstract class TileEntityFactory extends TileEntity implements IRotateabl
 		return true;
 	}
 	
-	protected void dropStack(ItemStack s, float dropOffsetX, float dropOffsetY, float dropZ)
+	protected void dropStack(ItemStack s, float dropOffsetX, float dropOffsetY, float dropOffsetZ)
 	{
 		for(Orientations o : Util.findPipes(worldObj, xCoord, yCoord, zCoord))
 		{
@@ -72,7 +72,7 @@ public abstract class TileEntityFactory extends TileEntity implements IRotateabl
 		}
 		if(s.stackSize > 0)
 		{
-			EntityItem entityitem = new EntityItem(worldObj, xCoord + dropOffsetX, yCoord + dropOffsetY, zCoord + dropZ, s);
+			EntityItem entityitem = new EntityItem(worldObj, xCoord + dropOffsetX, yCoord + dropOffsetY, zCoord + dropOffsetZ, s);
 			entityitem.motionX = 0.0D;
 			entityitem.motionY = 0.3D;
 			entityitem.motionZ = 0.0D;

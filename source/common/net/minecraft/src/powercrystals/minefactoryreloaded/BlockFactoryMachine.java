@@ -68,7 +68,9 @@ public class BlockFactoryMachine extends BlockContainer implements IPipeConnecti
 	    if(md == MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Collector)) return new TileEntityCollector();
 	    if(md == MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Breaker)) return new TileEntityBlockBreaker();
 	    if(md == MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Weather)) return new TileEntityWeather();
-	    return null;
+	    if(md == MineFactoryReloadedCore.machineMetadataMappings.get(Machine.AutoEnchanter)) return new TileEntityAutoEnchanter();
+	    if(md == MineFactoryReloadedCore.machineMetadataMappings.get(Machine.AutoBreeder)) return new TileEntityAutoBreeder();
+	    return getBlockEntity();
 	}
 
 	@Override
@@ -90,6 +92,10 @@ public class BlockFactoryMachine extends BlockContainer implements IPipeConnecti
 		else if(te != null && te instanceof TileEntityFactoryInventory && ((TileEntityFactoryInventory)te).getSizeInventory() == 27)
 		{
 			entityplayer.displayGUIChest((TileEntityFactoryInventory)te);
+		}
+		else if(te != null && te instanceof TileEntityAutoEnchanter)
+		{
+			entityplayer.displayGUIChest((TileEntityAutoEnchanter)te);
 		}
 		return true;
 	}
@@ -146,6 +152,10 @@ label0:
 		if(te != null && te instanceof TileEntityFactoryPowered)
 		{
 			((TileEntityFactoryPowered)te).neighborBlockChanged();
+		}
+		else if(te != null && te instanceof TileEntityAutoEnchanter)
+		{
+			((TileEntityAutoEnchanter)te).neighborBlockChanged();
 		}
 	}
 	

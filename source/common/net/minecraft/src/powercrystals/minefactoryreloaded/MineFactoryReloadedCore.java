@@ -149,6 +149,8 @@ public class MineFactoryReloadedCore
 		machineMetadataMappings.put(Machine.Collector, 6);
 		machineMetadataMappings.put(Machine.Breaker, 7);
 		machineMetadataMappings.put(Machine.Weather, 8);
+		machineMetadataMappings.put(Machine.AutoEnchanter, 9);
+		machineMetadataMappings.put(Machine.AutoBreeder, 10);
 
 		setupTextures();
 		
@@ -189,6 +191,8 @@ public class MineFactoryReloadedCore
 		ModLoader.RegisterTileEntity(TileEntityCollector.class, "factoryItemCollector");
 		ModLoader.RegisterTileEntity(TileEntityBlockBreaker.class, "factoryBlockBreaker");
 		ModLoader.RegisterTileEntity(TileEntityWeather.class, "factoryWeather");
+		ModLoader.RegisterTileEntity(TileEntityAutoEnchanter.class, "factoryAutoEnchanter");
+		ModLoader.RegisterTileEntity(TileEntityAutoBreeder.class, "factoryAutoBreeder");
 		
 		if(Util.getBool(enableSteelCraftingProperty))
 		{
@@ -514,7 +518,7 @@ public class MineFactoryReloadedCore
 		cargoPickupRailBlockId = c.getOrCreateBlockIdProperty("ID.CargoRailPickupBlock", 131);
 		cargoDropoffRailBlockId = c.getOrCreateBlockIdProperty("ID.CargoRailDropoffBlock", 132);
 		
-		steelIngotItemId = c.getOrCreateIntProperty("ID.SteelIngot", Configuration.ITEM_PROPERTY, 124);
+		steelIngotItemId = c.getOrCreateIntProperty("ID.SteelIngot", Configuration.ITEM_PROPERTY, 986);
 		hammerItemId = c.getOrCreateIntProperty("ID.Hammer", Configuration.ITEM_PROPERTY, 988);
 		milkItemId = c.getOrCreateIntProperty("ID.Milk", Configuration.ITEM_PROPERTY, 987);
 		
@@ -599,7 +603,9 @@ public class MineFactoryReloadedCore
 		Vet,
 		Collector,
 		Breaker,
-		Weather
+		Weather,
+		AutoEnchanter,
+		AutoBreeder
 	}
 	
 	public class OreHandler implements IOreHandler
