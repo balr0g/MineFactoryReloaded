@@ -4,10 +4,10 @@ import net.minecraft.src.Block;
 import net.minecraft.src.BlockRail;
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityMinecart;
-import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.World;
 import net.minecraft.src.forge.ITextureProvider;
+import net.minecraft.src.powercrystals.minefactoryreloaded.core.InventoryAndSide;
 import net.minecraft.src.powercrystals.minefactoryreloaded.core.Util;
 
 public class BlockRailCargoDropoff extends BlockRail implements ITextureProvider
@@ -39,7 +39,7 @@ public class BlockRailCargoDropoff extends BlockRail implements ITextureProvider
 			{
 				continue;
 			}
-			for(IInventory chest : Util.findChests(world, x, y, z))
+			for(InventoryAndSide chest : Util.findChests(world, x, y, z))
 			{
 				ItemStack stackToAdd = ourStack.copy();
 				int amountRemaining = Util.addToInventory(chest, stackToAdd);

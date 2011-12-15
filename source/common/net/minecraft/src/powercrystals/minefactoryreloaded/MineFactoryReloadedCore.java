@@ -1,7 +1,6 @@
 package net.minecraft.src.powercrystals.minefactoryreloaded;
 
 import net.minecraft.src.EntityPig;
-import net.minecraft.src.EntitySheep;
 import net.minecraft.src.EntitySlime;
 import net.minecraft.src.EntitySquid;
 import net.minecraft.src.ItemStack;
@@ -42,6 +41,7 @@ import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.PlantableWh
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.RanchableChicken;
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.RanchableCow;
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.RanchableMooshroom;
+import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.RanchableSheep;
 import net.minecraft.src.powercrystals.minefactoryreloaded.farmables.RanchableStandard;
 
 public class MineFactoryReloadedCore
@@ -51,7 +51,7 @@ public class MineFactoryReloadedCore
 	public static String terrainTexture = "/MineFactorySprites/terrain_0.png";
 	public static String itemTexture = "/MineFactorySprites/items_0.png";
 	
-	public static String version = "1.0.0R1.4.0";
+	public static String version = "1.0.0R1.5.0";
 	
 	public static Block machineBlock;
 	
@@ -394,7 +394,7 @@ public class MineFactoryReloadedCore
 		registerRanchable(new RanchableChicken());
 		registerRanchable(new RanchableCow());
 		registerRanchable(new RanchableStandard(EntityPig.class, new ItemStack(Item.porkRaw), 45, 1, 40));
-		registerRanchable(new RanchableStandard(EntitySheep.class, new ItemStack(Block.cloth), 30, 1, 40));
+		registerRanchable(new RanchableSheep());
 		registerRanchable(new RanchableStandard(EntitySlime.class, new ItemStack(Item.slimeBall), 25, 1, 30));
 		registerRanchable(new RanchableStandard(EntitySquid.class, new ItemStack(Item.dyePowder), 10, 1, 40));
 		registerRanchable(new RanchableMooshroom());
@@ -613,7 +613,7 @@ public class MineFactoryReloadedCore
 		@Override
 		public void registerOre(String oreClass, ItemStack ore)
 		{
-			if(oreClass == "ingotRefinedIron")
+			if(oreClass.equals("ingotRefinedIron"))
 			{
 				registerRecipes(ore);
 			}

@@ -9,6 +9,7 @@ import net.minecraft.src.EntityItem;
 import net.minecraft.src.EntityLiving;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IBlockAccess;
+import net.minecraft.src.IInventory;
 import net.minecraft.src.Material;
 import net.minecraft.src.MathHelper;
 import net.minecraft.src.MovingObjectPosition;
@@ -17,6 +18,7 @@ import net.minecraft.src.Vec3D;
 import net.minecraft.src.World;
 import net.minecraft.src.forge.ITextureProvider;
 import net.minecraft.src.powercrystals.minefactoryreloaded.core.IRotateableTile;
+import net.minecraft.src.powercrystals.minefactoryreloaded.core.InventoryAndSide;
 import net.minecraft.src.powercrystals.minefactoryreloaded.core.Util;
 
 public class BlockConveyor extends BlockContainer implements ITextureProvider
@@ -57,118 +59,157 @@ public class BlockConveyor extends BlockContainer implements ITextureProvider
     }
 
 	@Override
-	public void onEntityCollidedWithBlock(World world, int i, int j, int k, Entity entity)
+	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity)
 	{
 		if(!(entity instanceof EntityItem) && !(entity instanceof EntityLiving))
 		{
 			return;
 		}
-		if(world.isBlockIndirectlyGettingPowered(i, j, k))
+		TileEntity te = world.getBlockTileEntity(x, y, z);
+		if(te != null && te instanceof TileEntityConveyor)
 		{
-			return;
+			if(Util.isRedstonePowered(te))
+			{
+				return;
+			}
 		}
 		
-		int md = world.getBlockMetadata(i, j, k);
-		if(md == 4)
+		int md = world.getBlockMetadata(x, y, z);
+		double xVelocity = 0;
+		double yVelocity = 0;
+		double zVelocity = 0;
+		if(md == 4 || md == 5 || md == 6 || md == 7)
 		{
-			setEntityVelocity(entity, 0.1D, 0.2D, 0.0D);
-			entity.onGround = false;
+			yVelocity = 0.2D;
 		}
-		else if(md == 5)
+		if(md == 0 || md == 4 || md == 8)
 		{
-			setEntityVelocity(entity, 0.0D, 0.2D, 0.1D);
-			entity.onGround = false;
-		}
-		else if(md == 6)
-		{
-			setEntityVelocity(entity, -0.1D, 0.2D, 0.0D);
-			entity.onGround = false;
-		}
-		else if(md == 7)
-		{
-			setEntityVelocity(entity, 0.0D, 0.2D, -0.1D);
-			entity.onGround = false;
-		}
-		else if(md == 8)
-		{
-			setEntityVelocity(entity, 0.1D, 0.0D, 0.0D);
-			entity.onGround = false;
-		}
-		else if(md == 9)
-		{
-			setEntityVelocity(entity, 0.0D, 0.0D, 0.1D);
-			entity.onGround = false;
-		}
-		else if(md == 10)
-		{
-			setEntityVelocity(entity, -0.1D, 0.0D, 0.0D);
-			entity.onGround = false;
-		}
-		else if(md == 11)
-		{
-			setEntityVelocity(entity, 0.0D, 0.0D, -0.1D);
-			entity.onGround = false;
-		}
-		else if(md == 0)
-		{
-			if(entity.posZ > (double)k + 0.55D)
+			if(entity.posZ > (double)z + 0.55D)
 			{
-				setEntityVelocity(entity, 0.05D, 0.0D, -0.05D);
+				zVelocity = -0.05D;
 			}
-			else if(entity.posZ < (double)k + 0.45D)
+			else if(entity.posZ < (double)z + 0.45D)
 			{
-				setEntityVelocity(entity, 0.05D, 0.0D, 0.05D);
+				zVelocity = 0.05D;
 			}
-			else
+			xVelocity = 0.1D;
+			if(entity.posX > x + 0.8)
 			{
-				setEntityVelocity(entity, 0.1D, 0.0D, 0.0D);
+				InventoryAndSide inv = getInventoryAtEndOfBelt(world, x, y, z);
+				if(inv != null)
+				{
+					putInInventory(((EntityItem)entity), inv);
+					return;
+				}
 			}
 		}
-		else if(md == 1)
+		if(md == 1 || md == 5 || md == 9)
 		{
-			if(entity.posX > (double)i + 0.55D)
+			if(entity.posX > (double)x + 0.55D)
 			{
-				setEntityVelocity(entity, -0.05D, 0.0D, 0.05D);
+				xVelocity = -0.05D;
 			}
-			else if(entity.posX < (double)i + 0.45D)
+			else if(entity.posX < (double)x + 0.45D)
 			{
-				setEntityVelocity(entity, 0.05D, 0.0D, 0.05D);
+				xVelocity = 0.05D;
 			}
-			else
+			zVelocity = 0.1D;
+			if(entity.posZ > z + 0.8)
 			{
-				setEntityVelocity(entity, 0.0D, 0.0D, 0.1D);
+				InventoryAndSide inv = getInventoryAtEndOfBelt(world, x, y, z);
+				if(inv != null)
+				{
+					putInInventory(((EntityItem)entity), inv);
+					return;
+				}
 			}
 		}
-		else if(md == 2)
+		if(md == 2 || md == 6 || md == 10)
 		{
-			if(entity.posZ > (double)k + 0.55D)
+			if(entity.posZ > (double)z + 0.55D)
 			{
-				setEntityVelocity(entity, -0.05D, 0.0D, -0.05D);
+				zVelocity = -0.05D;
 			}
-			else if(entity.posZ < (double)k + 0.45D)
+			else if(entity.posZ < (double)z + 0.45D)
 			{
-				setEntityVelocity(entity, -0.05D, 0.0D, 0.05D);
+				zVelocity = 0.05D;
 			}
-			else
+			xVelocity = -0.1D;
+			if(entity.posX < z + 0.2)
 			{
-				setEntityVelocity(entity, -0.1D, 0.0D, 0.0D);
+				InventoryAndSide inv = getInventoryAtEndOfBelt(world, x, y, z);
+				if(inv != null)
+				{
+					putInInventory(((EntityItem)entity), inv);
+					return;
+				}
 			}
 		}
-		else if(md == 3)
+		if(md == 3 || md == 7 || md == 11)
 		{
-			if(entity.posX > (double)i + 0.55D)
+			if(entity.posX > (double)x + 0.55D)
 			{
-				setEntityVelocity(entity, -0.05D, 0.0D, -0.05D);
+				xVelocity = -0.05D;
 			}
-			else if(entity.posX < (double)i + 0.45D)
+			else if(entity.posX < (double)x + 0.45D)
 			{
-				setEntityVelocity(entity, 0.05D, 0.0D, -0.05D);
+				xVelocity = 0.05D;
 			}
-			else
+			zVelocity = -0.1D;
+			if(entity.posZ < z + 0.2)
 			{
-				setEntityVelocity(entity, 0.0D, 0.0D, -0.1D);
+				InventoryAndSide inv = getInventoryAtEndOfBelt(world, x, y, z);
+				if(inv != null)
+				{
+					putInInventory(((EntityItem)entity), inv);
+					return;
+				}
 			}
 		}
+		
+		setEntityVelocity(entity, xVelocity, yVelocity, zVelocity);
+		entity.onGround = false;
+	}
+	
+	private InventoryAndSide getInventoryAtEndOfBelt(World world, int x, int y, int z)
+	{
+		int xOffset = 0;
+		int yOffset = 0;
+		int zOffset = 0;
+		int md = world.getBlockMetadata(x, y, z);
+		if(md == 0 || md == 4 || md == 8)
+		{
+			xOffset = 1;
+		}
+		if(md == 1 || md == 5 || md == 9)
+		{
+			zOffset = 1;
+		}
+		if(md == 2 || md == 6 || md == 10)
+		{
+			xOffset = 1;
+		}
+		if(md == 3 || md == 7 || md == 11)
+		{
+			zOffset = 1;
+		}
+		if(md == 4 || md == 5 || md == 6 || md == 7)
+		{
+			yOffset = 1;
+		}
+		TileEntity te = world.getBlockTileEntity(x + xOffset, y + yOffset, z + zOffset);
+		if(te != null && te instanceof IInventory)
+		{
+			// deliberately not including Y offset so that we can connect to the side of a machine
+			return new InventoryAndSide((IInventory)te, Util.getDestinationSide(x, y, z, x + xOffset, y, z + zOffset));
+		}
+		return null;
+	}
+	
+	private void putInInventory(EntityItem item, InventoryAndSide inventory)
+	{
+		Util.addToInventory(inventory, item.item);
+		item.setEntityDead();
 	}
 	
 	public int getBlockTexture(IBlockAccess iblockaccess, int i, int j, int k, int l)

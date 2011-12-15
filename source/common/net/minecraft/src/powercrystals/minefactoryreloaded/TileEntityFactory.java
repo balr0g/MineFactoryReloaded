@@ -1,7 +1,6 @@
 package net.minecraft.src.powercrystals.minefactoryreloaded;
 
 import net.minecraft.src.EntityItem;
-import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.Packet;
@@ -16,6 +15,7 @@ import net.minecraft.src.buildcraft.api.Position;
 import net.minecraft.src.powercrystals.minefactoryreloaded.core.Area;
 import net.minecraft.src.powercrystals.minefactoryreloaded.core.BlockPosition;
 import net.minecraft.src.powercrystals.minefactoryreloaded.core.IRotateableTile;
+import net.minecraft.src.powercrystals.minefactoryreloaded.core.InventoryAndSide;
 import net.minecraft.src.powercrystals.minefactoryreloaded.core.Util;
 
 public abstract class TileEntityFactory extends TileEntity implements IRotateableTile
@@ -57,9 +57,9 @@ public abstract class TileEntityFactory extends TileEntity implements IRotateabl
 		
 		if(Util.getBool(MineFactoryReloadedCore.machinesCanDropInChests))
 		{
-			for(IInventory chest : Util.findChests(worldObj, xCoord, yCoord, zCoord))
+			for(InventoryAndSide chest : Util.findChests(worldObj, xCoord, yCoord, zCoord))
 			{
-				if(chest.getInvName() == "Engine")
+				if(chest.getInventory().getInvName() == "Engine")
 				{
 					continue;
 				}

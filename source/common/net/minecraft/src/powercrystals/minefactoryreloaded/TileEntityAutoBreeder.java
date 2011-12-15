@@ -58,10 +58,10 @@ public class TileEntityAutoBreeder extends TileEntityFactoryInventory
 			}
 			EntityAnimal animal = (EntityAnimal)o;
 
-	        if(MineFactoryReloadedCore.proxy.getAnimalMethodG(animal) == 0)
+	        if(animal.getDelay() == 0)
 	        {
 	            decrStackSize(wheatslot, 1);
-	            MineFactoryReloadedCore.proxy.setFieldA(animal, 600);
+	            MineFactoryReloadedCore.proxy.setInLove(animal, 600);
 	            MineFactoryReloadedCore.proxy.setEntityToAttack(animal, null);
 	            for(int i = 0; i < 7; i++)
 	            {

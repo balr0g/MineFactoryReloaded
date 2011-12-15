@@ -229,7 +229,7 @@ public class mod_MineFactory extends BaseModMp
 		}
 
 		@Override
-		public void setFieldA(EntityAnimal animal, int value)
+		public void setInLove(EntityAnimal animal, int value)
 		{
 			try
 			{
@@ -253,12 +253,6 @@ public class mod_MineFactory extends BaseModMp
 			{
 				e.printStackTrace();
 			}	
-		}
-
-		@Override
-		public int getAnimalMethodG(EntityAnimal animal)
-		{
-			return animal.func_40146_g();
 		}
 
 		@Override

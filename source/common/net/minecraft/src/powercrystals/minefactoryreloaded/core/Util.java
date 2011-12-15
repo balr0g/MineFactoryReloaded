@@ -15,40 +15,41 @@ import net.minecraft.src.World;
 import net.minecraft.src.buildcraft.api.API;
 import net.minecraft.src.buildcraft.api.IPipeEntry;
 import net.minecraft.src.buildcraft.api.Orientations;
+import net.minecraft.src.forge.ISidedInventory;
 import net.minecraft.src.forge.Property;
 import net.minecraft.src.powercrystals.minefactoryreloaded.MineFactoryReloadedCore;
 
 public class Util
 {
-	public static int addToInventory(IInventory targetInventory, ItemStack stackToAdd)
+	public static int addToInventory(InventoryAndSide targetInventory, ItemStack stackToAdd)
 	{
 		int amountLeftToAdd = stackToAdd.stackSize;
 		int stackSizeLimit;
 		if(stackToAdd.itemID >= Block.blocksList.length)
 		{
-			stackSizeLimit = Math.min(targetInventory.getInventoryStackLimit(), Item.itemsList[stackToAdd.itemID].getItemStackLimit());
+			stackSizeLimit = Math.min(targetInventory.getInventory().getInventoryStackLimit(), Item.itemsList[stackToAdd.itemID].getItemStackLimit());
 		}
 		else
 		{
-			stackSizeLimit = targetInventory.getInventoryStackLimit();
+			stackSizeLimit = targetInventory.getInventory().getInventoryStackLimit();
 		}
 		int slotIndex;
 		
 		while(amountLeftToAdd > 0)
 		{
-			slotIndex = getAvailableSlot(targetInventory, stackToAdd);
+			slotIndex = getAvailableSlot(targetInventory.getInventory(), stackToAdd, targetInventory.getSide());
 			if(slotIndex < 0)
 			{
 				break;
 			}
-			ItemStack targetStack = targetInventory.getStackInSlot(slotIndex);
+			ItemStack targetStack = targetInventory.getInventory().getStackInSlot(slotIndex);
 			if(targetStack == null)
 			{
 				if(stackToAdd.stackSize <= stackSizeLimit)
 				{
 					ItemStack s = stackToAdd.copy();
 					s.stackSize = amountLeftToAdd;
-					targetInventory.setInventorySlotContents(slotIndex, s);
+					targetInventory.getInventory().setInventorySlotContents(slotIndex, s);
 					amountLeftToAdd = 0;
 					break;
 				}
@@ -56,7 +57,7 @@ public class Util
 				{
 					ItemStack s = stackToAdd.copy();
 					s.stackSize = stackSizeLimit;
-					targetInventory.setInventorySlotContents(slotIndex, stackToAdd);
+					targetInventory.getInventory().setInventorySlotContents(slotIndex, stackToAdd);
 					amountLeftToAdd -= s.stackSize;
 				}
 			}
@@ -71,8 +72,21 @@ public class Util
 		return amountLeftToAdd;
 	}
 	
-	private static int getAvailableSlot(IInventory inventory, ItemStack stack)
+	private static int getAvailableSlot(IInventory inventory, ItemStack stack, int side)
 	{
+		int firstslot;
+		int lastslot;
+		if(inventory instanceof ISidedInventory)
+		{
+			firstslot = ((ISidedInventory)inventory).getStartInventorySide(side);
+			lastslot = firstslot + ((ISidedInventory)inventory).getSizeInventorySide(side);
+		}
+		else
+		{
+			firstslot = 0;
+			lastslot = inventory.getSizeInventory() - 1;
+		}
+		
 		int stackSizeLimit;
 		if(stack.itemID >= Block.blocksList.length)
 		{
@@ -82,7 +96,7 @@ public class Util
 		{
 			stackSizeLimit = inventory.getInventoryStackLimit();
 		}
-		for(int i = 0; i < inventory.getSizeInventory(); i++)
+		for(int i = firstslot; i <= lastslot; i++)
 		{
 			ItemStack targetStack = inventory.getStackInSlot(i);
 			if(targetStack == null)
@@ -118,9 +132,9 @@ public class Util
 		return pipes;
 	}
 	
-	public static List<IInventory> findChests(World world, int x, int y, int z)
+	public static List<InventoryAndSide> findChests(World world, int x, int y, int z)
 	{
-		List<IInventory> chests = new LinkedList<IInventory>();
+		List<InventoryAndSide> chests = new LinkedList<InventoryAndSide>();
 		BlockPosition ourpos = new BlockPosition(x, y, z);
 		
 		for(BlockPosition bp : ourpos.getAdjacent(true))
@@ -128,10 +142,39 @@ public class Util
 			TileEntity te = world.getBlockTileEntity(bp.x, bp.y, bp.z);
 			if(te != null && te instanceof IInventory)
 			{
-				chests.add(checkForDoubleChest(world, te, bp));
+				chests.add(new InventoryAndSide(checkForDoubleChest(world, te, bp), getDestinationSide(x, y, z, bp.x, bp.y, bp.z)));
 			}
 		}
 		return chests;
+	}
+	
+	public static int getDestinationSide(int x1, int y1, int z1, int x2, int y2, int z2)
+	{
+		if(y2 > y1) // destination above us, bottom
+		{
+			return 0;
+		}
+		if(y2 < y1) // destination below us, top
+		{
+			return 1;
+		}
+		if(x2 > x1) // destination is X+ from us, X-
+		{
+			return 2;
+		}
+		if(x2 < x1) // destination is X- from us, X+
+		{
+			return 4;
+		}
+		if(z2 > z1) // destination is Z+ from us, Z-
+		{
+			return 3;
+		}
+		if(z2 < z1) // destination is Z- from us, Z+
+		{
+			return 3;
+		}
+		return -1; // equal
 	}
 	
 	private static IInventory checkForDoubleChest(World world, TileEntity te, BlockPosition chestloc)

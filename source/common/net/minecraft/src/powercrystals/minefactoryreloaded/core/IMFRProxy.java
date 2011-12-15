@@ -42,7 +42,6 @@ public interface IMFRProxy
 	public int getLevel(EnchantmentData ed);
 	public void applyEnchantment(EnchantmentData ed, ItemStack stack);
 	
-	public void setFieldA(EntityAnimal animal, int value);
-	public int getAnimalMethodG(EntityAnimal animal);
+	public void setInLove(EntityAnimal animal, int value);
 	public void setEntityToAttack(EntityCreature entity, Entity target);
 }

@@ -4,10 +4,10 @@ import net.minecraft.src.Block;
 import net.minecraft.src.BlockRail;
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityMinecart;
-import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.World;
 import net.minecraft.src.forge.ITextureProvider;
+import net.minecraft.src.powercrystals.minefactoryreloaded.core.InventoryAndSide;
 import net.minecraft.src.powercrystals.minefactoryreloaded.core.Util;
 
 public class BlockRailCargoPickup extends BlockRail implements ITextureProvider
@@ -32,20 +32,20 @@ public class BlockRailCargoPickup extends BlockRail implements ITextureProvider
 			return;
 		}
 		
-		for(IInventory chest : Util.findChests(world, x, y, z))
+		for(InventoryAndSide chest : Util.findChests(world, x, y, z))
 		{
-			for(int slotIndex = 0; slotIndex < chest.getSizeInventory(); slotIndex++)
+			for(int slotIndex = 0; slotIndex < chest.getInventory().getSizeInventory(); slotIndex++)
 			{
-				ItemStack sourceStack = chest.getStackInSlot(slotIndex);
+				ItemStack sourceStack = chest.getInventory().getStackInSlot(slotIndex);
 				if(sourceStack == null)
 				{
 					continue;
 				}
 				ItemStack stackToAdd = sourceStack.copy();
-				int amountRemaining = Util.addToInventory(minecart, stackToAdd);
+				int amountRemaining = Util.addToInventory(new InventoryAndSide(minecart, -1), stackToAdd);
 				if(amountRemaining == 0)
 				{
-					chest.setInventorySlotContents(slotIndex, null);
+					chest.getInventory().setInventorySlotContents(slotIndex, null);
 				}
 				else
 				{

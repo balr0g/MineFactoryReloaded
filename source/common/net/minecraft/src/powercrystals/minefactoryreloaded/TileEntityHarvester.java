@@ -84,7 +84,7 @@ public class TileEntityHarvester extends TileEntityFactoryPowered
 		}
 		else
 		{
-			drops = Block.blocksList[harvestedBlockId].getBlockDropped(worldObj, targetCoords.x, targetCoords.y, targetCoords.z, harvestedBlockMetadata);
+			drops = Block.blocksList[harvestedBlockId].getBlockDropped(worldObj, targetCoords.x, targetCoords.y, targetCoords.z, harvestedBlockMetadata, 0);
 		}
 
 		if(drops != null)
