@@ -178,7 +178,7 @@ public class mod_MineFactory extends BaseModMp
 		public boolean fertilizeGiantMushroom(World world, int x, int y, int z)
 		{
 			int blockId = world.getBlockId(x, y, z);
-			return ((BlockMushroom)Block.blocksList[blockId]).func_35293_c(world, x, y, z, world.rand);
+			return ((BlockMushroom)Block.blocksList[blockId]).fertilizeMushroom(world, x, y, z, world.rand);
 		}
 
 		@Override
