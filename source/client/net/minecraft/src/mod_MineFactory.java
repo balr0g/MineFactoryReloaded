@@ -69,6 +69,13 @@ public class mod_MineFactory extends BaseModMp
 	{
 		return MineFactoryReloadedCore.version;
 	}
+	
+	/** Force MFR to load after all other mods (since it uses BC API)
+	  */
+	@Override
+	public String getPriorities() {
+		return "after:*";
+	}
 
 	@Override
 	public void RegisterAnimation(Minecraft minecraft)
