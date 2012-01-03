@@ -76,7 +76,7 @@ public abstract class TileEntityFactory extends TileEntity implements IRotateabl
 			entityitem.motionX = 0.0D;
 			entityitem.motionY = 0.3D;
 			entityitem.motionZ = 0.0D;
-			worldObj.entityJoinedWorld(entityitem);
+			worldObj.spawnEntityInWorld(entityitem);
 		}
 	}
 	

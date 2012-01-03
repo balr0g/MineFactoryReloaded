@@ -63,7 +63,14 @@ public class mod_MineFactory extends BaseModMp
 	{
 		return MineFactoryReloadedCore.version;
 	}
-
+	
+	/** Force MFR to load after all other mods (since it uses BC API)
+	  */
+	@Override
+	public String getPriorities() {
+		return "after:*";
+	}
+		
 	@Override
 	public void RegisterAnimation(Minecraft minecraft)
 	{
@@ -166,7 +173,7 @@ public class mod_MineFactory extends BaseModMp
 		public boolean fertilizeGiantMushroom(World world, int x, int y, int z)
 		{
 			int blockId = world.getBlockId(x, y, z);
-			return ((BlockMushroom)Block.blocksList[blockId]).func_35293_c(world, x, y, z, world.rand);
+			return ((BlockMushroom)Block.blocksList[blockId]).fertilizeMushroom(world, x, y, z, world.rand);
 		}
 
 		@Override
