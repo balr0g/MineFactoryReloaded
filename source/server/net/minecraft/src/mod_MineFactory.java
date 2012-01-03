@@ -129,13 +129,13 @@ public class mod_MineFactory extends BaseModMp
 		@Override
 		public int calcItemStackEnchantability(Random random, int i, int j, ItemStack itemstack)
 		{
-			return EnchantmentHelper.func_40642_a(random, i, j, itemstack);
+			return EnchantmentHelper.calcItemStackEnchantability(random, i, j, itemstack);
 		}
 
 		@Override
 		public List<?> buildEnchantmentList(Random random, ItemStack itemstack, int i)
 		{
-			return EnchantmentHelper.func_40629_a(random, itemstack, i);
+			return EnchantmentHelper.buildEnchantmentList(random, itemstack, i);
 		}
 
 		@Override
@@ -153,7 +153,7 @@ public class mod_MineFactory extends BaseModMp
 		@Override
 		public void applyEnchantment(EnchantmentData ed, ItemStack stack)
 		{
-			stack.func_40605_a(getEnchantment(ed), getLevel(ed));
+			stack.addEnchantment(getEnchantment(ed), getLevel(ed));
 		}
 
 		@Override
