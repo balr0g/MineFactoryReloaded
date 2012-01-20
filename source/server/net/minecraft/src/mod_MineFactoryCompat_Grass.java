@@ -7,7 +7,7 @@ import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryFertiliza
 public class mod_MineFactoryCompat_Grass extends BaseModMp {
 
 	@Override
-	public String Version()
+	public String getVersion()
 	{
 		return MineFactoryReloadedCore.version;
 	}
@@ -73,4 +73,9 @@ label0:
 		}
 		
 	}
+	@Override
+	public void load() {
+			
+	}
+
 }

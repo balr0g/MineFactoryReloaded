@@ -51,7 +51,7 @@ public class MineFactoryReloadedCore
 	public static String terrainTexture = "/MineFactorySprites/terrain_0.png";
 	public static String itemTexture = "/MineFactorySprites/items_0.png";
 	
-	public static String version = "1.0.0R1.4.0";
+	public static String version = "1.1.0R1.4.1";
 	
 	public static Block machineBlock;
 	

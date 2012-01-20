@@ -180,7 +180,7 @@ public class mod_MineFactory extends BaseModMp
 		public void fertilizeStemPlant(World world, int x, int y, int z)
 		{
 			int blockId = world.getBlockId(x, y, z);
-			((BlockStem)Block.blocksList[blockId]).func_35294_i(world, x, y, z);
+			((BlockStem)Block.blocksList[blockId]).fertilizeStem(world, x, y, z);
 		}
 
 		@Override

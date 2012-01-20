@@ -19,7 +19,7 @@ public class mod_MineFactory extends BaseModMp
 	}
 
 	@Override
-	public String Version()
+	public String getVersion()
 	{
 		return MineFactoryReloadedCore.version;
 	}
@@ -29,7 +29,10 @@ public class mod_MineFactory extends BaseModMp
 	{
 		MineFactoryReloadedCore.afterModsLoaded();
 	}
-	
+	@Override
+	public void load() {
+		
+	}
 	public static void registerPlantable(IFactoryPlantable plantable)
 	{
 		MineFactoryReloadedCore.registerPlantable(plantable);
@@ -102,7 +105,7 @@ public class mod_MineFactory extends BaseModMp
 		public void fertilizeStemPlant(World world, int x, int y, int z)
 		{
 			int blockId = world.getBlockId(x, y, z);
-			((BlockStem)Block.blocksList[blockId]).func_35066_f_(world, x, y, z);
+			((BlockStem)Block.blocksList[blockId]).fertilizeStem(world, x, y, z);
 		}
 
 		@Override
@@ -121,5 +124,6 @@ public class mod_MineFactory extends BaseModMp
 		{
 			ModLoaderMp.SendPacketToAll(instance, p);
 		}
+		
 	}
 }
