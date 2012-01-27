@@ -1,7 +1,14 @@
-Source code for MineFactory Reloaded.
+Source for for MineFactory Reloaded, maintained by armed_troop, TehKrush, and the rest of the Technic team.
 
-Wiki at http://wiki.technicpack.net/index.php?title=MineFactory_Reloaded
+MineFactory Reloaded is a mod designed to automate your worlds completely, including, but not limited to, conveyors, autofarmers, fishers, and more!
 
-Get the mod at http://www.mediafire.com/file/7sippl8tbim484x/MineFactoryReloaded_Client_1.4.0p.zip
+More information is available on our wiki, which can be found here: https://github.com/balr0g/MineFactoryReloaded/wiki
 
-The code is under the MIT license.
+Download the mod for client or server here: https://github.com/balr0g/MineFactoryReloaded/downloads
+
+Donate to armed_troop and TehKrush here:
+
+armed_troop's PayPal: http://bit.ly/xjvhks
+TehKrush's PayPal: http://tehkrush.net/donate
+
+MineFactory Reloaded is licensed under the MIT license.
