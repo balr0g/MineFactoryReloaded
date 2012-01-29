@@ -142,7 +142,7 @@ public class mod_MineFactory extends BaseModMp
 		@Override
 		public boolean isClient(World world)
 		{
-			return world.multiplayerWorld;
+			return world.isRemote;
 		}
 
 		@Override
