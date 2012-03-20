@@ -25,7 +25,7 @@ public class mod_MineFactory extends BaseModMp
 	}
 	
 	@Override
-	public void ModsLoaded()
+	public void modsLoaded()
 	{
 		MineFactoryReloadedCore.afterModsLoaded();
 	}
@@ -116,13 +116,13 @@ public class mod_MineFactory extends BaseModMp
 		@Override
 		public Packet getTileEntityPacket(TileEntity te, int[] dataInt, float[] dataFloat, String[] dataString)
 		{
-			return ModLoaderMp.GetTileEntityPacket(instance, te.xCoord, te.yCoord, te.zCoord, 0, dataInt, dataFloat, dataString);
+			return ModLoaderMp.getTileEntityPacket(instance, te.xCoord, te.yCoord, te.zCoord, 0, dataInt, dataFloat, dataString);
 		}
 
 		@Override
 		public void sendPacketToAll(Packet230ModLoader p)
 		{
-			ModLoaderMp.SendPacketToAll(instance, p);
+			ModLoaderMp.sendPacketToAll(instance, p);
 		}
 		
 	}

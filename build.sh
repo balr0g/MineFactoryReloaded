@@ -14,7 +14,7 @@ CLEANSRC=$MCP/src-dev
 
 SPRITEFOLDER=MineFactorySprites
 MODNAME=MineFactoryReloaded
-MODVERSION=1.4.1
+MODVERSION=1.5.0
 ZIPPATH=`which zip`
 
 SRCBASE=$PROJBASE/source

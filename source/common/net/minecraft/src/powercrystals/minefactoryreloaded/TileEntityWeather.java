@@ -28,7 +28,7 @@ public class TileEntityWeather extends TileEntityFactoryInventory implements ILi
 			return;
 		}
 		
-		if(worldObj.getWorldInfo().getIsRaining() && canSeeSky())
+		if(worldObj.getWorldInfo().isRaining() && canSeeSky())
 		{
 			int bucketIndex = findFirstStack(Item.bucketEmpty.shiftedIndex, 0);
 			if(bucketIndex >= 0)
@@ -87,5 +87,11 @@ public class TileEntityWeather extends TileEntityFactoryInventory implements ILi
 	public int getLiquidId()
 	{
 		return 0;
+	}
+
+	@Override
+	public ItemStack getStackInSlotOnClosing(int var1)
+	{
+		return null;
 	}
 }

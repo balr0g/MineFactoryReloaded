@@ -22,35 +22,36 @@ public class mod_MineFactory extends BaseModMp
 {
 	public static int renderId = 1000;
 	
+	@Override
 	public void load()
 	{
 		MineFactoryReloadedCore.Init(new ClientProxy());
 		
-		ModLoader.AddName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Planter)), "Planter");
-		ModLoader.AddName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Fisher)), "Fisher");
-		ModLoader.AddName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Harvester)), "Harvester");
-		ModLoader.AddName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Rancher)), "Rancher");
-		ModLoader.AddName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Fertilizer)), "Fertilizer");
-		ModLoader.AddName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Vet)), "Veterinary Station");
-		ModLoader.AddName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Collector)), "Item Collector");
-		ModLoader.AddName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Breaker)), "Block Breaker");
-		ModLoader.AddName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Weather)), "Weather Collector");
+		ModLoader.addName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Planter)), "Planter");
+		ModLoader.addName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Fisher)), "Fisher");
+		ModLoader.addName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Harvester)), "Harvester");
+		ModLoader.addName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Rancher)), "Rancher");
+		ModLoader.addName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Fertilizer)), "Fertilizer");
+		ModLoader.addName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Vet)), "Veterinary Station");
+		ModLoader.addName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Collector)), "Item Collector");
+		ModLoader.addName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Breaker)), "Block Breaker");
+		ModLoader.addName(new ItemStack(MineFactoryReloadedCore.machineBlock, 1, MineFactoryReloadedCore.machineMetadataMappings.get(Machine.Weather)), "Weather Collector");
 		
-		ModLoader.AddName(MineFactoryReloadedCore.conveyorBlock, "Conveyor Belt");
+		ModLoader.addName(MineFactoryReloadedCore.conveyorBlock, "Conveyor Belt");
 		
-		ModLoader.AddName(MineFactoryReloadedCore.passengerRailPickupBlock, "Passenger Pickup Rail");
-		ModLoader.AddName(MineFactoryReloadedCore.passengerRailDropoffBlock, "Passenger Dropoff Rail");
-		ModLoader.AddName(MineFactoryReloadedCore.cargoRailDropoffBlock, "Cargo Dropoff Rail");
-		ModLoader.AddName(MineFactoryReloadedCore.cargoRailPickupBlock, "Cargo Pickup Rail");
+		ModLoader.addName(MineFactoryReloadedCore.passengerRailPickupBlock, "Passenger Pickup Rail");
+		ModLoader.addName(MineFactoryReloadedCore.passengerRailDropoffBlock, "Passenger Dropoff Rail");
+		ModLoader.addName(MineFactoryReloadedCore.cargoRailDropoffBlock, "Cargo Dropoff Rail");
+		ModLoader.addName(MineFactoryReloadedCore.cargoRailPickupBlock, "Cargo Pickup Rail");
 		
-		ModLoader.AddName(MineFactoryReloadedCore.steelIngotItem, "Steel Ingot");
-		ModLoader.AddName(MineFactoryReloadedCore.factoryHammerItem, "Factory Hammer");
+		ModLoader.addName(MineFactoryReloadedCore.steelIngotItem, "Steel Ingot");
+		ModLoader.addName(MineFactoryReloadedCore.factoryHammerItem, "Factory Hammer");
 		
 		renderId = ModLoader.getUniqueBlockModelID(this, false);
 	}
 	
 	@Override
-	public void ModsLoaded()
+	public void modsLoaded()
 	{
 		ModLoaderMp.Init();
 		MinecraftForgeClient.preloadTexture(MineFactoryReloadedCore.terrainTexture);
@@ -72,7 +73,7 @@ public class mod_MineFactory extends BaseModMp
 	}
 		
 	@Override
-	public void RegisterAnimation(Minecraft minecraft)
+	public void registerAnimation(Minecraft minecraft)
 	{
 		if(Util.getBool(MineFactoryReloadedCore.animateBlockFaces))
 		{
@@ -87,7 +88,7 @@ public class mod_MineFactory extends BaseModMp
 	}
 
 	@Override
-	public boolean RenderWorldBlock(RenderBlocks renderblocks, IBlockAccess iblockaccess, int i, int j, int k, Block block, int renderId)
+	public boolean renderWorldBlock(RenderBlocks renderblocks, IBlockAccess iblockaccess, int i, int j, int k, Block block, int renderId)
 	{
 		if(renderId == mod_MineFactory.renderId)
 		{
@@ -101,7 +102,7 @@ public class mod_MineFactory extends BaseModMp
 	}
 	
 	@Override
-    public void HandleTileEntityPacket(int i, int j, int k, int l, int ai[], float af[], String as[])
+    public void handleTileEntityPacket(int i, int j, int k, int l, int ai[], float af[], String as[])
     {
 		World w = APIProxy.getWorld();
 		TileEntity te = w.getBlockTileEntity(i, j, k);

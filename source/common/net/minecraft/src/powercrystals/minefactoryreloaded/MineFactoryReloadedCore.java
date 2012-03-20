@@ -13,12 +13,8 @@ import java.util.Map;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.Item;
-import net.minecraft.src.buildcraft.api.API;
-import net.minecraft.src.buildcraft.api.LiquidData;
-import net.minecraft.src.forge.Configuration;
-import net.minecraft.src.forge.IOreHandler;
-import net.minecraft.src.forge.MinecraftForge;
-import net.minecraft.src.forge.Property;
+import net.minecraft.src.buildcraft.api.*;
+import net.minecraft.src.forge.*;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.HarvestType;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryFertilizable;
 import net.minecraft.src.powercrystals.minefactoryreloaded.api.IFactoryHarvestable;
@@ -51,7 +47,7 @@ public class MineFactoryReloadedCore
 	public static String terrainTexture = "/MineFactorySprites/terrain_0.png";
 	public static String itemTexture = "/MineFactorySprites/items_0.png";
 	
-	public static String version = "1.1.0R1.4.1";
+	public static String version = "1.2.3R1.5.0";
 	
 	public static Block machineBlock;
 	
@@ -172,27 +168,27 @@ public class MineFactoryReloadedCore
 			.setIconIndex(milkTexture)
 			.setItemName("milkItem");
 
-		ModLoader.RegisterBlock(machineBlock, ItemFactoryMachine.class);
-		ModLoader.RegisterBlock(conveyorBlock);
-		ModLoader.RegisterBlock(passengerRailPickupBlock);
-		ModLoader.RegisterBlock(passengerRailDropoffBlock);
-		ModLoader.RegisterBlock(cargoRailDropoffBlock);
-		ModLoader.RegisterBlock(cargoRailPickupBlock);
+		ModLoader.registerBlock(machineBlock, ItemFactoryMachine.class);
+		ModLoader.registerBlock(conveyorBlock);
+		ModLoader.registerBlock(passengerRailPickupBlock);
+		ModLoader.registerBlock(passengerRailDropoffBlock);
+		ModLoader.registerBlock(cargoRailDropoffBlock);
+		ModLoader.registerBlock(cargoRailPickupBlock);
 		
-		ModLoader.RegisterTileEntity(TileEntityFisher.class, "factoryFisher");
-		ModLoader.RegisterTileEntity(TileEntityPlanter.class, "factoryPlanter");
-		ModLoader.RegisterTileEntity(TileEntityHarvester.class, "factoryHarvester");
-		ModLoader.RegisterTileEntity(TileEntityRancher.class, "factoryRancher");
-		ModLoader.RegisterTileEntity(TileEntityFertilizer.class, "factoryFertilizer");
-		ModLoader.RegisterTileEntity(TileEntityConveyor.class, "factoryConveyor");
-		ModLoader.RegisterTileEntity(TileEntityVet.class, "factoryVet");
-		ModLoader.RegisterTileEntity(TileEntityCollector.class, "factoryItemCollector");
-		ModLoader.RegisterTileEntity(TileEntityBlockBreaker.class, "factoryBlockBreaker");
-		ModLoader.RegisterTileEntity(TileEntityWeather.class, "factoryWeather");
+		ModLoader.registerTileEntity(TileEntityFisher.class, "factoryFisher");
+		ModLoader.registerTileEntity(TileEntityPlanter.class, "factoryPlanter");
+		ModLoader.registerTileEntity(TileEntityHarvester.class, "factoryHarvester");
+		ModLoader.registerTileEntity(TileEntityRancher.class, "factoryRancher");
+		ModLoader.registerTileEntity(TileEntityFertilizer.class, "factoryFertilizer");
+		ModLoader.registerTileEntity(TileEntityConveyor.class, "factoryConveyor");
+		ModLoader.registerTileEntity(TileEntityVet.class, "factoryVet");
+		ModLoader.registerTileEntity(TileEntityCollector.class, "factoryItemCollector");
+		ModLoader.registerTileEntity(TileEntityBlockBreaker.class, "factoryBlockBreaker");
+		ModLoader.registerTileEntity(TileEntityWeather.class, "factoryWeather");
 		
 		if(Util.getBool(enableSteelCraftingProperty))
 		{
-			ModLoader.AddRecipe(new ItemStack(steelIngotItem, 5), new Object[]
+			ModLoader.addRecipe(new ItemStack(steelIngotItem, 5), new Object[]
  				{
  					" C ", "CIC", " C ",
  					Character.valueOf('C'), Item.coal,
@@ -209,91 +205,91 @@ public class MineFactoryReloadedCore
 	
 	private static void registerRecipes(ItemStack steelIngot)
 	{
-		ModLoader.AddRecipe(new ItemStack(conveyorBlock, 1), new Object[]
+		ModLoader.addRecipe(new ItemStack(conveyorBlock, 1), new Object[]
 			{
 				"R", "S",
 				Character.valueOf('R'), Item.redstone,
 				Character.valueOf('S'), steelIngot
 		    }
 		);
-		ModLoader.AddRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Fertilizer)), new Object[]
+		ModLoader.addRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Fertilizer)), new Object[]
  			{
  				"SSS", "SPS", "SSS",
  				Character.valueOf('P'), Block.sapling,
  				Character.valueOf('S'), steelIngot
  			}
  		);
-		ModLoader.AddRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Fertilizer)), new Object[]
+		ModLoader.addRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Fertilizer)), new Object[]
    			{
    				"SSS", "SPS", "SSS",
    				Character.valueOf('P'), new ItemStack(Block.sapling, 1, 1),
    				Character.valueOf('S'), steelIngot
    			}
    		);
- 		ModLoader.AddRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Fertilizer)), new Object[]
+ 		ModLoader.addRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Fertilizer)), new Object[]
  			{
  				"SSS", "SPS", "SSS",
  				Character.valueOf('P'), new ItemStack(Block.sapling, 1, 2),
  				Character.valueOf('S'), steelIngot
  			}
  		);
-		ModLoader.AddRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Harvester)), new Object[]
+		ModLoader.addRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Harvester)), new Object[]
 		    {
 				"SSS", "SXS", "SSS",
 				Character.valueOf('X'), Item.axeSteel,
 				Character.valueOf('S'), steelIngot
 		    }
 		);
-		ModLoader.AddRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Harvester)), new Object[]
+		ModLoader.addRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Harvester)), new Object[]
  		    {
  				"SSS", "SWS", "SSS",
  				Character.valueOf('W'), Item.swordSteel,
  				Character.valueOf('S'), steelIngot
  		    }
  		);
-		ModLoader.AddRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Planter)), new Object[]
+		ModLoader.addRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Planter)), new Object[]
 		    {
 				"SSS", "SHS", "SSS",
 				Character.valueOf('H'), Item.hoeSteel,
 				Character.valueOf('S'), steelIngot
 		    }
 		);
-		ModLoader.AddRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Rancher)), new Object[]
+		ModLoader.addRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Rancher)), new Object[]
 			{
 				"SSS", "SHS", "SSS",
 				Character.valueOf('H'), Item.shears,
 				Character.valueOf('S'), steelIngot
 		    }
 		);
-		ModLoader.AddRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Fisher)), new Object[]
+		ModLoader.addRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Fisher)), new Object[]
  			{
  				"SSS", "SFS", "SSS",
  				Character.valueOf('F'), Item.fishingRod,
  				Character.valueOf('S'), steelIngot
  			}
  		);
-		ModLoader.AddRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Collector)), new Object[]
+		ModLoader.addRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Collector)), new Object[]
  			{
  				"SSS", "SCS", "SSS",
  				Character.valueOf('C'), Block.chest,
  				Character.valueOf('S'), steelIngot
  			}
  		);
-		ModLoader.AddRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Vet)), new Object[]
+		ModLoader.addRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Vet)), new Object[]
  			{
  				"SSS", "SBS", "SSS",
  				Character.valueOf('B'), Item.bread,
  				Character.valueOf('S'), steelIngot
  		    }
  		);
- 		ModLoader.AddRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Breaker)), new Object[]
+ 		ModLoader.addRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Breaker)), new Object[]
   			{
   				"SSS", "SPS", "SSS",
   				Character.valueOf('P'), Item.pickaxeSteel,
   				Character.valueOf('S'), steelIngot
   			}
   		);
- 		ModLoader.AddRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Weather)), new Object[]
+ 		ModLoader.addRecipe(new ItemStack(machineBlock, 1, machineMetadataMappings.get(Machine.Weather)), new Object[]
   			{
   				"SSS", "SBS", "SSS",
   				Character.valueOf('B'), Item.bucketEmpty,
@@ -301,7 +297,7 @@ public class MineFactoryReloadedCore
   			}
   		);
 		
-		ModLoader.AddRecipe(new ItemStack(cargoRailPickupBlock, 2), new Object[]
+		ModLoader.addRecipe(new ItemStack(cargoRailPickupBlock, 2), new Object[]
  			{
  				" C ", "SDS", "SSS",
  				Character.valueOf('C'), Block.chest,
@@ -309,7 +305,7 @@ public class MineFactoryReloadedCore
  				Character.valueOf('D'), Block.railDetector
  			}
  		);
-		ModLoader.AddRecipe(new ItemStack(cargoRailDropoffBlock, 2), new Object[]
+		ModLoader.addRecipe(new ItemStack(cargoRailDropoffBlock, 2), new Object[]
   			{
 				"SSS", "SDS", " C ",
 				Character.valueOf('C'), Block.chest,
@@ -317,7 +313,7 @@ public class MineFactoryReloadedCore
 				Character.valueOf('D'), Block.railDetector
 			}
 		);
-		ModLoader.AddRecipe(new ItemStack(passengerRailPickupBlock, 3), new Object[]
+		ModLoader.addRecipe(new ItemStack(passengerRailPickupBlock, 3), new Object[]
  			{
  				" L ", "SDS", "SSS",
 				Character.valueOf('L'), Block.blockLapis,
@@ -325,7 +321,7 @@ public class MineFactoryReloadedCore
 				Character.valueOf('D'), Block.railDetector
  			}
  		);
-		ModLoader.AddRecipe(new ItemStack(passengerRailDropoffBlock, 3), new Object[]
+		ModLoader.addRecipe(new ItemStack(passengerRailDropoffBlock, 3), new Object[]
 			{
  				"SSS", "SDS", " L ",
 				Character.valueOf('L'), Block.blockLapis,
@@ -336,7 +332,7 @@ public class MineFactoryReloadedCore
 		
 		
 		
-		ModLoader.AddRecipe(new ItemStack(factoryHammerItem, 1), new Object[]
+		ModLoader.addRecipe(new ItemStack(factoryHammerItem, 1), new Object[]
             {
 				"SSS", " T ", " T ",
 				Character.valueOf('S'), steelIngotItem,

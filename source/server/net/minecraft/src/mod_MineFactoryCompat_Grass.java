@@ -13,7 +13,7 @@ public class mod_MineFactoryCompat_Grass extends BaseModMp {
 	}
 	
 	@Override
-	public void ModsLoaded()
+	public void modsLoaded()
 	{
 		mod_MineFactory.registerFertilizable(new FactoryFertilizableGrass());
 	}

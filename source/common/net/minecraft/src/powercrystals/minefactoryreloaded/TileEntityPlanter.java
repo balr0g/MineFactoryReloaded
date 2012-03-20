@@ -80,4 +80,10 @@ public class TileEntityPlanter extends TileEntityFactoryInventory
         	}
         }
     }
+
+	@Override
+	public ItemStack getStackInSlotOnClosing(int var1) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
